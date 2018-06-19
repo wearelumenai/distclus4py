@@ -1,8 +1,19 @@
 from setuptools import setup, find_packages
 
+requires=[
+    'cffi>=1.0.0',
+    'numpy>=1.6',
+    'scipy>=0.13.0'
+]
+
+tests_require=[
+    'pytest',
+    'pytest-cov'
+]
+
 setup(
     name='distclus_bind',
-    version='0.0',
+    version='0.1',
     description='distclus golang bind',
     author='lumenai',
     author_email='',
@@ -10,9 +21,8 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=[
-        'cffi>=1.0.0',
-        'numpy>=1.6',
-        'scipy>=0.13.0'
-    ],
+    extras_require={
+        'test': tests_require,
+    },
+    install_requires=requires,
 )
