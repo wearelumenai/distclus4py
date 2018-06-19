@@ -121,20 +121,5 @@ func MCMC(data *C.double, l1, l2 C.size_t, framesize, initK, mcmcIter, initIter 
 	return SliceArr2D(res)
 }
 
-//func TestGo(arr *C.double, l1 C.size_t, l2 C.size_t) (*C.double, C.size_t, C.size_t) {
-//	s := ArrSlice2D(arr, l1, l2)
-//	for i := range s {
-//		for j, v := range s[i] {
-//			println(i, j, v)
-//		}
-//	}
-//	return SliceArr2D(s)
-//	//s := ArrSlice1D(arr, l1)
-//	//for i, v := range s {
-//	//	println(i, v)
-//	//}
-//	//return SliceArr1D(s)
-//}
-
 func main() {
 }
