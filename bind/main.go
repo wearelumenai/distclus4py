@@ -99,17 +99,6 @@ func Kmeans(data *C.double, l1, l2 C.size_t, k C.int, iter C.int, initializer C.
 	return SliceArr2D(res)
 }
 
-func GoPrint(a *C.double, s C.size_t) {
-	hdr := reflect.SliceHeader{
-		Data: uintptr(unsafe.Pointer(a)),
-		Len:  (int)(s),
-		Cap:  (int)(s),
-	}
-	for i, v := range *(*[]float64)(unsafe.Pointer(&hdr)) {
-		println(i, v)
-	}
-}
-
 //func TestGo(arr *C.double, l1 C.size_t, l2 C.size_t) (*C.double, C.size_t, C.size_t) {
 //	s := ArrSlice2D(arr, l1, l2)
 //	for i := range s {
