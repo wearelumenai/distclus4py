@@ -3,7 +3,7 @@ package main
 // #include <stdlib.h>
 // #include <stdint.h>
 // #include <string.h>
-// typedef enum {I_RANDOM, I_GIVIEN, I_KMEANSPP} initializer;
+// typedef enum {I_RANDOM, I_GIVEN, I_KMEANSPP} initializer;
 import "C"
 import (
 	"unsafe"
@@ -16,7 +16,7 @@ func InitConvert(i C.initializer) (fi algo.Initializer) {
 	switch i {
 	case C.I_RANDOM:
 		fi = algo.RandInitializer
-	case C.I_GIVIEN:
+	case C.I_GIVEN:
 		fi = algo.GivenInitializer
 	case C.I_KMEANSPP:
 		fi = algo.KmeansPPInitializer

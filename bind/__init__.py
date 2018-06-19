@@ -5,7 +5,7 @@ lib_file = os.path.join(os.path.dirname(__file__), 'build', 'distclus.so')
 
 ffi = cffi.FFI()
 ffi.cdef("""
-typedef enum {I_RANDOM, I_GIVIEN, I_KMEANSPP} initializer;
+typedef enum {I_RANDOM, I_GIVEN, I_KMEANSPP} initializer;
 struct Array2D {
 	double* data;
 	size_t l1;
