@@ -27,10 +27,19 @@ def as_array2(ptr, l1, l2):
     return arr
 
 
-def kmeans(data, k, iter):
+def cast_initializer(initializer):
+    if initializer in ['random', 'rand']:
+        return lib.I_RANDOM
+    elif initializer == 'given':
+        return lib.I_GIVEN
+    elif initializer in ['kmeanspp', 'kmeans++']:
+        return lib.I_KMEANSPP
+
+
+def kmeans(data, k, iter, initializer="random"):
     arr = ffi.cast("double*", data.ctypes.data)
     l1 = ffi.cast("size_t", data.shape[0])
     l2 = ffi.cast("size_t", data.shape[1])
-    res = lib.Kmeans(arr, l1, l2, k, iter)
+    res = lib.Kmeans(arr, l1, l2, k, iter, cast_initializer(initializer))
     centers = as_array2(res.data, res.l1, res.l2)
     return centers

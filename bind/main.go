@@ -3,6 +3,7 @@ package main
 // #include <stdlib.h>
 // #include <stdint.h>
 // #include <string.h>
+// typedef enum {I_RANDOM, I_GIVIEN, I_KMEANSPP} initializer;
 import "C"
 import (
 	"unsafe"
@@ -10,6 +11,18 @@ import (
 	"distclus/algo"
 	"distclus/core"
 )
+
+func InitConvert(i C.initializer) (fi algo.Initializer) {
+	switch i {
+	case C.I_RANDOM:
+		fi = algo.RandInitializer
+	case C.I_GIVIEN:
+		fi = algo.GivenInitializer
+	case C.I_KMEANSPP:
+		fi = algo.KmeansPPInitializer
+	}
+	return fi
+}
 
 func SliceArr1D(arr []float64) (*C.double, C.size_t) {
 	l := len(arr)
@@ -72,13 +85,10 @@ func ArrSlice2D(arr *C.double, l1 C.size_t, l2 C.size_t) ([][]float64) {
 }
 
 //export Kmeans
-func Kmeans(data *C.double, l1, l2 C.size_t, k C.int, iter C.int)(*C.double, C.size_t, C.size_t){
-	var k_ = (int)(k)
-	var iter_ = (int)(iter)
-	var conf = algo.KMeansConf{Iter: iter_, K: k_, Space: core.RealSpace{}}
-	var km = algo.NewKMeans(conf, algo.RandInitializer)
-	var data_ = ArrSlice2D(data,l1, l2)
-	for _, elemt := range data_ {
+func Kmeans(data *C.double, l1, l2 C.size_t, k C.int, iter C.int, initializer C.initializer) (*C.double, C.size_t, C.size_t) {
+	var conf = algo.KMeansConf{Iter: (int)(iter), K: (int)(k), Space: core.RealSpace{}}
+	var km = algo.NewKMeans(conf, InitConvert(initializer))
+	for _, elemt := range ArrSlice2D(data, l1, l2) {
 		km.Push(elemt)
 	}
 	km.Run(false)
