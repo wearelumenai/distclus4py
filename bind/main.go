@@ -99,6 +99,28 @@ func Kmeans(data *C.double, l1, l2 C.size_t, k C.int, iter C.int, initializer C.
 	return SliceArr2D(res)
 }
 
+//export MCMC
+func MCMC(data *C.double, l1, l2 C.size_t, framesize, initK, mcmcIter, initIter C.int, b, amp, norm, nu C.double,
+	initializer C.initializer) (*C.double, C.size_t, C.size_t) {
+	var data_ = ArrSlice2D(data, l1, l2)
+	var mcmcConf = algo.MCMCConf{
+		Dim:      len(data_[0]), FrameSize: (int)(framesize), B: (float64)(b), Amp: (float64)(amp),
+		Norm:     (float64)(norm), Nu: (float64)(nu), InitK: (int)(initK), McmcIter: (int)(mcmcIter),
+		InitIter: (int)(initIter), Space: core.RealSpace{},
+	}
+	var distrib = algo.NewMultivT(algo.MultivTConf{mcmcConf})
+	var mcmc = algo.NewMCMC(mcmcConf, distrib, InitConvert(initializer))
+	for _, elemt := range data_ {
+		mcmc.Push(elemt)
+	}
+	mcmc.Run(false)
+	var res, err = mcmc.Centroids()
+	if err != nil {
+		panic(err)
+	}
+	return SliceArr2D(res)
+}
+
 //func TestGo(arr *C.double, l1 C.size_t, l2 C.size_t) (*C.double, C.size_t, C.size_t) {
 //	s := ArrSlice2D(arr, l1, l2)
 //	for i := range s {
