@@ -70,9 +70,7 @@ def kmeans(data, k, iter, initializer="random"):
     l2 = ffi.cast("size_t", data.shape[1])
     res = lib.Kmeans(arr, l1, l2, k, iter, cast_initializer(initializer))
     gc_data = ffi.gc(res.data, lib.FreeArrPtr)
-    centers = as_array2(gc_data, res.l1, res.l2)
-    print(centers)
-    return centers
+    return as_array2(gc_data, res.l1, res.l2)
 
 
 def mcmc(data, framesize=None, init_k=8, mcmc_iter=30, init_iter=1, b=100, amp=1, norm=2, nu=1, initializer="random"):
@@ -99,5 +97,4 @@ def mcmc(data, framesize=None, init_k=8, mcmc_iter=30, init_iter=1, b=100, amp=1
     framesize = framesize or data.shape[0]
     res = lib.MCMC(arr, l1, l2, framesize, init_k, mcmc_iter, init_iter, b, amp, norm, nu, cast_initializer(initializer))
     gc_data = ffi.gc(res.data, lib.FreeArrPtr)
-    centers = as_array2(gc_data, res.l1, res.l2)
-    return centers
+    return as_array2(gc_data, res.l1, res.l2)
