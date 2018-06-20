@@ -12,8 +12,8 @@ struct Array2D {
 	size_t l2;
 };
 
+extern void FreeArrPtr(double* arr);
 extern struct Array2D MCMC(double* data, size_t l1, size_t l2, int framesize, int initK, int mcmcIter, int initIter, double b, double amp, double norm, double nu, initializer init);
-
 extern struct Array2D Kmeans(double* data, size_t l1, size_t l2, int k, int iter, initializer init);
 """)
 lib = ffi.dlopen(lib_file)

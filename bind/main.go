@@ -121,5 +121,10 @@ func MCMC(data *C.double, l1, l2 C.size_t, framesize, initK, mcmcIter, initIter 
 	return SliceArr2D(res)
 }
 
+//export FreeArrPtr
+func FreeArrPtr(arr *C.double){
+	C.free(unsafe.Pointer(arr))
+}
+
 func main() {
 }

@@ -35,13 +35,14 @@ def cast_initializer(initializer):
     elif initializer in ['kmeanspp', 'kmeans++']:
         return lib.I_KMEANSPP
 
-
 def kmeans(data, k, iter, initializer="random"):
     arr = ffi.cast("double*", data.ctypes.data)
     l1 = ffi.cast("size_t", data.shape[0])
     l2 = ffi.cast("size_t", data.shape[1])
     res = lib.Kmeans(arr, l1, l2, k, iter, cast_initializer(initializer))
-    centers = as_array2(res.data, res.l1, res.l2)
+    gc_data = ffi.gc(res.data, lib.FreeArrPtr)
+    centers = as_array2(gc_data, res.l1, res.l2)
+    print(centers)
     return centers
 
 
@@ -51,5 +52,6 @@ def mcmc(data, framesize=None, init_k=8, mcmc_iter=30, init_iter=1, b=100, amp=1
     l2 = ffi.cast("size_t", data.shape[1])
     framesize = framesize or data.shape[0]
     res = lib.MCMC(arr, l1, l2, framesize, init_k, mcmc_iter, init_iter, b, amp, norm, nu, cast_initializer(initializer))
-    centers = as_array2(res.data, res.l1, res.l2)
+    gc_data = ffi.gc(res.data, lib.FreeArrPtr)
+    centers = as_array2(gc_data, res.l1, res.l2)
     return centers
