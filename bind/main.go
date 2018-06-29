@@ -87,7 +87,7 @@ func ArrSlice2D(arr *C.double, l1 C.size_t, l2 C.size_t) ([][]float64) {
 //export Kmeans
 func Kmeans(data *C.double, l1, l2 C.size_t, k C.int, iter C.int, initializer C.initializer) (*C.double, C.size_t, C.size_t) {
 	var conf = algo.KMeansConf{Iter: (int)(iter), K: (int)(k), Space: core.RealSpace{}}
-	var km = algo.NewKMeans(conf, InitConvert(initializer))
+	var km = algo.NewKMeans(conf, InitConvert(initializer), []core.Elemt{})
 	for _, elemt := range ArrSlice2D(data, l1, l2) {
 		km.Push(elemt)
 	}
@@ -109,7 +109,7 @@ func MCMC(data *C.double, l1, l2 C.size_t, framesize, initK, mcmcIter, initIter 
 		InitIter: (int)(initIter), Space: core.RealSpace{},
 	}
 	var distrib = algo.NewMultivT(algo.MultivTConf{mcmcConf})
-	var mcmc = algo.NewMCMC(mcmcConf, distrib, InitConvert(initializer))
+	var mcmc = algo.NewMCMC(mcmcConf, distrib, InitConvert(initializer), []core.Elemt{})
 	for _, elemt := range data_ {
 		mcmc.Push(elemt)
 	}
