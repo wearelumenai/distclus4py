@@ -12,9 +12,9 @@ tests_require=[
 ]
 
 setup(
-    name='distclus_bind',
+    name='distclus',
     version='0.1',
-    description='distclus golang bind',
+    description='distclus golang facade',
     author='lumenai',
     author_email='',
     url='',

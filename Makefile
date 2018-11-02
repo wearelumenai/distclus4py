@@ -1,4 +1,5 @@
 all: bindgo
 
 bindgo:
-	go build -buildmode=c-shared -x -o bind/build/distclus.so bind/main.go
+	go build -buildmode=c-shared -x -o distclus/lib/distclus.so distclus4py/facade/
+	cp facade/bind.h distclus/lib/
