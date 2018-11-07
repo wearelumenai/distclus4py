@@ -79,6 +79,7 @@ func MCMCClose(descr C.int) {
 
 //export FreeMCMC
 func FreeMCMC(descr C.int) {
+	MCMCClose(descr)
 	UnregisterAlgorithm((int)(descr))
 }
 

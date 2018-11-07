@@ -17,13 +17,12 @@ class TestsBindings(unittest.TestCase):
         self.assertTrue(algo.algo >= 1)
 
     def test_push_run_centroids_predict(self):
-        algo = MCMC(dim=2, init_k=2, b=500, mcmc_iter=100000000)
+        algo = MCMC(dim=2, init_k=2, b=1, mcmc_iter=100000000, seed=653126513379)
         algo.run(rasync=True)
 
         algo.push(self.data[:5])
-        time.sleep(.15)
         algo.push(self.data[5:])
-        time.sleep(.15)
+        time.sleep(.3)
 
         labels = algo.predict(self.data)
         label0, label10 = self.check_labels(labels)
