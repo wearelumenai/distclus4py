@@ -11,11 +11,11 @@ class MCMC:
     """
 
     def __init__(self, dim,
-                 init_k=8, mcmc_iter=100, framesize=10000,
+                 init_k=8, mcmc_iter=100, frame_size=10000,
                  b=1, amp=1, norm=2, nu=3,
                  init_iter=1, init="kmeanspp", seed=None):
         seed = seed or random.randint(0, 2 ** 63)
-        descr = lib.MCMC(dim, init_k, mcmc_iter, framesize, b, amp, norm, nu, init_iter, bind.initializer(init), seed)
+        descr = lib.MCMC(dim, init_k, mcmc_iter, frame_size, b, amp, norm, nu, init_iter, bind.initializer(init), seed)
         self.descr = descr
         self.__finalize = weakref.finalize(self, lambda: lib.FreeMCMC(descr))
 
