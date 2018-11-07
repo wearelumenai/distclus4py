@@ -15,9 +15,9 @@ class MCMC:
                  b=1, amp=1, norm=2, nu=3,
                  init_iter=1, init="kmeanspp", seed=None):
         seed = seed or random.randint(0, 2 ** 63)
-        self.algo = lib.MCMC(dim, init_k, mcmc_iter, framesize, b, amp, norm, nu, init_iter, bind.initializer(init),
-                             seed)
-        self.__finalize = weakref.finalize(self, self.__cleanup)
+        descr = lib.MCMC(dim, init_k, mcmc_iter, framesize, b, amp, norm, nu, init_iter, bind.initializer(init), seed)
+        self.descr = descr
+        self.__finalize = weakref.finalize(self, lambda: lib.FreeMCMC(descr))
 
     def fit(self, data):
         self.push(data)
@@ -26,22 +26,19 @@ class MCMC:
 
     def push(self, data):
         arr, l1, l2 = bind.to_c_2d_array(data)
-        lib.MCMCPush(self.algo, arr, l1, l2)
+        lib.MCMCPush(self.descr, arr, l1, l2)
 
     def run(self, rasync=False):
-        lib.MCMCRun(self.algo, 1 if rasync else 0)
+        lib.MCMCRun(self.descr, 1 if rasync else 0)
 
     def close(self):
-        lib.MCMCClose(self.algo)
+        lib.MCMCClose(self.descr)
 
     def predict(self, data, push=False):
         arr, l1, l2 = bind.to_c_2d_array(data)
-        result = lib.MCMCPredict(self.algo, arr, l1, l2, 1 if push else 0)
+        result = lib.MCMCPredict(self.descr, arr, l1, l2, 1 if push else 0)
         return bind.to_managed_1d_array(result)
 
     def centroids(self):
-        result = lib.MCMCRealCentroids(self.algo)
+        result = lib.MCMCRealCentroids(self.descr)
         return bind.to_managed_2d_array(result)
-
-    def __cleanup(self):
-        lib.FreeMCMC(self.algo)
