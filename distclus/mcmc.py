@@ -11,8 +11,8 @@ class MCMC:
     """
 
     def __init__(self, dim,
-                 init_k=8, mcmc_iter=30, framesize=0,
-                 b=100, amp=1, norm=2, nu=1,
+                 init_k=8, mcmc_iter=30, framesize=10000,
+                 b=1, amp=1, norm=2, nu=1,
                  init_iter=1, init="kmeanspp", seed=None):
         seed = seed or random.randint(0, 2 ** 63)
         self.algo = lib.MCMC(dim, init_k, mcmc_iter, framesize, b, amp, norm, nu, init_iter, bind.initializer(init),

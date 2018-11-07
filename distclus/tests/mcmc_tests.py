@@ -17,7 +17,7 @@ class TestsBindings(unittest.TestCase):
         self.assertTrue(algo.algo >= 1)
 
     def test_push_run_centroids_predict(self):
-        algo = MCMC(dim=2, init_k=2)
+        algo = MCMC(dim=2, init_k=2, b=500, mcmc_iter=100000000)
         algo.run(rasync=True)
 
         algo.push(self.data[:5])
@@ -34,7 +34,7 @@ class TestsBindings(unittest.TestCase):
         self.check_centroids(centroids, label0, label10)
 
     def test_fit_predict(self):
-        algo = MCMC(dim=2, init_k=2)
+        algo = MCMC(dim=2, init_k=2, b=500)
         algo.fit(self.data)
 
         labels = algo.predict(self.data)
