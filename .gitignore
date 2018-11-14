@@ -1,3 +1,4 @@
 .idea
 bind/build/
 *egg*
+.coverage
