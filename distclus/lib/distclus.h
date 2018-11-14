@@ -80,30 +80,30 @@ extern void FreeIntArray(long int* p0);
 
 extern int MCMC(size_t p0, int p1, int p2, int p3, double p4, double p5, double p6, double p7, int p8, initializer p9, long int p10);
 
-extern void MCMCPush(int p0, double* p1, size_t p2, size_t p3);
+extern void Push(int p0, double* p1, size_t p2, size_t p3);
 
-extern void MCMCRun(int p0, int p1);
+extern void Run(int p0, int p1);
 
-/* Return type for MCMCPredict */
-struct MCMCPredict_return {
+/* Return type for Predict */
+struct Predict_return {
 	long int* r0;
 	size_t r1;
 };
 
-extern struct MCMCPredict_return MCMCPredict(int p0, double* p1, size_t p2, size_t p3, int p4);
+extern struct Predict_return Predict(int p0, double* p1, size_t p2, size_t p3, int p4);
 
-/* Return type for MCMCRealCentroids */
-struct MCMCRealCentroids_return {
+/* Return type for RealCentroids */
+struct RealCentroids_return {
 	double* r0;
 	size_t r1;
 	size_t r2;
 };
 
-extern struct MCMCRealCentroids_return MCMCRealCentroids(int p0);
+extern struct RealCentroids_return RealCentroids(int p0);
 
-extern void MCMCClose(int p0);
+extern void Close(int p0);
 
-extern void FreeMCMC(int p0);
+extern void Free(int p0);
 
 #ifdef __cplusplus
 }

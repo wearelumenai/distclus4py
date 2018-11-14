@@ -4,7 +4,12 @@ import numpy as np
 
 from .ffi import ffi, lib
 
-TYPE_MAP = {'float': np.dtype('f4'), 'double': np.dtype('f8'), 'int': np.dtype('i4'), 'long': np.dtype('i8')}
+TYPE_MAP = {
+    'float': np.dtype('f4'),
+    'double': np.dtype('f8'),
+    'int': np.dtype('i4'),
+    'long': np.dtype('i8')
+}
 
 Array1D = namedtuple("Array1D", "addr l1")
 Array2D = namedtuple("Array2D", "addr l1 l2")
@@ -21,8 +26,8 @@ def to_c_2d_array(data):
 
 
 def to_managed_2d_array(ptr):
-    """
-    Convert a C pointer to a numpy 2D array and ensure it will be freed when array is garbage collected
+    """Convert a C pointer to a numpy 2D array and ensure it will be freed when
+    array is garbage collected
     """
     ptr_1d = Array1D(addr=ptr.addr, l1=ptr.l1 * ptr.l2)
     arr = to_managed_1d_array(ptr_1d)
@@ -31,12 +36,14 @@ def to_managed_2d_array(ptr):
 
 
 def to_managed_1d_array(ptr):
-    """
-    Convert a C pointer to a numpy 1D array and ensure it will be freed when array is garbage collected
+    """Convert a C pointer to a numpy 1D array and ensure it will be freed when
+    array is garbage collected
     """
     _type = get_type(ptr.addr)
     gc_data = finalize(ptr, _type)
-    return np.frombuffer(ffi.buffer(gc_data, ptr.l1 * ffi.sizeof(_type)), TYPE_MAP[_type])
+    return np.frombuffer(
+        ffi.buffer(gc_data, ptr.l1 * ffi.sizeof(_type)), TYPE_MAP[_type]
+    )
 
 
 def finalize(ptr, _type):

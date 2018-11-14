@@ -26,16 +26,16 @@ extern void FreeIntArray(long* p0);
 
 extern int MCMC(size_t dim, int initK, int mcmcIter, int framesize, double b, double amp, double norm, double nu, int initIter, initializer init, long seed);
 
-extern void MCMCPush(int descr, double* data, size_t l1, size_t l2);
+extern void Push(int descr, double* data, size_t l1, size_t l2);
 
-extern void MCMCRun(int descr, int async);
+extern void Run(int descr, int async);
 
-extern struct RealArray2D MCMCRealCentroids(int descr);
+extern struct RealArray2D RealCentroids(int descr);
 
-extern struct IntArray1D MCMCPredict(int descr, double* data, size_t l1, size_t l2, int push);
+extern struct IntArray1D Predict(int descr, double* data, size_t l1, size_t l2, int push);
 
-extern void MCMCClose(int descr);
+extern void Close(int descr);
 
-extern void FreeMCMC(int descr);
+extern void Free(int descr);
 """)
 lib = ffi.dlopen(lib_file)

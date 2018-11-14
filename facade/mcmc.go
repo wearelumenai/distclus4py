@@ -6,6 +6,7 @@ import (
 	"distclus/core"
 	"distclus/mcmc"
 	"distclus/real"
+
 	"golang.org/x/exp/rand"
 )
 
@@ -25,8 +26,8 @@ func MCMC(dim C.size_t,
 	return C.int(RegisterAlgorithm(algo))
 }
 
-//export MCMCPush
-func MCMCPush(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t) {
+//export Push
+func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t) {
 	var elemts = ArrayToRealElemts(data, l1, l2)
 	var algo = GetAlgorithm((int)(descr))
 	for i := range elemts {
@@ -34,14 +35,14 @@ func MCMCPush(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t) {
 	}
 }
 
-//export MCMCRun
-func MCMCRun(descr C.int, async C.int) {
+//export Run
+func Run(descr C.int, async C.int) {
 	var algo = GetAlgorithm((int)(descr))
 	algo.Run((int)(async) != 0)
 }
 
-//export MCMCPredict
-func MCMCPredict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, push C.int) (*C.long, C.size_t) {
+//export Predict
+func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, push C.int) (*C.long, C.size_t) {
 	var elemts = ArrayToRealElemts(data, l1, l2)
 	var algo = GetAlgorithm((int)(descr))
 
@@ -59,8 +60,8 @@ func MCMCPredict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, push C.i
 	return IntsToArray(predictions)
 }
 
-//export MCMCRealCentroids
-func MCMCRealCentroids(descr C.int) (*C.double, C.size_t, C.size_t) {
+//export RealCentroids
+func RealCentroids(descr C.int) (*C.double, C.size_t, C.size_t) {
 	var algo = GetAlgorithm((int)(descr))
 	var centroids, err = algo.Centroids()
 
@@ -71,15 +72,15 @@ func MCMCRealCentroids(descr C.int) (*C.double, C.size_t, C.size_t) {
 	return RealElemtsToArray(centroids)
 }
 
-//export MCMCClose
-func MCMCClose(descr C.int) {
+//export Close
+func Close(descr C.int) {
 	var algo = GetAlgorithm((int)(descr))
 	algo.Close()
 }
 
-//export FreeMCMC
-func FreeMCMC(descr C.int) {
-	MCMCClose(descr)
+//export Free
+func Free(descr C.int) {
+	Close(descr)
 	UnregisterAlgorithm((int)(descr))
 }
 

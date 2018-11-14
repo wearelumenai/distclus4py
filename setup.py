@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
 
-requires=[
+requires = [
     'cffi>=1.0.0',
     'numpy>=1.6',
     'scipy>=0.13.0'
 ]
 
-tests_require=[
+tests_require = [
     'pytest',
     'pytest-cov'
 ]

@@ -2,8 +2,9 @@ package main
 
 import (
 	"distclus/core"
-	"golang.org/x/exp/rand"
 	"testing"
+
+	"golang.org/x/exp/rand"
 )
 
 func TestMCMC(t *testing.T) {
@@ -14,7 +15,7 @@ func TestMCMC(t *testing.T) {
 		t.Error("Expected pointer got nil")
 	}
 
-	FreeMCMC(descr)
+	Free(descr)
 }
 
 func TestMCMCPushRunCentroidsPredict(t *testing.T) {
@@ -23,11 +24,11 @@ func TestMCMCPushRunCentroidsPredict(t *testing.T) {
 	var elemts = makeElements()
 	var arr, l1, l2 = RealElemtsToArray(elemts)
 
-	MCMCRun(descr, 1)
-	MCMCPush(descr, arr, l1, l2)
-	MCMCClose(descr)
+	Run(descr, 1)
+	Push(descr, arr, l1, l2)
+	Close(descr)
 
-	var centroids, c1, c2 = MCMCRealCentroids(descr)
+	var centroids, c1, c2 = RealCentroids(descr)
 
 	if c1 != 2 {
 		t.Error("Expected 2 got", c1)
@@ -39,7 +40,7 @@ func TestMCMCPushRunCentroidsPredict(t *testing.T) {
 
 	assertCentroids(ArrayToRealElemts(centroids, c1, c2), t)
 
-	var labels, l = MCMCPredict(descr, arr, l1, l2, 0)
+	var labels, l = Predict(descr, arr, l1, l2, 0)
 
 	if l != l1 {
 		t.Error("Expected", l1, "got", l)
@@ -47,7 +48,7 @@ func TestMCMCPushRunCentroidsPredict(t *testing.T) {
 
 	assertLabels(ArrayToInts(labels, l), t)
 
-	FreeMCMC(descr)
+	Free(descr)
 }
 
 func assertCentroids(elemts []core.Elemt, t *testing.T) {
