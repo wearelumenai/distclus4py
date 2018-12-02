@@ -22,6 +22,11 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 #line 1 "cgo-generated-wrapper"
 
+#line 3 "kmeans.go"
+#include "bind.h"
+
+#line 1 "cgo-generated-wrapper"
+
 #line 3 "mcmc.go"
 #include "bind.h"
 
@@ -79,13 +84,27 @@ extern "C" {
 #endif
 
 
+// FreeRealArray free an array of reals
+
 extern void FreeRealArray(double* p0);
+
+// FreeIntArray free an array of integers
 
 extern void FreeIntArray(long int* p0);
 
-extern int MCMC(size_t p0, int p1, int p2, int p3, double p4, double p5, double p6, double p7, int p8, initializer p9, long int p10);
+// KMEANS algorithm
+
+extern int KMEANS(space p0, int p1, initializer p2, long int p3, int p4, int p5, int p6);
+
+// MCMC algorithm
+
+extern int MCMC(space p0, int p1, initializer p2, long int p3, size_t p4, int p5, int p6, int p7, int p8, double p9, double p10, double p11, double p12, int p13);
+
+// Push push an element in a specific algorithm
 
 extern void Push(int p0, double* p1, size_t p2, size_t p3);
+
+// Run executes a specific algorithm
 
 extern void Run(int p0, int p1);
 
@@ -94,6 +113,8 @@ struct Predict_return {
 	long int* r0;
 	size_t r1;
 };
+
+// Predict predicts an element in a specific algorithm
 
 extern struct Predict_return Predict(int p0, double* p1, size_t p2, size_t p3, int p4);
 
@@ -104,11 +125,21 @@ struct RealCentroids_return {
 	size_t r2;
 };
 
+// RealCentroids returns specific on centroids
+
 extern struct RealCentroids_return RealCentroids(int p0);
+
+// Close terminates an oc execution
 
 extern void Close(int p0);
 
+// Free terminates an oc execution and unregister it from global registry
+
 extern void Free(int p0);
+
+// CreateOC creates an OC according to configurable parameters
+
+extern int CreateOC(oc p0, space p1, GoInterface p2, initializer p3);
 
 #ifdef __cplusplus
 }

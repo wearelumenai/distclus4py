@@ -77,3 +77,13 @@ def initializer(name):
         return lib.I_GIVEN
     elif name in ['kmeanspp', 'kmeans++']:
         return lib.I_KMEANSPP
+
+
+def space(name):
+    """convert a string to a CFFI space enum type"""
+    return getattr(lib, 'S_{0}'.format(name.upper()))
+
+
+def oc(name):
+    """convert a string to a CFFI oc enum type"""
+    return getattr(lib, 'O_{0}'.format(name.upper()))

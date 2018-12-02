@@ -51,6 +51,11 @@ func TestUnregisterAlgorithm(t *testing.T) {
 	}
 }
 
-func makeAlgorithm() AlgoritmDescr {
-	return (int)(MCMC(2, 2, 30, 0, 100.0, 1.0, 2.0, 1.0, 1, 0, 6305689164243))
+func makeAlgorithm() AlgorithmDescr {
+	return (int)(MCMC(
+		0, 0, 0, 6305689164243,
+		2, 2, 3, 30, 0,
+		100.0, 1.0, 2.0, 1.0,
+		1,
+	))
 }

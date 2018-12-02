@@ -9,30 +9,34 @@ import (
 // Algorithm may be registered, unregistered or accessed.
 // The table is a map accessed with a descriptor
 
-type AlgoritmDescr = int
+// AlgorithmDescr is the algorithm description type
+type AlgorithmDescr = int
 
 var lock = &sync.Mutex{}
 var sequence = 1
 var table = make(map[int]core.OnlineClust)
 
-func RegisterAlgorithm(algo core.OnlineClust) AlgoritmDescr {
+// RegisterAlgorithm registers an algorithm and retuns a descriptor
+func RegisterAlgorithm(algo core.OnlineClust) AlgorithmDescr {
 	lock.Lock()
 	defer lock.Unlock()
 
 	var descr = sequence
-	sequence += 1
+	sequence++
 	table[descr] = algo
 	return descr
 }
 
-func UnregisterAlgorithm(descr AlgoritmDescr) {
+// UnregisterAlgorithm unregisters an OC
+func UnregisterAlgorithm(descr AlgorithmDescr) {
 	lock.Lock()
 	defer lock.Unlock()
 
 	delete(table, descr)
 }
 
-func GetAlgorithm(descr AlgoritmDescr) core.OnlineClust {
+// GetAlgorithm returns an OC
+func GetAlgorithm(descr AlgorithmDescr) core.OnlineClust {
 	lock.Lock()
 	defer lock.Unlock()
 

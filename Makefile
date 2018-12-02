@@ -5,6 +5,7 @@ bindgo:
 	cp facade/bind.h distclus/lib/
 
 test: bindgo
+	go test ./...
 	pipenv install "-e .[test]"
 	pipenv run python setup.py test
 	pipenv run py.test --cov=distclus distclus/tests

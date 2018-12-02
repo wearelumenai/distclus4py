@@ -29,7 +29,7 @@ class TestsBindings(unittest.TestCase):
 
         algo.close()
 
-        centroids = algo.centroids()
+        centroids = algo.centroids
         self.check_centroids(centroids, label0, label10)
 
     def test_fit_predict(self):
@@ -39,7 +39,7 @@ class TestsBindings(unittest.TestCase):
         labels = algo.predict(self.data)
         label0, label10 = self.check_labels(labels)
 
-        centroids = algo.centroids()
+        centroids = algo.centroids
         self.check_centroids(centroids, label0, label10)
 
     def check_labels(self, labels):
@@ -63,8 +63,8 @@ class TestsBindings(unittest.TestCase):
         mean0 = np.mean(self.data[:10, ], axis=0)
         mean10 = np.mean(self.data[10:, ], axis=0)
 
-        centroid0 = centroids[label0,]
-        centroid10 = centroids[label10,]
+        centroid0 = centroids[label0, ]
+        centroid10 = centroids[label10, ]
 
         dist0 = np.linalg.norm(mean0 - centroid0)
         dist10 = np.linalg.norm(mean10 - centroid10)

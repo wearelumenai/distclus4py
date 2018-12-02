@@ -81,7 +81,7 @@ func TestArrayToRealElemts(t *testing.T) {
 func TestInitConvert(t *testing.T) {
 	assertInitializer(t, Initializer(0), kmeans.RandInitializer)
 	assertInitializer(t, Initializer(1), kmeans.GivenInitializer)
-	assertInitializer(t, Initializer(2), kmeans.KMeansPPInitializer)
+	assertInitializer(t, Initializer(2), kmeans.PPInitializer)
 }
 
 func assertInitializer(t *testing.T, expected core.Initializer, actual core.Initializer) {
@@ -89,6 +89,31 @@ func assertInitializer(t *testing.T, expected core.Initializer, actual core.Init
 	var vactual = reflect.ValueOf(actual)
 	if vactual != vexpected {
 		t.Error("Expected", vexpected, "got", vactual)
+	}
+}
+
+func TestOC(t *testing.T) {
+	assertOC(t, OC(0), "kmeans")
+	assertOC(t, OC(1), "mcmc")
+	assertOC(t, OC(2), "knn")
+	assertOC(t, OC(3), "streaming")
+}
+
+func assertOC(t *testing.T, actual string, expected string) {
+	if actual != expected {
+		t.Error("Expected", expected, "got", actual)
+	}
+}
+
+func TestSpace(t *testing.T) {
+	assertSpace(t, Space(0), "real")
+	assertSpace(t, Space(1), "complex")
+	assertSpace(t, Space(2), "series")
+}
+
+func assertSpace(t *testing.T, actual string, expected string) {
+	if actual != expected {
+		t.Error("Expected", expected, "got", actual)
 	}
 }
 

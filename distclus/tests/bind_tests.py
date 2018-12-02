@@ -12,6 +12,17 @@ class TestBind(unittest.TestCase):
         self.assertEqual(lib.I_GIVEN, bind.initializer("given"))
         self.assertEqual(lib.I_KMEANSPP, bind.initializer("kmeanspp"))
 
+    def test_space(self):
+        self.assertEqual(lib.S_REAL, bind.space("real"))
+        self.assertEqual(lib.S_COMPLEX, bind.space("complex"))
+        self.assertEqual(lib.S_SERIES, bind.space("series"))
+
+    def test_oc(self):
+        self.assertEqual(lib.O_KMEANS, bind.oc("kmeans"))
+        self.assertEqual(lib.O_MCMC, bind.oc("mcmc"))
+        self.assertEqual(lib.O_KNN, bind.oc("knn"))
+        self.assertEqual(lib.O_STREAMING, bind.oc("streaming"))
+
     def test_to_array_1d(self):
         data = self.alloc_double_array(20)
 
