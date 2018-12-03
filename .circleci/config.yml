@@ -10,5 +10,5 @@ jobs: # basic units of work in a run
     steps: # steps that comprise the `build` job
       - checkout # check out source code to working directory
 
-      - run: go get bitbucket.org/weARtfact/distclus.git
+      - run: go get bitbucket.org/weARtfact/distclus
       - run: make test
