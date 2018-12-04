@@ -13,6 +13,6 @@ class KMEANS(OnlineClust):
         self, space='real', par=True, init='kmeanspp',
         k=16, iter=100, frame_size=10000, seed=None
     ):
-        super(MCMC, self).__init__(
+        super(KMEANS, self).__init__(
             space, par, init, seed, k, iter, frame_size, seed
         )
