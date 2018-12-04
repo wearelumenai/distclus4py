@@ -1,4 +1,4 @@
-all: bindgo
+all: bindgo test
 
 bindgo:
 	go build -buildmode=c-shared -x -o distclus/lib/distclus.so distclus4py/facade/
