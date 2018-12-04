@@ -57,9 +57,6 @@ class OnlineClust:
         """Close algorithm execution."""
         lib.Close(self.descr)
 
-    def __del__(self):
-        return self.close()
-
     def predict(self, data, push=False):
         """Predict """
         arr, l1, l2 = bind.to_c_2d_array(data)
