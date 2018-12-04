@@ -1,5 +1,7 @@
 .idea
-bind/build/
+build/
 *egg*
 .coverage
 *so
+build/
+__pycache__/
