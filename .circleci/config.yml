@@ -11,7 +11,7 @@ jobs: # basic units of work in a run
       - checkout # check out source code to working directory
       - add_ssh_keys: 
           fingerprints:
-            - "04:28:84:d5:92:c7:25:95:0c:2b:59:d6:7c:f4:db:83"
+            - "bb:43:ec:c0:d5:ad:26:c1:34:bb:81:a1:68:34:04:d3"
 
       - run: git clone git@bitbucket.org:weARtfact/distclus.git
       - run: make test
