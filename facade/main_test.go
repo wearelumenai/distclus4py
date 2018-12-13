@@ -52,8 +52,11 @@ func TestUnregisterAlgorithm(t *testing.T) {
 }
 
 func makeAlgorithm() AlgorithmDescr {
+	var elemts = makeElements()
+	var arr, l1, l2 = RealElemtsToArray(elemts)
 	return (int)(MCMC(
 		0, 0, 0, 6305689164243,
+		arr, l1, l2,
 		2, 2, 3, 30, 0,
 		100.0, 1.0, 2.0, 1.0,
 		1,

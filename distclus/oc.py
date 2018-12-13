@@ -4,19 +4,24 @@ import weakref
 from . import bind
 from .ffi import lib
 
+import numpy as np
+
 
 class OnlineClust:
     """Base class for algorithm implementation using a native library"""
 
     def __init__(
-        self, space='real', par=True, init='kmeanspp', seed=None, *args
+        self,
+        space='real', par=True, init='kmeanspp', seed=None,
+        data=np.empty([0, 0]), *args
     ):
         space = bind.space(space)
         init = bind.initializer(init)
         seed = random.randint(0, 2 ** 63) if seed is None else seed
         par = 1 if par else 0
         descr = getattr(lib, self.__class__.__name__.upper())
-        self.descr = descr(space, par, init, seed, *args)
+        arr, l1, l2 = bind.to_c_2d_array(data)
+        self.descr = descr(space, par, init, seed, arr, l1, l2, *args)
         self.__finalize = weakref.finalize(self, lambda: lib.Free(self.descr))
 
     def fit(self, data):

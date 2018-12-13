@@ -20,14 +20,16 @@ func KMEANS(
 	space C.space,
 	par C.int,
 	initializer C.initializer,
-	seed C.long, k C.int, iter C.int, framesize C.int,
+	seed C.long,
+	data *C.double, l1 C.size_t, l2 C.size_t,
+	k C.int, iter C.int, framesize C.int,
 	innerSpace C.space, window C.int,
 ) C.int {
 	var conf = core.Conf{
 		ImplConf:  kmeansConf(par, k, iter, framesize, seed),
 		SpaceConf: spaceConf(space, window, innerSpace),
 	}
-	return CreateOC(C.O_KMEANS, space, conf, initializer)
+	return CreateOC(C.O_KMEANS, space, conf, initializer, data, l1, l2)
 }
 
 func kmeansConf(

@@ -26,12 +26,20 @@ extern void FreeRealArray(double* p0);
 
 extern void FreeIntArray(long* p0);
 
-extern int KMEANS(space space, int par, initializer init, long seed, int k,
-    int iter, int framesize);
+extern int KMEANS(
+    space space, int par, initializer init, long seed,
+    double* data, size_t l1, size_t l2,
+    int k, int iter, int framesize,
+    space innerSpace, int window
+);
 
-extern int MCMC(space space, int par, initializer init, long seed,
+extern int MCMC(
+    space space, int par, initializer init, long seed,
+    double* data, size_t l1, size_t l2,
     size_t dim, int initK, int maxK, int mcmcIter, int framesize, double b,
-    double amp, double norm, double nu, int initIter);
+    double amp, double norm, double nu, int initIter,
+    space innerSpace, int window
+);
 
 extern void Push(int descr, double* data, size_t l1, size_t l2);
 
@@ -44,5 +52,7 @@ extern struct IntArray1D Predict(int descr, double* data, size_t l1, size_t l2);
 extern void Close(int descr);
 
 extern void Free(int descr);
+
+extern void Reset(int descr, double* data, size_t l1, size_t l2);
 """)
 lib = ffi.dlopen(lib_file)

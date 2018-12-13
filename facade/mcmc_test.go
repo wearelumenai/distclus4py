@@ -5,8 +5,11 @@ import (
 )
 
 func TestMCMC(t *testing.T) {
+	var elemts = makeElements()
+	var arr, l1, l2 = RealElemtsToArray(elemts)
 	var descr = MCMC(
 		0, 0, 2, 6305689164243,
+		arr, l1, l2,
 		2, 2, 3, 30, 10000,
 		100.0, 1.0, 2.0, 1.0,
 		1,
@@ -22,16 +25,19 @@ func TestMCMC(t *testing.T) {
 }
 
 func TestMCMCPushRunCentroidsPredict(t *testing.T) {
+	var elemts = makeElements()
+	var arr, l1, l2 = RealElemtsToArray(elemts)
 	var descr = MCMC(
 		0, 0, 2, 6305689164243,
+		arr, l1, l2,
 		2, 2, 3, 100000000, 10000,
 		1.0, 1.0, 2.0, 1.0,
 		1,
 		0, 0,
 	)
 
-	var elemts = makeElements()
-	var arr, l1, l2 = RealElemtsToArray(elemts)
+	elemts = makeElements()
+	arr, l1, l2 = RealElemtsToArray(elemts)
 
 	Run(descr, 1)
 	Push(descr, arr, l1, l2)

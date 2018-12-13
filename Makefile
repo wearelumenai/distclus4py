@@ -8,4 +8,4 @@ test:
 	go test ./...
 	pipenv install "-e .[test]"
 	pipenv run python setup.py test
-	pipenv run py.test --cov=distclus distclus/tests
+	pipenv run py.test --cov=distclus tests

@@ -94,11 +94,11 @@ extern void FreeIntArray(long int* p0);
 
 // KMEANS algorithm
 
-extern int KMEANS(space p0, int p1, initializer p2, long int p3, int p4, int p5, int p6, space p7, int p8);
+extern int KMEANS(space p0, int p1, initializer p2, long int p3, double* p4, size_t p5, size_t p6, int p7, int p8, int p9, space p10, int p11);
 
 // MCMC algorithm
 
-extern int MCMC(space p0, int p1, initializer p2, long int p3, size_t p4, int p5, int p6, int p7, int p8, double p9, double p10, double p11, double p12, int p13, space p14, int p15);
+extern int MCMC(space p0, int p1, initializer p2, long int p3, double* p4, size_t p5, size_t p6, size_t p7, int p8, int p9, int p10, int p11, double p12, double p13, double p14, double p15, int p16, space p17, int p18);
 
 // Push push an element in a specific algorithm
 

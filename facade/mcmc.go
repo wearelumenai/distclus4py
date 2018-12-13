@@ -17,6 +17,7 @@ import (
 //export MCMC
 func MCMC(
 	space C.space, par C.int, initializer C.initializer, seed C.long,
+	data *C.double, l1 C.size_t, l2 C.size_t,
 	dim C.size_t, initK C.int, maxK C.int, mcmcIter C.int, framesize C.int,
 	b C.double, amp C.double, norm C.double, nu C.double,
 	initIter C.int,
@@ -26,7 +27,7 @@ func MCMC(
 		ImplConf:  mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed),
 		SpaceConf: spaceConf(space, window, innerSpace),
 	}
-	return CreateOC(C.O_MCMC, space, conf, initializer)
+	return CreateOC(C.O_MCMC, space, conf, initializer, data, l1, l2)
 }
 
 func mcmcConf(par C.int,

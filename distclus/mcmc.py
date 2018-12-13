@@ -5,6 +5,8 @@ from . import bind
 
 from .oc import OnlineClust
 
+import numpy as np
+
 
 class MCMC(OnlineClust):
     """Proxy a MCMC algorithm implemented in native library"""
@@ -12,10 +14,11 @@ class MCMC(OnlineClust):
     def __init__(
         self, dim=0, space='real', par=True, init='kmeanspp',
         init_k=8, max_k=16, mcmc_iter=100, frame_size=10000, b=1,
-        amp=1, norm=2, nu=3, init_iter=1, seed=None
+        amp=1, norm=2, nu=3, init_iter=1, seed=None, data=np.empty([0, 0]),
+        inner_space=0, window=10
     ):
         super(MCMC, self).__init__(
-            space, par, init, seed,
+            space, par, init, seed, data,
             dim, init_k, max_k, mcmc_iter, frame_size, b, amp, norm, nu,
-            init_iter
+            init_iter, inner_space, window
         )

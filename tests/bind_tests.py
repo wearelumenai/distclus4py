@@ -2,7 +2,7 @@ import unittest
 
 from distclus import bind
 from distclus.ffi import lib
-from distclus.tests import C, tffi
+from tests import C, tffi
 
 
 class TestBind(unittest.TestCase):
