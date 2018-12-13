@@ -39,8 +39,7 @@ extern void Run(int descr, int async);
 
 extern struct RealArray2D RealCentroids(int descr);
 
-extern struct IntArray1D Predict(int descr, double* data, size_t l1, size_t l2,
-int push);
+extern struct IntArray1D Predict(int descr, double* data, size_t l1, size_t l2);
 
 extern void Close(int descr);
 

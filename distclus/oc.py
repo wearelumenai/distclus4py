@@ -6,9 +6,7 @@ from .ffi import lib
 
 
 class OnlineClust:
-    """
-    Base class for algorithm implementation using a native library
-    """
+    """Base class for algorithm implementation using a native library"""
 
     def __init__(
         self, space='real', par=True, init='kmeanspp', seed=None, *args
@@ -19,15 +17,12 @@ class OnlineClust:
         par = 1 if par else 0
         descr = getattr(lib, self.__class__.__name__.upper())
         self.descr = descr(space, par, init, seed, *args)
-
-    def __finalize(self):
-        weakref.finalize(self, lambda: lib.Free(self.descr))
+        self.__finalize = weakref.finalize(self, lambda: lib.Free(self.descr))
 
     def fit(self, data):
         """Execute sequentially push, run and close methods.
 
-        :param data: data to process
-        """
+        :param data: data to process"""
         self.push(data)
         self.run()
         self.close()
@@ -35,8 +30,7 @@ class OnlineClust:
     def push(self, data):
         """Push input data to process.
 
-        :param data: data to push in the algorithme.
-        """
+        :param data: data to push in the algorithme."""
         arr, l1, l2 = bind.to_c_2d_array(data)
         lib.Push(self.descr, arr, l1, l2)
 
@@ -57,10 +51,10 @@ class OnlineClust:
         """Close algorithm execution."""
         lib.Close(self.descr)
 
-    def predict(self, data, push=False):
+    def predict(self, data):
         """Predict """
         arr, l1, l2 = bind.to_c_2d_array(data)
-        result = lib.Predict(self.descr, arr, l1, l2, 1 if push else 0)
+        result = lib.Predict(self.descr, arr, l1, l2)
         return bind.to_managed_1d_array(result)
 
     @property
@@ -70,13 +64,13 @@ class OnlineClust:
         return bind.to_managed_2d_array(result)
 
     def __len__(self):
-        return len(this.centroids)
+        return len(self.centroids)
 
     def __getitem__(self, key):
-        return this.centroids[key]
+        return self.centroids[key]
 
     def __iter__(self):
-        return iter(this.centroids)
+        return iter(self.centroids)
 
     def __contains__(self, data):
-        return data in this.centroids
+        return data in self.centroids

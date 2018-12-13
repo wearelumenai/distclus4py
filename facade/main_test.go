@@ -57,5 +57,6 @@ func makeAlgorithm() AlgorithmDescr {
 		2, 2, 3, 30, 0,
 		100.0, 1.0, 2.0, 1.0,
 		1,
+		0, 0,
 	))
 }

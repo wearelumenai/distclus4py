@@ -94,11 +94,11 @@ extern void FreeIntArray(long int* p0);
 
 // KMEANS algorithm
 
-extern int KMEANS(space p0, int p1, initializer p2, long int p3, int p4, int p5, int p6);
+extern int KMEANS(space p0, int p1, initializer p2, long int p3, int p4, int p5, int p6, space p7, int p8);
 
 // MCMC algorithm
 
-extern int MCMC(space p0, int p1, initializer p2, long int p3, size_t p4, int p5, int p6, int p7, int p8, double p9, double p10, double p11, double p12, int p13);
+extern int MCMC(space p0, int p1, initializer p2, long int p3, size_t p4, int p5, int p6, int p7, int p8, double p9, double p10, double p11, double p12, int p13, space p14, int p15);
 
 // Push push an element in a specific algorithm
 
@@ -116,7 +116,7 @@ struct Predict_return {
 
 // Predict predicts an element in a specific algorithm
 
-extern struct Predict_return Predict(int p0, double* p1, size_t p2, size_t p3, int p4);
+extern struct Predict_return Predict(int p0, double* p1, size_t p2, size_t p3);
 
 /* Return type for RealCentroids */
 struct RealCentroids_return {
@@ -136,10 +136,6 @@ extern void Close(int p0);
 // Free terminates an oc execution and unregister it from global registry
 
 extern void Free(int p0);
-
-// CreateOC creates an OC according to configurable parameters
-
-extern int CreateOC(oc p0, space p1, GoInterface p2, initializer p3);
 
 #ifdef __cplusplus
 }

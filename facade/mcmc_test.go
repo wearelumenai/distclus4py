@@ -10,6 +10,7 @@ func TestMCMC(t *testing.T) {
 		2, 2, 3, 30, 10000,
 		100.0, 1.0, 2.0, 1.0,
 		1,
+		0, 0,
 	)
 	var algo = GetAlgorithm((int)(descr))
 
@@ -26,6 +27,7 @@ func TestMCMCPushRunCentroidsPredict(t *testing.T) {
 		2, 2, 3, 100000000, 10000,
 		1.0, 1.0, 2.0, 1.0,
 		1,
+		0, 0,
 	)
 
 	var elemts = makeElements()
@@ -47,7 +49,7 @@ func TestMCMCPushRunCentroidsPredict(t *testing.T) {
 
 	assertCentroids(ArrayToRealElemts(centroids, c1, c2), t)
 
-	var labels, l = Predict(descr, arr, l1, l2, 0)
+	var labels, l = Predict(descr, arr, l1, l2)
 
 	if l != l1 {
 		t.Error("Expected", l1, "got", l)

@@ -30,13 +30,13 @@ func Run(descr C.int, async C.int) {
 
 // Predict predicts an element in a specific algorithm
 //export Predict
-func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, push C.int) (*C.long, C.size_t) {
+func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t) (*C.long, C.size_t) {
 	var elemts = ArrayToRealElemts(data, l1, l2)
 	var algo = GetAlgorithm((int)(descr))
 
 	var predictions = make([]int, len(elemts))
 	for i := range elemts {
-		var _, label, err = algo.Predict(elemts[i], (int)(push) != 0)
+		var _, label, err = algo.Predict(elemts[i])
 
 		if err != nil {
 			panic(err)
@@ -76,11 +76,10 @@ func Free(descr C.int) {
 }
 
 // CreateOC creates an OC according to configurable parameters
-//export CreateOC
-func CreateOC(name C.oc, space C.space, conf interface{}, initializer C.initializer) C.int {
-	var spaceImpl = factory.CreateSpace(Space(space), conf)
+func CreateOC(name C.oc, space C.space, conf core.Conf, initializer C.initializer) C.int {
 	var ocName = OC(name)
-	var oc = factory.CreateOC(ocName, conf, spaceImpl, []core.Elemt{}, Initializer(initializer))
+	var spaceName = Space(space)
+	var oc = factory.CreateOC(ocName, spaceName, conf, []core.Elemt{}, Initializer(initializer))
 	return C.int(RegisterAlgorithm(oc))
 }
 
@@ -91,12 +90,8 @@ func SetConf(descr C.int, conf core.Conf) error {
 }
 
 // SetSpace switches algorithm space
-func SetSpace(descr C.int, space C.space, conf core.Conf) error {
+func SetSpace(descr C.int, space C.space, conf core.SpaceConf) error {
 	var algo = GetAlgorithm((int)(descr))
-	var finalConf = conf
-	if finalConf == nil {
-		finalConf = algo.Conf()
-	}
-	var spaceImpl = factory.CreateSpace(Space(space), finalConf)
+	var spaceImpl = factory.CreateSpace(Space(space), conf)
 	return algo.SetSpace(spaceImpl)
 }

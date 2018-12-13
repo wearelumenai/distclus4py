@@ -14,5 +14,5 @@ class KMEANS(OnlineClust):
         k=16, iter=100, frame_size=10000, seed=None
     ):
         super(KMEANS, self).__init__(
-            space, par, init, seed, k, iter, frame_size, seed
+            space, par, init, seed, k, iter, frame_size
         )
