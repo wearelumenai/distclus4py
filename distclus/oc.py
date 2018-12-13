@@ -74,3 +74,15 @@ class OnlineClust:
 
     def __contains__(self, data):
         return data in self.centroids
+
+    def reset(
+        self, data, dim=0, space='real', par=True, init='kmeanspp',
+        init_k=8, max_k=16, mcmc_iter=100, frame_size=10000, b=1,
+        amp=1, norm=2, nu=3, init_iter=1, seed=None
+    ):
+        arr, l1, l2 = bind.to_c_2d_array(data)
+        return lib.Reset(
+            self.descr, arr, l1, l2, space, par, init, seed,
+            dim, init_k, max_k, mcmc_iter, frame_size, b, amp, norm, nu,
+            init_iter
+        )

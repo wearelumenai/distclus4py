@@ -13,12 +13,12 @@ class TestsBindings(unittest.TestCase):
              np.array(np.random.rand(10, 2), dtype=np.float64) + 30))
 
     def test_mcmc(self):
-        algo = MCMC(dim=2, init_k=2)
+        algo = MCMC(init_k=2)
         self.assertTrue(algo.descr >= 1)
 
     def test_push_run_centroids_predict(self):
         algo = MCMC(
-            dim=2, init_k=2, b=1, mcmc_iter=100000000, seed=653126513379
+            init_k=2, b=1, mcmc_iter=100000000, seed=653126513379
         )
         algo.run(rasync=True)
 
@@ -35,7 +35,7 @@ class TestsBindings(unittest.TestCase):
         self.check_centroids(centroids, label0, label10)
 
     def test_fit_predict(self):
-        algo = MCMC(dim=2, init_k=2, b=500)
+        algo = MCMC(init_k=2, b=500)
         algo.fit(self.data)
 
         labels = algo.predict(self.data)

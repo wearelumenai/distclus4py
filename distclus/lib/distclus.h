@@ -137,6 +137,10 @@ extern void Close(int p0);
 
 extern void Free(int p0);
 
+// Reset resets the algorithm
+
+extern void Reset(int p0, double* p1, size_t p2, size_t p3, space p4, int p5, long int p6, size_t p7, int p8, int p9, int p10, int p11, double p12, double p13, double p14, double p15, int p16, space p17, int p18);
+
 #ifdef __cplusplus
 }
 #endif

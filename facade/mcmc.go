@@ -23,8 +23,8 @@ func MCMC(
 	innerSpace C.space, window C.int,
 ) C.int {
 	var conf = core.Conf{
-		mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed),
-		spaceConf(space, window, innerSpace),
+		ImplConf:  mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed),
+		SpaceConf: spaceConf(space, window, innerSpace),
 	}
 	return CreateOC(C.O_MCMC, space, conf, initializer)
 }
