@@ -9,6 +9,9 @@ jobs: # basic units of work in a run
 
     steps: # steps that comprise the `build` job
       - checkout # check out source code to working directory
+      - add_ssh_keys: 
+          fingerprints:
+            - "bb:43:ec:c0:d5:ad:26:c1:34:bb:81:a1:68:34:04:d3"
 
-      - run: go get bitbucket.org/weARtfact/distclus
+      - run: git clone git@bitbucket.org:weARtfact/distclus.git
       - run: make test
