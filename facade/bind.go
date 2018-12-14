@@ -27,10 +27,8 @@ func Initializer(i C.initializer) (fi core.Initializer) {
 // Space retuns a specific OC space name
 func Space(s C.space) (fs string) {
 	switch s {
-	case C.S_REAL:
-		fs = "real"
-	case C.S_COMPLEX:
-		fs = "complex"
+	case C.S_VECTORS:
+		fs = "vectors"
 	case C.S_SERIES:
 		fs = "series"
 	}

@@ -12,22 +12,36 @@ class OnlineClust:
 
     def __init__(
         self,
-        space='real', par=True, init='kmeanspp', seed=None,
+        space='vectors', par=True, init='kmeanspp', seed=None,
         data=np.empty([0, 0]), *args
     ):
         space = bind.space(space)
         init = bind.initializer(init)
         seed = random.randint(0, 2 ** 63) if seed is None else seed
         par = 1 if par else 0
-        descr = getattr(lib, self.__class__.__name__.upper())
         arr, l1, l2 = bind.to_c_2d_array(data)
-        self.descr = descr(space, par, init, seed, arr, l1, l2, *args)
-        self.__finalize = weakref.finalize(self, lambda: lib.Free(self.descr))
+        self.args = [space, par, init, seed, arr, l1, l2] + list(args)
+        self.reset()
+        self.__finalize = weakref.finalize(self, self._free)
+
+    def _free(self):
+        if hasattr(self, 'descr'):
+            lib.Free(self.descr)
+
+    def _set_descr(self):
+        descr = getattr(lib, self.__class__.__name__.upper())
+        self.descr = descr(*self.args)
+
+    def reset(self):
+        """Reset the algorithm"""
+        self._free()
+        self._set_descr()
 
     def fit(self, data):
         """Execute sequentially push, run and close methods.
 
         :param data: data to process"""
+        self.reset()
         self.push(data)
         self.run()
         self.close()
@@ -79,15 +93,3 @@ class OnlineClust:
 
     def __contains__(self, data):
         return data in self.centroids
-
-    def reset(
-        self, data, dim=0, space='real', par=True, init='kmeanspp',
-        init_k=8, max_k=16, mcmc_iter=100, frame_size=10000, b=1,
-        amp=1, norm=2, nu=3, init_iter=1, seed=None
-    ):
-        arr, l1, l2 = bind.to_c_2d_array(data)
-        return lib.Reset(
-            self.descr, arr, l1, l2, space, par, init, seed,
-            dim, init_k, max_k, mcmc_iter, frame_size, b, amp, norm, nu,
-            init_iter
-        )

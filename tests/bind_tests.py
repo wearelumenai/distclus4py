@@ -13,8 +13,7 @@ class TestBind(unittest.TestCase):
         self.assertEqual(lib.I_KMEANSPP, bind.initializer("kmeanspp"))
 
     def test_space(self):
-        self.assertEqual(lib.S_REAL, bind.space("real"))
-        self.assertEqual(lib.S_COMPLEX, bind.space("complex"))
+        self.assertEqual(lib.S_VECTORS, bind.space("vectors"))
         self.assertEqual(lib.S_SERIES, bind.space("series"))
 
     def test_oc(self):

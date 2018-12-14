@@ -6,6 +6,7 @@ import (
 	"distclus/core"
 	"distclus/kmeans"
 	"distclus/series"
+	"distclus/vectors"
 
 	"golang.org/x/exp/rand"
 )
@@ -36,7 +37,6 @@ func kmeansConf(
 	par C.int,
 	k C.int, iter C.int, framesize C.int, seed C.long,
 ) kmeans.Conf {
-
 	return kmeans.Conf{
 		Par: (par != 0), K: (int)(k), FrameSize: (int)(framesize), Iter: (int)(iter),
 		RGen: rand.New(rand.NewSource((uint64)(seed))),
@@ -45,7 +45,11 @@ func kmeansConf(
 
 func spaceConf(space C.space, window C.int, innerSpace C.space) core.SpaceConf {
 	if space == C.S_SERIES {
-		return series.NewSpace(series.Conf{"real", (int)(window)})
+		var conf = series.Conf{
+			InnerSpace: vectors.Space{},
+			Window:     (int)(window),
+		}
+		return series.NewSpace(conf)
 	}
 	return nil
 }

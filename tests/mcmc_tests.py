@@ -16,11 +16,6 @@ class TestsBindings(unittest.TestCase):
         algo = MCMC(init_k=2)
         self.assertTrue(algo.descr >= 1)
 
-    def test_data(self):
-        algo = MCMC(data=self.data)
-        algo()
-        self.assertEqual(len(algo.centroids), 2)
-
     def test_push_run_centroids_predict(self):
         algo = MCMC(
             init_k=2, b=1, mcmc_iter=100000000, seed=653126513379

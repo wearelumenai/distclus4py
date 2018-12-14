@@ -8,7 +8,7 @@ header_file = os.path.join(os.path.dirname(__file__), 'lib', 'distclus.so')
 ffi = cffi.FFI()
 ffi.cdef("""
 typedef enum {I_RANDOM, I_GIVEN, I_KMEANSPP} initializer;
-typedef enum {S_REAL, S_COMPLEX, S_SERIES} space;
+typedef enum {S_VECTORS, S_SERIES} space;
 typedef enum {O_KMEANS, O_MCMC, O_KNN, O_STREAMING} oc;
 
 struct IntArray1D {
@@ -52,7 +52,5 @@ extern struct IntArray1D Predict(int descr, double* data, size_t l1, size_t l2);
 extern void Close(int descr);
 
 extern void Free(int descr);
-
-extern void Reset(int descr, double* data, size_t l1, size_t l2);
 """)
 lib = ffi.dlopen(lib_file)

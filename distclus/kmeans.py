@@ -12,7 +12,7 @@ class KMEANS(OnlineClust):
     """Proxy a KMEANS algorithm implemented in native library"""
 
     def __init__(
-        self, space='real', par=True, init='kmeanspp',
+        self, space='vectors', par=True, init='kmeanspp',
         k=16, iter=100, frame_size=10000, seed=None, data=np.empty([0, 0]),
         inner_space=0, window=10
     ):

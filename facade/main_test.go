@@ -57,7 +57,7 @@ func makeAlgorithm() AlgorithmDescr {
 	return (int)(MCMC(
 		0, 0, 0, 6305689164243,
 		arr, l1, l2,
-		2, 2, 3, 30, 0,
+		2, 2, 3, 30, 100,
 		100.0, 1.0, 2.0, 1.0,
 		1,
 		0, 0,

@@ -83,37 +83,3 @@ func CreateOC(name C.oc, space C.space, conf core.Conf, initializer C.initialize
 	var oc = factory.CreateOC(ocName, spaceName, conf, elemts, Initializer(initializer))
 	return C.int(RegisterAlgorithm(oc))
 }
-
-// SetConf switches algorithm configuration
-func SetConf(descr C.int, conf core.Conf) error {
-	var algo = GetAlgorithm((int)(descr))
-	return algo.SetConf(conf)
-}
-
-// SetSpace switches algorithm space
-func SetSpace(descr C.int, space C.space, conf core.SpaceConf) error {
-	var algo = GetAlgorithm((int)(descr))
-	var spaceImpl = factory.CreateSpace(Space(space), conf)
-	return algo.SetSpace(spaceImpl)
-}
-
-// Reset resets the algorithm
-//export Reset
-func Reset(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t,
-	space C.space, par C.int, seed C.long,
-	dim C.size_t, initK C.int, maxK C.int, mcmcIter C.int, framesize C.int,
-	b C.double, amp C.double, norm C.double, nu C.double,
-	initIter C.int,
-	innerSpace C.space, window C.int,
-) {
-	var elemts = ArrayToRealElemts(data, l1, l2)
-	var algo = GetAlgorithm((int)(descr))
-	var conf = core.Conf{
-		ImplConf:  mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed),
-		SpaceConf: spaceConf(space, window, innerSpace),
-	}
-	var err = algo.Reset(conf, elemts)
-	if err != nil {
-		panic(err)
-	}
-}
