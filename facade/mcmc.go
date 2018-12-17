@@ -36,11 +36,16 @@ func mcmcConf(par C.int,
 	b C.double, amp C.double, norm C.double, nu C.double,
 	initIter C.int, seed C.long) mcmc.Conf {
 
+	var rgen *rand.Rand
+	if seed != 0 {
+		rgen = rand.New(rand.NewSource((uint64)(seed)))
+	}
+
 	return mcmc.Conf{
 		Par: par != 0,
 		Dim: (int)(l2), FrameSize: (int)(framesize), B: (float64)(b), Amp: (float64)(amp),
 		Norm: (float64)(norm), Nu: (float64)(nu), InitK: (int)(initK), MaxK: (int)(maxK), McmcIter: (int)(mcmcIter),
 		InitIter: (int)(initIter),
-		RGen:     rand.New(rand.NewSource((uint64)(seed))),
+		RGen:     rgen,
 	}
 }

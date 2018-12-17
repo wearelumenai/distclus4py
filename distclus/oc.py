@@ -17,7 +17,7 @@ class OnlineClust:
     ):
         space = bind.space(space)
         init = bind.initializer(init)
-        seed = random.randint(0, 2 ** 63) if seed is None else seed
+        seed = 0 if seed is None else seed
         par = 1 if par else 0
         arr, l1, l2 = bind.to_c_2d_array(data)
         self.args = [space, par, init, seed, arr, l1, l2] + list(args)
