@@ -13,7 +13,7 @@ class MCMC(OnlineClust):
 
     def __init__(
         self, dim=0, space='vectors', par=True, init='kmeanspp',
-        init_k=8, max_k=16, mcmc_iter=100, frame_size=10000, b=1,
+        init_k=8, max_k=16, mcmc_iter=100, frame_size=0, b=1,
         amp=0.1, norm=2, nu=3, init_iter=1, seed=None, data=np.empty([0, 0]),
         inner_space=0, window=10
     ):
