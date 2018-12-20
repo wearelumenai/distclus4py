@@ -43,7 +43,7 @@ extern int MCMC(
 
 extern void Push(int descr, double* data, size_t l1, size_t l2);
 
-extern void Run(int descr, int async);
+extern int Run(int descr, int async);
 
 extern struct RealArray2D RealCentroids(int descr);
 

@@ -106,7 +106,7 @@ extern void Push(int p0, double* p1, size_t p2, size_t p3);
 
 // Run executes a specific algorithm
 
-extern void Run(int p0, int p1);
+extern int Run(int p0, int p1);
 
 /* Return type for Predict */
 struct Predict_return {

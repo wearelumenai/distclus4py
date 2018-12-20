@@ -21,11 +21,22 @@ func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t) {
 	}
 }
 
+func handlePanic(errCode *C.int) {
+	if r := recover(); r != nil {
+		*errCode = -1
+	}
+}
+
 // Run executes a specific algorithm
 //export Run
-func Run(descr C.int, async C.int) {
+func Run(descr C.int, async C.int) (errCode C.int) {
+	defer handlePanic(&errCode)
 	var algo = GetAlgorithm((int)(descr))
-	algo.Run((int)(async) != 0)
+	var err = algo.Run((int)(async) != 0)
+	if err != nil {
+		errCode = 1
+	}
+	return
 }
 
 // Predict predicts an element in a specific algorithm

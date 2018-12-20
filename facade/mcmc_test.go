@@ -39,8 +39,8 @@ func TestMCMCPushRunCentroidsPredict(t *testing.T) {
 	elemts = makeElements()
 	arr, l1, l2 = RealElemtsToArray(elemts)
 
-	Run(descr, 1)
 	Push(descr, arr, l1, l2)
+	Run(descr, 1)
 	Close(descr)
 
 	var centroids, c1, c2 = RealCentroids(descr)
