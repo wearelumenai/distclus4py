@@ -43,10 +43,8 @@ class OnlineClust:
         :param data: data to process"""
         self.reset()
         self.push(data)
-        err = self.run()
-        if err == 0:
-            return self.close()
-        return err
+        self.run()
+        self.close()
 
     def push(self, data):
         """Push input data to process.
@@ -63,7 +61,13 @@ class OnlineClust:
 
         :param bool rasync: Asynchronous execution if True. Default is False.
         """
-        return lib.Run(self.descr, 1 if rasync else 0)
+        err = lib.Run(self.descr, 1 if rasync else 0)
+        if err != 0:
+            raise RuntimeError(
+                'Wrong initialization parameters or is already running'
+            )
+
+        return err
 
     def __call__(self, rasync=False):
         return self.run(rasync)
