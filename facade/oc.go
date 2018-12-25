@@ -79,6 +79,17 @@ func Close(descr C.int) {
 	algo.Close()
 }
 
+// Iterations returns number of iterations per execution
+//export Iterations
+func Iterations(descr C.int) C.int {
+	var algo = GetAlgorithm((int)(descr))
+	var iter, err = algo.Iterations()
+	if err != nil {
+		panic(err)
+	}
+	return C.int(iter)
+}
+
 // Free terminates an oc execution and unregister it from global registry
 //export Free
 func Free(descr C.int) {

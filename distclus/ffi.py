@@ -52,5 +52,7 @@ extern struct IntArray1D Predict(int descr, double* data, size_t l1, size_t l2);
 extern void Close(int descr);
 
 extern void Free(int descr);
+
+extern int Iterations(int descr);
 """)
 lib = ffi.dlopen(lib_file)
