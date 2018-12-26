@@ -80,14 +80,14 @@ func Close(descr C.int) {
 }
 
 // Iterations returns number of iterations per execution
-//export Iterations
-func Iterations(descr C.int) C.int {
+//export RuntimeFigure
+func RuntimeFigure(descr C.int, figure C.figure) C.double {
 	var algo = GetAlgorithm((int)(descr))
-	var iter, err = algo.Iterations()
+	var value, err = algo.RuntimeFigure(Figure(figure))
 	if err != nil {
 		panic(err)
 	}
-	return C.int(iter)
+	return C.double(value)
 }
 
 // Free terminates an oc execution and unregister it from global registry

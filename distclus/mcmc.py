@@ -2,6 +2,7 @@ import random
 import weakref
 
 from . import bind
+from .ffi import lib
 
 from .oc import OnlineClust
 
@@ -22,3 +23,7 @@ class MCMC(OnlineClust):
             dim, init_k, max_k, mcmc_iter, frame_size, b, amp, norm, nu,
             init_iter, inner_space, window
         )
+
+    @property
+    def iterations(self):
+        return lib.RuntimeFigure(self.descr, lib.F_ITERATIONS)

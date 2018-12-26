@@ -135,7 +135,7 @@ extern void Close(int p0);
 
 // Iterations returns number of iterations per execution
 
-extern int Iterations(int p0);
+extern double RuntimeFigure(int p0, figure p1);
 
 // Free terminates an oc execution and unregister it from global registry
 

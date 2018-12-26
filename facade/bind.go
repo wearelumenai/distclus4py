@@ -50,6 +50,15 @@ func OC(o C.oc) (fo string) {
 	return
 }
 
+// Initializer returns a specific OC initializer
+func Figure(figure C.figure) (name string) {
+	switch figure {
+	case C.F_ITERATIONS:
+		name = "iterations"
+	}
+	return
+}
+
 // IntsToArray convert integers to an array
 func IntsToArray(arr []int) (*C.long, C.size_t) {
 	var l = len(arr)

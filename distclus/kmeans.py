@@ -2,6 +2,7 @@ import random
 import weakref
 
 from . import bind
+from .ffi import lib
 
 from .oc import OnlineClust
 
@@ -20,3 +21,7 @@ class KMEANS(OnlineClust):
             space, par, init, seed, data, k, iter, frame_size,
             inner_space, window
         )
+
+    @property
+    def iterations(self):
+        return lib.RuntimeFigure(self.descr, lib.F_ITERATIONS)

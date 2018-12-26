@@ -45,6 +45,12 @@ class TestsBindings(unittest.TestCase):
         centroids = algo.centroids
         self.check_centroids(centroids, label0, label10)
 
+    def test_iterations(self):
+        algo = KMEANS(k=2, iter=5)
+        algo.fit(self.data)
+
+        self.assertEqual(5, algo.iterations)
+
     def check_labels(self, labels):
         self.assertEqual(20, len(labels))
         label0, label10 = -1, -1

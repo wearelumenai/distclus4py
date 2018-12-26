@@ -99,7 +99,3 @@ class OnlineClust:
 
     def __contains__(self, data):
         return data in self.centroids
-
-    @property
-    def iterations(self):
-        return lib.Iterations(self.descr)

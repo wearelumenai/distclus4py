@@ -87,3 +87,8 @@ def space(name):
 def oc(name):
     """convert a string to a CFFI oc enum type"""
     return getattr(lib, 'O_{0}'.format(name.upper()))
+
+
+def figure(name):
+    """convert a string to a CFFI oc enum type"""
+    return getattr(lib, 'F_{0}'.format(name.upper()))

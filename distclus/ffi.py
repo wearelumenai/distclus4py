@@ -10,6 +10,7 @@ ffi.cdef("""
 typedef enum {I_RANDOM, I_GIVEN, I_KMEANSPP} initializer;
 typedef enum {S_VECTORS, S_SERIES} space;
 typedef enum {O_KMEANS, O_MCMC, O_KNN, O_STREAMING} oc;
+typedef enum {F_ITERATIONS} figure;
 
 struct IntArray1D {
     long* addr;
@@ -53,6 +54,6 @@ extern void Close(int descr);
 
 extern void Free(int descr);
 
-extern int Iterations(int descr);
+extern double RuntimeFigure(int descr, figure fig);
 """)
 lib = ffi.dlopen(lib_file)
