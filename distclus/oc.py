@@ -21,27 +21,23 @@ class OnlineClust:
         par = 1 if par else 0
         arr, l1, l2 = bind.to_c_2d_array(data)
         self.args = [space, par, init, seed, arr, l1, l2] + list(args)
-        self.reset()
-        self.__finalize = weakref.finalize(self, self._free)
+        self._set_descr()
 
-    def _free(self):
-        if hasattr(self, 'descr'):
-            lib.Free(self.descr)
 
     def _set_descr(self):
+        if hasattr(self, '_OnlineClust__finalize'):
+            _, free, _, _ = self.__finalize.detach()
+            free()
         descr = getattr(lib, self.__class__.__name__.upper())
         self.descr = descr(*self.args)
+        self.__finalize = weakref.finalize(self, _make_free(self.descr))
 
-    def reset(self):
-        """Reset the algorithm"""
-        self._free()
-        self._set_descr()
 
     def fit(self, data):
         """Execute sequentially push, run and close methods.
 
         :param data: data to process"""
-        self.reset()
+        self._set_descr()
         self.push(data)
         self.run()
         self.close()
@@ -99,3 +95,10 @@ class OnlineClust:
 
     def __contains__(self, data):
         return data in self.centroids
+
+
+def _make_free(descr):
+    def free():
+        lib.Free(descr)
+    return free
+
