@@ -83,10 +83,11 @@ func Close(descr C.int) {
 //export RuntimeFigure
 func RuntimeFigure(descr C.int, figure C.figure) C.double {
 	var algo = GetAlgorithm((int)(descr))
-	var value, err = algo.RuntimeFigure(Figure(figure))
+	var figures, err = algo.RuntimeFigures()
 	if err != nil {
 		panic(err)
 	}
+	var value = figures[Figure(figure)]
 	return C.double(value)
 }
 
