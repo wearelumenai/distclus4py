@@ -7,7 +7,6 @@ import (
 	"distclus/kmeans"
 	"distclus/series"
 	"distclus/vectors"
-
 	"golang.org/x/exp/rand"
 )
 
@@ -26,11 +25,9 @@ func KMEANS(
 	k C.int, iter C.int, framesize C.int,
 	innerSpace C.space, window C.int,
 ) C.int {
-	var conf = core.Conf{
-		ImplConf:  kmeansConf(par, k, iter, framesize, seed),
-		SpaceConf: spaceConf(space, window, innerSpace),
-	}
-	return CreateOC(C.O_KMEANS, space, conf, initializer, data, l1, l2)
+	var implConf = kmeansConf(par, k, iter, framesize, seed)
+	var spaceConf = spaceConf(space, window, innerSpace)
+	return CreateOC(implConf, spaceConf, initializer, data, l1, l2)
 }
 
 func kmeansConf(
@@ -38,18 +35,20 @@ func kmeansConf(
 	k C.int, iter C.int, framesize C.int, seed C.long,
 ) kmeans.Conf {
 	return kmeans.Conf{
-		Par: (par != 0), K: (int)(k), FrameSize: (int)(framesize), Iter: (int)(iter),
+		Par: par != 0, K: (int)(k), FrameSize: (int)(framesize), Iter: (int)(iter),
 		RGen: rand.New(rand.NewSource((uint64)(seed))),
 	}
 }
 
-func spaceConf(space C.space, window C.int, innerSpace C.space) core.SpaceConf {
-	if space == C.S_SERIES {
-		var conf = series.Conf{
+func spaceConf(spaceName C.space, window C.int, innerSpace C.space) (conf core.SpaceConf) {
+	switch spaceName {
+	case C.S_SERIES:
+		conf = series.Conf{
 			InnerSpace: vectors.Space{},
 			Window:     (int)(window),
 		}
-		return series.NewSpace(conf)
+	case C.S_VECTORS:
+		conf = vectors.Conf{}
 	}
-	return nil
+	return
 }

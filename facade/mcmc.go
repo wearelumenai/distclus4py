@@ -3,7 +3,6 @@ package main
 //#include "bind.h"
 import "C"
 import (
-	"distclus/core"
 	"distclus/mcmc"
 
 	"golang.org/x/exp/rand"
@@ -23,11 +22,9 @@ func MCMC(
 	initIter C.int,
 	innerSpace C.space, window C.int,
 ) C.int {
-	var conf = core.Conf{
-		ImplConf:  mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed),
-		SpaceConf: spaceConf(space, window, innerSpace),
-	}
-	return CreateOC(C.O_MCMC, space, conf, initializer, data, l1, l2)
+	var implConf = mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed)
+	var spaceConf = spaceConf(space, window, innerSpace)
+	return CreateOC(implConf, spaceConf, initializer, data, l1, l2)
 }
 
 func mcmcConf(par C.int,

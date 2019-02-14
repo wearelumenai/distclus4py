@@ -17,7 +17,7 @@ func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t) {
 	var elemts = ArrayToRealElemts(data, l1, l2)
 	var algo = GetAlgorithm((int)(descr))
 	for i := range elemts {
-		algo.Push(elemts[i])
+		_ = algo.Push(elemts[i])
 	}
 }
 
@@ -76,7 +76,7 @@ func RealCentroids(descr C.int) (*C.double, C.size_t, C.size_t) {
 //export Close
 func Close(descr C.int) {
 	var algo = GetAlgorithm((int)(descr))
-	algo.Close()
+	_ = algo.Close()
 }
 
 // Iterations returns number of iterations per execution
@@ -99,10 +99,8 @@ func Free(descr C.int) {
 }
 
 // CreateOC creates an OC according to configurable parameters
-func CreateOC(name C.oc, space C.space, conf core.Conf, initializer C.initializer, data *C.double, l1 C.size_t, l2 C.size_t) C.int {
+func CreateOC(implConf core.ImplConf, spaceConf core.SpaceConf, initializer C.initializer, data *C.double, l1 C.size_t, l2 C.size_t) C.int {
 	var elemts = ArrayToRealElemts(data, l1, l2)
-	var ocName = OC(name)
-	var spaceName = Space(space)
-	var oc = factory.CreateOC(ocName, spaceName, conf, elemts, Initializer(initializer))
+	var oc = factory.CreateOC(implConf, spaceConf, elemts, Initializer(initializer))
 	return C.int(RegisterAlgorithm(oc))
 }
