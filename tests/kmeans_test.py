@@ -1,4 +1,3 @@
-import time
 import unittest
 
 import numpy as np
@@ -72,8 +71,8 @@ class TestsBindings(unittest.TestCase):
         mean0 = np.mean(self.data[:10, ], axis=0)
         mean10 = np.mean(self.data[10:, ], axis=0)
 
-        centroid0 = centroids[label0, ]
-        centroid10 = centroids[label10, ]
+        centroid0 = centroids[label0,]
+        centroid10 = centroids[label10,]
 
         dist0 = np.linalg.norm(mean0 - centroid0)
         dist10 = np.linalg.norm(mean10 - centroid10)

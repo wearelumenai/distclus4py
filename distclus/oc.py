@@ -1,19 +1,18 @@
-import random
 import weakref
+
+import numpy as np
 
 from . import bind
 from .ffi import lib
-
-import numpy as np
 
 
 class OnlineClust:
     """Base class for algorithm implementation using a native library"""
 
     def __init__(
-        self,
-        space='vectors', par=True, init='kmeanspp', seed=None,
-        data=np.empty([0, 0]), *args
+            self,
+            space='vectors', par=True, init='kmeanspp', seed=None,
+            data=np.empty([0, 0]), *args
     ):
         space = bind.space(space)
         init = bind.initializer(init)
@@ -23,7 +22,6 @@ class OnlineClust:
         self.args = [space, par, init, seed, arr, l1, l2] + list(args)
         self._set_descr()
 
-
     def _set_descr(self):
         if hasattr(self, '_OnlineClust__finalize'):
             _, free, _, _ = self.__finalize.detach()
@@ -31,7 +29,6 @@ class OnlineClust:
         descr = getattr(lib, self.__class__.__name__.upper())
         self.descr = descr(*self.args)
         self.__finalize = weakref.finalize(self, _make_free(self.descr))
-
 
     def fit(self, data):
         """Execute sequentially push, run and close methods.
@@ -100,5 +97,5 @@ class OnlineClust:
 def _make_free(descr):
     def free():
         lib.Free(descr)
-    return free
 
+    return free
