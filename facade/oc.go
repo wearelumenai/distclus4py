@@ -101,6 +101,6 @@ func Free(descr C.int) {
 // CreateOC creates an OC according to configurable parameters
 func CreateOC(implConf core.ImplConf, spaceConf core.SpaceConf, initializer C.initializer, data *C.double, l1 C.size_t, l2 C.size_t) C.int {
 	var elemts = ArrayToRealElemts(data, l1, l2)
-	var oc = factory.CreateOC(implConf, spaceConf, elemts, Initializer(initializer))
+	var oc, _ = factory.CreateOC(implConf, spaceConf, elemts, Initializer(initializer))
 	return C.int(RegisterAlgorithm(oc))
 }
