@@ -1,19 +1,18 @@
-import random
 import weakref
+
+import numpy as np
 
 from . import bind
 from .ffi import lib
-
-import numpy as np
 
 
 class OnlineClust:
     """Base class for algorithm implementation using a native library"""
 
     def __init__(
-        self,
-        space='vectors', par=True, init='kmeanspp', seed=None,
-        data=np.empty([0, 0]), *args
+            self,
+            space='vectors', par=True, init='kmeanspp', seed=None,
+            data=np.empty([0, 0]), *args
     ):
         space = bind.space(space)
         init = bind.initializer(init)
@@ -86,4 +85,5 @@ class OnlineClust:
 def _make_free(descr):
     def free():
         lib.Free(descr)
+
     return free

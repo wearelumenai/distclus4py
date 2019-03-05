@@ -3,15 +3,21 @@ jobs: # basic units of work in a run
   build: # runs not using Workflows must have a `build` job as entry point
     docker: # run the steps with Docker
       # CircleCI Go images available at: https://hub.docker.com/r/circleci/golang/
-      - image: circleci/golang:1.8 #
+      - image: circleci/python:3.7 #
     # directory where steps are run. Path must conform to the Go Workspace requirements
-    working_directory: /go/src/distclus4py
+    working_directory: /home/circleci/project/go/src/distclus4py
 
     steps: # steps that comprise the `build` job
       - checkout # check out source code to working directory
-      - add_ssh_keys: 
+      - add_ssh_keys:
           fingerprints:
-            - "bb:43:ec:c0:d5:ad:26:c1:34:bb:81:a1:68:34:04:d3"
+            - "34:9f:20:7c:0e:68:1a:4f:ce:55:1c:3f:ce:0f:8b:ad"
 
-      - run: git clone git@bitbucket.org:weARtfact/distclus.git
+      - run:
+          name: Setup Environment Variables
+          command: |
+            echo 'export GOPATH="/home/circleci/project/go"' >> $BASH_ENV
+            echo 'export PATH="$HOME/go/bin:$GOPATH/bin:$PATH"' >> $BASH_ENV
+      - run: make configci
+      - run: make build
       - run: make test

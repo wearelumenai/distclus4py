@@ -51,7 +51,6 @@ class TestsBindings(unittest.TestCase):
 
         self.assertEqual(5, algo.iterations)
 
-
     def check_labels(self, labels):
         self.assertEqual(20, len(labels))
         label0, label10 = -1, -1
@@ -73,8 +72,8 @@ class TestsBindings(unittest.TestCase):
         mean0 = np.mean(self.data[:10, ], axis=0)
         mean10 = np.mean(self.data[10:, ], axis=0)
 
-        centroid0 = centroids[label0, ]
-        centroid10 = centroids[label10, ]
+        centroid0 = centroids[label0,]
+        centroid10 = centroids[label10,]
 
         dist0 = np.linalg.norm(mean0 - centroid0)
         dist10 = np.linalg.norm(mean10 - centroid10)
