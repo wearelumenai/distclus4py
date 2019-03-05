@@ -23,7 +23,6 @@ class OnlineClust:
         self.args = [space, par, init, seed, arr, l1, l2] + list(args)
         self._set_descr()
 
-
     def _set_descr(self):
         if hasattr(self, '_OnlineClust__finalize'):
             _, free, _, _ = self.__finalize.detach()
@@ -31,7 +30,6 @@ class OnlineClust:
         descr = getattr(lib, self.__class__.__name__.upper())
         self.descr = descr(*self.args)
         self.__finalize = weakref.finalize(self, _make_free(self.descr))
-
 
     def fit(self, data):
         """Execute sequentially push, run and close methods.
@@ -84,21 +82,8 @@ class OnlineClust:
         result = lib.RealCentroids(self.descr)
         return bind.to_managed_2d_array(result)
 
-    def __len__(self):
-        return len(self.centroids)
-
-    def __getitem__(self, key):
-        return self.centroids[key]
-
-    def __iter__(self):
-        return iter(self.centroids)
-
-    def __contains__(self, data):
-        return data in self.centroids
-
 
 def _make_free(descr):
     def free():
         lib.Free(descr)
     return free
-
