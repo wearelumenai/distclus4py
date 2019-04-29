@@ -24,7 +24,7 @@ func KMEANS(
 	data *C.double, l1 C.size_t, l2 C.size_t,
 	k C.int, iter C.int, framesize C.int,
 	innerSpace C.space, window C.int,
-) C.int {
+) (C.int, *C.char) {
 	var implConf = kmeansConf(par, k, iter, framesize, seed)
 	var spaceConf = spaceConf(space, window, innerSpace)
 	return CreateOC(implConf, spaceConf, initializer, data, l1, l2)

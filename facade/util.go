@@ -1,6 +1,7 @@
 package main
 
 import (
+	"C"
 	"distclus/core"
 	"testing"
 
@@ -54,4 +55,8 @@ func assertLabels(labels []int, t *testing.T) {
 			}
 		}
 	}
+}
+
+func goString(str *C.char) string {
+	return C.GoString(str)
 }

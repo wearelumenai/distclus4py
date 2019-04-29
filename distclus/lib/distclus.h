@@ -92,26 +92,39 @@ extern void FreeRealArray(double* p0);
 
 extern void FreeIntArray(long int* p0);
 
+/* Return type for KMEANS */
+struct KMEANS_return {
+	int r0;
+	char* r1;
+};
+
 // KMEANS algorithm
 
-extern int KMEANS(space p0, int p1, initializer p2, long int p3, double* p4, size_t p5, size_t p6, int p7, int p8, int p9, space p10, int p11);
+extern struct KMEANS_return KMEANS(space p0, int p1, initializer p2, long int p3, double* p4, size_t p5, size_t p6, int p7, int p8, int p9, space p10, int p11);
+
+/* Return type for MCMC */
+struct MCMC_return {
+	int r0;
+	char* r1;
+};
 
 // MCMC algorithm
 
-extern int MCMC(space p0, int p1, initializer p2, long int p3, double* p4, size_t p5, size_t p6, size_t p7, int p8, int p9, int p10, int p11, double p12, double p13, double p14, double p15, int p16, space p17, int p18);
+extern struct MCMC_return MCMC(space p0, int p1, initializer p2, long int p3, double* p4, size_t p5, size_t p6, size_t p7, int p8, int p9, int p10, int p11, double p12, double p13, double p14, double p15, int p16, space p17, int p18);
 
 // Push push an element in a specific algorithm
 
-extern void Push(int p0, double* p1, size_t p2, size_t p3);
+extern char* Push(int p0, double* p1, size_t p2, size_t p3);
 
 // Run executes a specific algorithm
 
-extern int Run(int p0, int p1);
+extern char* Run(int p0, int p1);
 
 /* Return type for Predict */
 struct Predict_return {
-	long int* r0;
-	size_t r1;
+	long int* r0; /* labels */
+	size_t r1; /* l1 */
+	char* r2; /* errMsg */
 };
 
 // Predict predicts an element in a specific algorithm
@@ -120,22 +133,29 @@ extern struct Predict_return Predict(int p0, double* p1, size_t p2, size_t p3);
 
 /* Return type for RealCentroids */
 struct RealCentroids_return {
-	double* r0;
-	size_t r1;
-	size_t r2;
+	double* r0; /* data */
+	size_t r1; /* l1 */
+	size_t r2; /* l2 */
+	char* r3; /* errMsg */
 };
 
 // RealCentroids returns specific on centroids
 
 extern struct RealCentroids_return RealCentroids(int p0);
 
-// Close terminates an oc execution
-
-extern void Close(int p0);
+/* Return type for RuntimeFigure */
+struct RuntimeFigure_return {
+	double r0; /* value */
+	char* r1; /* errMsg */
+};
 
 // Iterations returns number of iterations per execution
 
-extern double RuntimeFigure(int p0, figure p1);
+extern struct RuntimeFigure_return RuntimeFigure(int p0, figure p1);
+
+// Close terminates an oc execution
+
+extern void Close(int p0);
 
 // Free terminates an oc execution and unregister it from global registry
 

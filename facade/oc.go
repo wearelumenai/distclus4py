@@ -13,94 +13,118 @@ import (
 
 // Push push an element in a specific algorithm
 //export Push
-func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t) {
+func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t) (errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
 	var elemts = ArrayToRealElemts(data, l1, l2)
-	var algo = GetAlgorithm((int)(descr))
+	var algo = GetAlgorithm((AlgorithmDescr)(descr))
 	for i := range elemts {
-		_ = algo.Push(elemts[i])
+		var err = algo.Push(elemts[i])
+		if err != nil {
+			errMsg = setError((AlgorithmDescr)(descr), err.Error())
+			return
+		}
 	}
-}
-
-func handlePanic(errCode *C.int) {
-	if r := recover(); r != nil {
-		*errCode = -1
-	}
+	return
 }
 
 // Run executes a specific algorithm
 //export Run
-func Run(descr C.int, async C.int) (errCode C.int) {
-	defer handlePanic(&errCode)
-	var algo = GetAlgorithm((int)(descr))
-	var err = algo.Run((int)(async) != 0)
+func Run(descr C.int, async C.int) (errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var algo = GetAlgorithm((AlgorithmDescr)(descr))
+	var err = algo.Run((AlgorithmDescr)(async) != 0)
 	if err != nil {
-		errCode = 1
+		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}
 	return
 }
 
 // Predict predicts an element in a specific algorithm
 //export Predict
-func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t) (*C.long, C.size_t) {
-	var elemts = ArrayToRealElemts(data, l1, l2)
-	var algo = GetAlgorithm((int)(descr))
+func Predict(descr C.int, data *C.double, i1 C.size_t, i2 C.size_t) (labels *C.long, l1 C.size_t, errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var elemts = ArrayToRealElemts(data, i1, i2)
+	var algo = GetAlgorithm((AlgorithmDescr)(descr))
 
 	var predictions = make([]int, len(elemts))
 	for i := range elemts {
 		var _, label, err = algo.Predict(elemts[i])
 
 		if err != nil {
-			panic(err)
+			errMsg = setError((AlgorithmDescr)(descr), err.Error())
+			return
 		}
 
 		predictions[i] = label
 	}
 
-	return IntsToArray(predictions)
+	labels, l1 = IntsToArray(predictions)
+	return
 }
 
 // RealCentroids returns specific on centroids
 //export RealCentroids
-func RealCentroids(descr C.int) (*C.double, C.size_t, C.size_t) {
-	var algo = GetAlgorithm((int)(descr))
+func RealCentroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var algo = GetAlgorithm((AlgorithmDescr)(descr))
 	var centroids, err = algo.Centroids()
 
 	if err != nil {
-		panic(err)
+		errMsg = setError((AlgorithmDescr)(descr), err.Error())
+	} else {
+		data, l1, l2 = RealElemtsToArray(centroids)
 	}
 
-	return RealElemtsToArray(centroids)
+	return
+}
+
+// Iterations returns number of iterations per execution
+//export RuntimeFigure
+func RuntimeFigure(descr C.int, figure C.figure) (value C.double, errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var algo = GetAlgorithm((AlgorithmDescr)(descr))
+	var figures, err = algo.RuntimeFigures()
+
+	if err != nil {
+		errMsg = setError((AlgorithmDescr)(descr), err.Error())
+	} else {
+		value = (C.double)(figures[Figure(figure)])
+	}
+
+	return
 }
 
 // Close terminates an oc execution
 //export Close
 func Close(descr C.int) {
-	var algo = GetAlgorithm((int)(descr))
+	var algo = GetAlgorithm((AlgorithmDescr)(descr))
 	_ = algo.Close()
-}
-
-// Iterations returns number of iterations per execution
-//export RuntimeFigure
-func RuntimeFigure(descr C.int, figure C.figure) C.double {
-	var algo = GetAlgorithm((int)(descr))
-	var figures, err = algo.RuntimeFigures()
-	if err != nil {
-		panic(err)
-	}
-	var value = figures[Figure(figure)]
-	return C.double(value)
 }
 
 // Free terminates an oc execution and unregister it from global registry
 //export Free
 func Free(descr C.int) {
 	Close(descr)
-	UnregisterAlgorithm((int)(descr))
+	UnregisterAlgorithm((AlgorithmDescr)(descr))
 }
 
 // CreateOC creates an OC according to configurable parameters
-func CreateOC(implConf core.ImplConf, spaceConf core.SpaceConf, initializer C.initializer, data *C.double, l1 C.size_t, l2 C.size_t) C.int {
+func CreateOC(implConf core.ImplConf, spaceConf core.SpaceConf, initializer C.initializer, data *C.double, l1 C.size_t, l2 C.size_t) (descr C.int, errMsg *C.char) {
+	defer handlePanic(0, &errMsg)
 	var elemts = ArrayToRealElemts(data, l1, l2)
 	var oc, _ = factory.CreateOC(implConf, spaceConf, elemts, Initializer(initializer))
-	return C.int(RegisterAlgorithm(oc))
+	return C.int(RegisterAlgorithm(oc)), errMsg
+}
+
+func handlePanic(descr C.int, msg **C.char) {
+	if r := recover(); r != nil {
+		switch v := r.(type) {
+		case error:
+			*msg = setError((AlgorithmDescr)(descr), v.Error())
+		case string:
+			*msg = setError((AlgorithmDescr)(descr), v)
+		default:
+			*msg = setError((AlgorithmDescr)(descr), "unexpected error")
+		}
+	}
 }

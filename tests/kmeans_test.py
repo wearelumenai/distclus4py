@@ -24,7 +24,7 @@ class TestsBindings(unittest.TestCase):
 
         err = algo.run(rasync=True)
 
-        self.assertEqual(err, 0)
+        self.assertIsNone(err)
 
         labels = algo.predict(self.data)
         label0, label10 = self.check_labels(labels)

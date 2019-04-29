@@ -3,7 +3,7 @@ import weakref
 import numpy as np
 
 from . import bind
-from .ffi import lib
+from .ffi import ffi, lib
 
 
 class OnlineClust:
@@ -26,8 +26,11 @@ class OnlineClust:
         if hasattr(self, '_OnlineClust__finalize'):
             _, free, _, _ = self.__finalize.detach()
             free()
-        descr = getattr(lib, self.__class__.__name__.upper())
-        self.descr = descr(*self.args)
+        builder = getattr(lib, self.__class__.__name__.upper())
+        algo = builder(*self.args)
+        if algo.err:
+            raise RuntimeError(algo.err)
+        self.descr = algo.descr
         self.__finalize = weakref.finalize(self, _make_free(self.descr))
 
     def fit(self, data):
@@ -44,7 +47,9 @@ class OnlineClust:
 
         :param data: data to push in the algorithme."""
         arr, l1, l2 = bind.to_c_2d_array(data)
-        lib.Push(self.descr, arr, l1, l2)
+        err = lib.Push(self.descr, arr, l1, l2)
+        if err:
+            raise RuntimeError(err)
 
     def __radd__(self, data):
         return self.push(data)
@@ -55,12 +60,8 @@ class OnlineClust:
         :param bool rasync: Asynchronous execution if True. Default is False.
         """
         err = lib.Run(self.descr, 1 if rasync else 0)
-        if err != 0:
-            raise RuntimeError(
-                'Wrong initialization parameters or is already running'
-            )
-
-        return err
+        if err:
+            raise RuntimeError(err)
 
     def __call__(self, rasync=False):
         return self.run(rasync)
@@ -73,12 +74,16 @@ class OnlineClust:
         """Predict """
         arr, l1, l2 = bind.to_c_2d_array(data)
         result = lib.Predict(self.descr, arr, l1, l2)
+        if result.err:
+            raise RuntimeError(result.err)
         return bind.to_managed_1d_array(result)
 
     @property
     def centroids(self):
         """Get centroids."""
         result = lib.RealCentroids(self.descr)
+        if result.err:
+            raise RuntimeError(ffi.string(result.err))
         return bind.to_managed_2d_array(result)
 
     def __len__(self):

@@ -19,4 +19,7 @@ class KMEANS(OnlineClust):
 
     @property
     def iterations(self):
-        return lib.RuntimeFigure(self.descr, lib.F_ITERATIONS)
+        figure = lib.RuntimeFigure(self.descr, lib.F_ITERATIONS)
+        if figure.err:
+            raise RuntimeError(figure.err)
+        return figure.value

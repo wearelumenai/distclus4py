@@ -1,4 +1,3 @@
-import time
 import unittest
 
 import numpy as np
@@ -16,6 +15,12 @@ class TestsBindings(unittest.TestCase):
         algo = MCMC(init_k=2)
         self.assertTrue(algo.descr >= 1)
 
+    def test_centroids_error(self):
+        algo = MCMC(
+            init_k=2, b=1, mcmc_iter=5, seed=653126513379
+        )
+        self.assertRaises(RuntimeError, lambda: algo.centroids)
+
     def test_push_run_centroids_predict(self):
         algo = MCMC(
             init_k=2, b=1, mcmc_iter=5, seed=653126513379
@@ -25,7 +30,7 @@ class TestsBindings(unittest.TestCase):
 
         err = algo.run(rasync=True)
 
-        self.assertEqual(err, 0)
+        self.assertIsNone(err)
 
         labels = algo.predict(self.data)
         label0, label10 = self.check_labels(labels)

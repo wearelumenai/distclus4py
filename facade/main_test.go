@@ -1,6 +1,9 @@
 package main
 
 import (
+	"distclus/factory"
+	"distclus/kmeans"
+	"distclus/mcmc"
 	"testing"
 )
 
@@ -51,15 +54,19 @@ func TestUnregisterAlgorithm(t *testing.T) {
 	}
 }
 
+func TestSetError(t *testing.T) {
+	var descr0 = makeAlgorithm()
+	var message4Test = "just 4 testing"
+	var lastErr = setError(descr0, message4Test)
+	if goString(lastErr) != message4Test {
+		t.Error("expected error message")
+	}
+	UnregisterAlgorithm(descr0)
+}
+
 func makeAlgorithm() AlgorithmDescr {
 	var elemts = makeElements()
-	var arr, l1, l2 = RealElemtsToArray(elemts)
-	return (int)(MCMC(
-		0, 0, 0, 6305689164243,
-		arr, l1, l2,
-		2, 2, 3, 30, 100,
-		100.0, 1.0, 2.0, 1.0,
-		1,
-		0, 0,
-	))
+	var implConf = mcmc.Conf{InitK: 2}
+	var oc, _ = factory.CreateOC(implConf, spaceConf, elemts, kmeans.PPInitializer)
+	return RegisterAlgorithm(oc)
 }

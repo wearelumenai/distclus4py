@@ -15,26 +15,38 @@ typedef enum {F_ITERATIONS} figure;
 struct IntArray1D {
     long* addr;
     size_t l1;
+    const char* err;
 };
 
 struct RealArray2D {
     double* addr;
     size_t l1;
     size_t l2;
+    const char* err;
+};
+
+struct Algo {
+    int descr;
+    const char* err;
+};
+
+struct Figure {
+    double value;
+    const char *err;
 };
 
 extern void FreeRealArray(double* p0);
 
 extern void FreeIntArray(long* p0);
 
-extern int KMEANS(
+extern struct Algo KMEANS(
     space space, int par, initializer init, long seed,
     double* data, size_t l1, size_t l2,
     int k, int iter, int framesize,
     space innerSpace, int window
 );
 
-extern int MCMC(
+extern struct Algo MCMC(
     space space, int par, initializer init, long seed,
     double* data, size_t l1, size_t l2,
     size_t dim, int initK, int maxK, int mcmcIter, int framesize, double b,
@@ -42,18 +54,18 @@ extern int MCMC(
     space innerSpace, int window
 );
 
-extern void Push(int descr, double* data, size_t l1, size_t l2);
+extern const char* Push(int descr, double* data, size_t l1, size_t l2);
 
-extern int Run(int descr, int async);
+extern const char* Run(int descr, int async);
 
 extern struct RealArray2D RealCentroids(int descr);
 
 extern struct IntArray1D Predict(int descr, double* data, size_t l1, size_t l2);
 
+extern struct Figure RuntimeFigure(int descr, figure fig);
+
 extern void Close(int descr);
 
 extern void Free(int descr);
-
-extern double RuntimeFigure(int descr, figure fig);
 """)
 lib = ffi.dlopen(lib_file)

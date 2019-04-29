@@ -21,7 +21,7 @@ func MCMC(
 	b C.double, amp C.double, norm C.double, nu C.double,
 	initIter C.int,
 	innerSpace C.space, window C.int,
-) C.int {
+) (C.int, *C.char) {
 	var implConf = mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed)
 	var spaceConf = spaceConf(space, window, innerSpace)
 	return CreateOC(implConf, spaceConf, initializer, data, l1, l2)
