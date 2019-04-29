@@ -19,7 +19,13 @@ class TestsBindings(unittest.TestCase):
         algo = MCMC(
             init_k=2, b=1, mcmc_iter=5, seed=653126513379
         )
-        self.assertRaises(RuntimeError, lambda: algo.centroids)
+        try:
+            centroids = algo.centroids
+            self.fail()
+        except RuntimeError as x:
+            self.assertEqual(x.args[0], b'clustering not started')
+        except:
+            self.fail()
 
     def test_push_run_centroids_predict(self):
         algo = MCMC(

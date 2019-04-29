@@ -2,6 +2,7 @@ from collections import namedtuple
 
 import numpy as np
 
+from distclus.ffi import ffi
 from .ffi import ffi, lib
 
 TYPE_MAP = {
@@ -92,3 +93,8 @@ def oc(name):
 def figure(name):
     """convert a string to a CFFI oc enum type"""
     return getattr(lib, 'F_{0}'.format(name.upper()))
+
+
+def handle_error(err):
+    if err:
+        raise RuntimeError(ffi.string(err))

@@ -2,8 +2,9 @@ import weakref
 
 import numpy as np
 
+from distclus.bind import handle_error
 from . import bind
-from .ffi import ffi, lib
+from .ffi import lib
 
 
 class OnlineClust:
@@ -28,8 +29,7 @@ class OnlineClust:
             free()
         builder = getattr(lib, self.__class__.__name__.upper())
         algo = builder(*self.args)
-        if algo.err:
-            raise RuntimeError(algo.err)
+        handle_error(algo.err)
         self.descr = algo.descr
         self.__finalize = weakref.finalize(self, _make_free(self.descr))
 
@@ -48,8 +48,7 @@ class OnlineClust:
         :param data: data to push in the algorithme."""
         arr, l1, l2 = bind.to_c_2d_array(data)
         err = lib.Push(self.descr, arr, l1, l2)
-        if err:
-            raise RuntimeError(err)
+        handle_error(err)
 
     def __radd__(self, data):
         return self.push(data)
@@ -60,8 +59,7 @@ class OnlineClust:
         :param bool rasync: Asynchronous execution if True. Default is False.
         """
         err = lib.Run(self.descr, 1 if rasync else 0)
-        if err:
-            raise RuntimeError(err)
+        handle_error(err)
 
     def __call__(self, rasync=False):
         return self.run(rasync)
@@ -74,16 +72,14 @@ class OnlineClust:
         """Predict """
         arr, l1, l2 = bind.to_c_2d_array(data)
         result = lib.Predict(self.descr, arr, l1, l2)
-        if result.err:
-            raise RuntimeError(result.err)
+        handle_error(result.err)
         return bind.to_managed_1d_array(result)
 
     @property
     def centroids(self):
         """Get centroids."""
         result = lib.RealCentroids(self.descr)
-        if result.err:
-            raise RuntimeError(ffi.string(result.err))
+        handle_error(result.err)
         return bind.to_managed_2d_array(result)
 
 
