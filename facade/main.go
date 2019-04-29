@@ -70,7 +70,7 @@ func setError(descr AlgorithmDescr, errMsg string) *C.char {
 	var container = table[descr]
 	var cerr = C.CString(errMsg)
 	defer C.free(unsafe.Pointer(cerr))
-	C.strlcpy(container.lastErr, cerr, errorMsgSize)
+	C.strcpy(container.lastErr, cerr, errorMsgSize)
 	return container.lastErr
 }
 
