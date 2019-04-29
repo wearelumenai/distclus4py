@@ -86,18 +86,6 @@ class OnlineClust:
             raise RuntimeError(ffi.string(result.err))
         return bind.to_managed_2d_array(result)
 
-    def __len__(self):
-        return len(self.centroids)
-
-    def __getitem__(self, key):
-        return self.centroids[key]
-
-    def __iter__(self):
-        return iter(self.centroids)
-
-    def __contains__(self, data):
-        return data in self.centroids
-
 
 def _make_free(descr):
     def free():
