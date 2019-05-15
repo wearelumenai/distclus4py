@@ -107,7 +107,8 @@ func assertOC(t *testing.T, actual string, expected string) {
 
 func TestSpace(t *testing.T) {
 	assertSpace(t, Space(0), "vectors")
-	assertSpace(t, Space(1), "series")
+	assertSpace(t, Space(1), "cosinus")
+	assertSpace(t, Space(2), "series")
 }
 
 func assertSpace(t *testing.T, actual string, expected string) {

@@ -20,13 +20,13 @@ func makeElements() []core.Elemt {
 	for i := range elemts {
 		var elemt = make([]float64, 2)
 
-		var shift = 2.0
+		var shift = []float64{2.0, 4.0}
 		if i >= 10 {
-			shift = 30.0
+			shift = []float64{30.0, -15.0}
 		}
 
 		for j := range elemt {
-			elemt[j] = rgen.Float64() + shift
+			elemt[j] = rgen.Float64() + shift[j]
 		}
 
 		elemts[i] = elemt

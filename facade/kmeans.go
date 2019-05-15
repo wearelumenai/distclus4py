@@ -4,6 +4,7 @@ package main
 import "C"
 import (
 	"distclus/core"
+	"distclus/cosinus"
 	"distclus/kmeans"
 	"distclus/series"
 	"distclus/vectors"
@@ -49,6 +50,8 @@ func spaceConf(spaceName C.space, window C.int, innerSpace C.space) (conf core.S
 		}
 	case C.S_VECTORS:
 		conf = vectors.Conf{}
+	case C.S_COSINUS:
+		conf = cosinus.Conf{}
 	}
 	return
 }

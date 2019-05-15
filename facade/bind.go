@@ -29,6 +29,8 @@ func Space(s C.space) (fs string) {
 	switch s {
 	case C.S_VECTORS:
 		fs = "vectors"
+	case C.S_COSINUS:
+		fs = "cosinus"
 	case C.S_SERIES:
 		fs = "series"
 	}

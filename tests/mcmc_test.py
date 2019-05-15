@@ -8,8 +8,9 @@ from distclus import MCMC
 class TestsBindings(unittest.TestCase):
     def setUp(self):
         self.data = np.concatenate(
-            ((np.array(np.random.rand(10, 2), dtype=np.float64) + 2),
-             np.array(np.random.rand(10, 2), dtype=np.float64) + 30))
+            ((np.array(np.random.rand(10, 2), dtype=np.float64) + np.array([2, 4])),
+             np.array(np.random.rand(10, 2), dtype=np.float64) + np.array([30, -15]))
+        )
 
     def test_mcmc(self):
         algo = MCMC(init_k=2)
@@ -91,3 +92,13 @@ class TestsBindings(unittest.TestCase):
 
         self.assertGreater(1, dist0)
         self.assertGreater(1, dist10)
+
+    def test_cosinus(self):
+        algo = MCMC(space="cosinus", init_k=2, b=1, amp=1, seed=6305689164243)
+        algo.fit(self.data)
+
+        labels = algo.predict(self.data)
+        label0, label10 = self.check_labels(labels)
+
+        centroids = algo.centroids
+        self.check_centroids(centroids, label0, label10)

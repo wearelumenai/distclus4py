@@ -8,7 +8,7 @@ header_file = os.path.join(os.path.dirname(__file__), 'lib', 'distclus.so')
 ffi = cffi.FFI()
 ffi.cdef("""
 typedef enum {I_RANDOM, I_GIVEN, I_KMEANSPP} initializer;
-typedef enum {S_VECTORS, S_SERIES} space;
+typedef enum {S_VECTORS, S_COSINUS, S_SERIES} space;
 typedef enum {O_KMEANS, O_MCMC, O_KNN, O_STREAMING} oc;
 typedef enum {F_ITERATIONS} figure;
 
