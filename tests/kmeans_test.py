@@ -5,7 +5,7 @@ import numpy as np
 from distclus import KMEANS
 
 
-class TestsBindings(unittest.TestCase):
+class TestKMeans(unittest.TestCase):
     def setUp(self):
         self.data = np.concatenate(
             ((np.array(np.random.rand(10, 2), dtype=np.float64) + 2),

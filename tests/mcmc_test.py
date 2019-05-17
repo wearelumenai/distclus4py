@@ -5,7 +5,7 @@ import numpy as np
 from distclus import MCMC
 
 
-class TestsBindings(unittest.TestCase):
+class TestMCMC(unittest.TestCase):
     def setUp(self):
         self.data = np.concatenate(
             ((np.array(np.random.rand(10, 2), dtype=np.float64) + np.array([2, 4])),

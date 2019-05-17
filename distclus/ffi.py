@@ -54,6 +54,14 @@ extern struct Algo MCMC(
     space innerSpace, int window
 );
 
+extern struct Algo STREAMING(
+	space space, int par, initializer init, long seed,
+	double* data, size_t l1, size_t l2,
+	int bufsize,
+	double b, double lambda,
+	space innerSpace, int window
+);
+
 extern const char* Push(int descr, double* data, size_t l1, size_t l2);
 
 extern const char* Run(int descr, int async);

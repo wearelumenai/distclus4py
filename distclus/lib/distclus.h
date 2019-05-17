@@ -37,6 +37,11 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 #line 1 "cgo-generated-wrapper"
 
+#line 3 "streaming.go"
+#include "bind.h"
+
+#line 1 "cgo-generated-wrapper"
+
 
 /* End of preamble from import "C" comments.  */
 
@@ -160,6 +165,16 @@ extern void Close(int p0);
 // Free terminates an oc execution and unregister it from global registry
 
 extern void Free(int p0);
+
+/* Return type for STREAMING */
+struct STREAMING_return {
+	int r0;
+	char* r1;
+};
+
+// STREAMING algorithm
+
+extern struct STREAMING_return STREAMING(space p0, int p1, initializer p2, long int p3, double* p4, size_t p5, size_t p6, int p7, double p8, double p9, space p10, int p11);
 
 #ifdef __cplusplus
 }
