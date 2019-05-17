@@ -1,2 +1,3 @@
-from .kmeans import KMEANS
+from .streaming import Streaming
+from .kmeans import KMeans
 from .mcmc import MCMC

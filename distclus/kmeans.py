@@ -4,7 +4,7 @@ from .ffi import lib
 from .oc import OnlineClust
 
 
-class KMEANS(OnlineClust):
+class KMeans(OnlineClust):
     """Proxy a KMEANS algorithm implemented in native library"""
 
     def __init__(
@@ -12,7 +12,7 @@ class KMEANS(OnlineClust):
             k=16, mcmc_iter=100, frame_size=0, seed=None, data=np.empty([0, 0]),
             inner_space=0, window=10
     ):
-        super(KMEANS, self).__init__(
+        super(KMeans, self).__init__(
             space, par, init, seed, data, k, mcmc_iter, frame_size,
             inner_space, window
         )
