@@ -18,6 +18,7 @@ func TestMCMC(t *testing.T) {
 
 	if msg != nil {
 		t.Error("message should be NULL")
+		return
 	}
 
 	var algo = GetAlgorithm((int)(descr))
