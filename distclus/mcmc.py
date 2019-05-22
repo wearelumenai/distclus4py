@@ -1,5 +1,6 @@
 import numpy as np
 
+from distclus import bind
 from .ffi import lib
 from .oc import OnlineClust
 
@@ -14,7 +15,7 @@ class MCMC(OnlineClust):
             data=np.empty([0, 0]), inner_space=0, window=10
     ):
         super(MCMC, self).__init__(
-            space, par, init, seed, data,
+            lib.MCMC, space, data, bind.par(par), bind.initializer(init), bind.seed(seed),
             dim, init_k, max_k, mcmc_iter, frame_size, b, amp, norm, nu,
             init_iter, inner_space, window
         )

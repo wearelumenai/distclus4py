@@ -2,7 +2,6 @@ from collections import namedtuple
 
 import numpy as np
 
-from distclus.ffi import ffi
 from .ffi import ffi, lib
 
 TYPE_MAP = {
@@ -12,39 +11,39 @@ TYPE_MAP = {
     'long': np.dtype('i8')
 }
 
-Array1D = namedtuple("Array1D", "addr l1")
-Array2D = namedtuple("Array2D", "addr l1 l2")
+Array = namedtuple("Array", "addr l1 l2 l3", defaults=(None, 0, 0, 0))
 
 
-def to_c_2d_array(data):
+def to_c_array(data):
     """
     Convert a numpy 2D array to C pointer
     """
     arr = ffi.cast("double*", data.ctypes.data)
-    l1 = ffi.cast("size_t", data.shape[0])
-    l2 = ffi.cast("size_t", data.shape[1])
-    return Array2D(addr=arr, l1=l1, l2=l2)
+    l1, l2, l3 = ffi.cast("size_t", data.shape[0]), 0, 0
+    if len(data.shape) > 1:
+        l2 = ffi.cast("size_t", data.shape[1])
+    if len(data.shape) > 2:
+        l3 = ffi.cast("size_t", data.shape[2])
+    return Array(addr=arr, l1=l1, l2=l2, l3=l3)
 
 
-def to_managed_2d_array(ptr):
+def to_managed_array(ptr):
     """Convert a C pointer to a numpy 2D array and ensure it will be freed when
     array is garbage collected
     """
-    ptr_1d = Array1D(addr=ptr.addr, l1=ptr.l1 * ptr.l2)
-    arr = to_managed_1d_array(ptr_1d)
-    arr.shape = (ptr.l1, ptr.l2)
-    return arr
-
-
-def to_managed_1d_array(ptr):
-    """Convert a C pointer to a numpy 1D array and ensure it will be freed when
-    array is garbage collected
-    """
+    length = ptr.l1
+    shape = (ptr.l1,)
+    if hasattr(ptr, "l2") and ptr.l2 > 0:
+        length *= ptr.l2
+        shape = (ptr.l1, ptr.l2)
+    if hasattr(ptr, "l3") and ptr.l3 > 0:
+        length *= ptr.l3
+        shape = (ptr.l1, ptr.l2, ptr.l3)
     _type = get_type(ptr.addr)
     gc_data = finalize(ptr, _type)
-    return np.frombuffer(
-        ffi.buffer(gc_data, ptr.l1 * ffi.sizeof(_type)), TYPE_MAP[_type]
-    )
+    arr = np.frombuffer(ffi.buffer(gc_data, length * ffi.sizeof(_type)), TYPE_MAP[_type])
+    arr.shape = shape
+    return arr
 
 
 def finalize(ptr, _type):
@@ -95,6 +94,14 @@ def figure(name):
     return getattr(lib, 'F_{0}'.format(name.upper()))
 
 
+def par(par):
+    return 1 if par else 0
+
+
 def handle_error(err):
     if err:
         raise RuntimeError(ffi.string(err))
+
+
+def seed(seed):
+    return 0 if seed is None else seed

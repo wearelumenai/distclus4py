@@ -97,29 +97,29 @@ extern void FreeRealArray(double* p0);
 
 extern void FreeIntArray(long int* p0);
 
-/* Return type for KMEANS */
-struct KMEANS_return {
-	int r0;
-	char* r1;
+/* Return type for KMeans */
+struct KMeans_return {
+	int r0; /* descr */
+	char* r1; /* errMsg */
 };
 
-// KMEANS algorithm
+// KMeans algorithm
 
-extern struct KMEANS_return KMEANS(space p0, int p1, initializer p2, long int p3, double* p4, size_t p5, size_t p6, int p7, int p8, int p9, space p10, int p11);
+extern struct KMeans_return KMeans(space p0, double* p1, size_t p2, size_t p3, int p4, initializer p5, long int p6, int p7, int p8, int p9, space p10, int p11);
 
 /* Return type for MCMC */
 struct MCMC_return {
-	int r0;
-	char* r1;
+	int r0; /* descr */
+	char* r1; /* errMsg */
 };
 
 // MCMC algorithm
 
-extern struct MCMC_return MCMC(space p0, int p1, initializer p2, long int p3, double* p4, size_t p5, size_t p6, size_t p7, int p8, int p9, int p10, int p11, double p12, double p13, double p14, double p15, int p16, space p17, int p18);
+extern struct MCMC_return MCMC(space p0, double* p1, size_t p2, size_t p3, int p4, initializer p5, long int p6, size_t p7, int p8, int p9, int p10, int p11, double p12, double p13, double p14, double p15, int p16, space p17, int p18);
 
 // Push push an element in a specific algorithm
 
-extern char* Push(int p0, double* p1, size_t p2, size_t p3);
+extern char* Push(int p0, double* p1, size_t p2, size_t p3, size_t p4);
 
 // Run executes a specific algorithm
 
@@ -128,25 +128,26 @@ extern char* Run(int p0, int p1);
 /* Return type for Predict */
 struct Predict_return {
 	long int* r0; /* labels */
-	size_t r1; /* l1 */
+	size_t r1; /* n1 */
 	char* r2; /* errMsg */
 };
 
 // Predict predicts an element in a specific algorithm
 
-extern struct Predict_return Predict(int p0, double* p1, size_t p2, size_t p3);
+extern struct Predict_return Predict(int p0, double* p1, size_t p2, size_t p3, size_t p4);
 
-/* Return type for RealCentroids */
-struct RealCentroids_return {
+/* Return type for Centroids */
+struct Centroids_return {
 	double* r0; /* data */
 	size_t r1; /* l1 */
 	size_t r2; /* l2 */
-	char* r3; /* errMsg */
+	size_t r3; /* l3 */
+	char* r4; /* errMsg */
 };
 
-// RealCentroids returns specific on centroids
+// Centroids returns specific on centroids
 
-extern struct RealCentroids_return RealCentroids(int p0);
+extern struct Centroids_return Centroids(int p0);
 
 /* Return type for RuntimeFigure */
 struct RuntimeFigure_return {
@@ -166,15 +167,15 @@ extern void Close(int p0);
 
 extern void Free(int p0);
 
-/* Return type for STREAMING */
-struct STREAMING_return {
-	int r0;
-	char* r1;
+/* Return type for Streaming */
+struct Streaming_return {
+	int r0; /* descr */
+	char* r1; /* errMsg */
 };
 
-// STREAMING algorithm
+// Streaming algorithm
 
-extern struct STREAMING_return STREAMING(space p0, int p1, initializer p2, long int p3, double* p4, size_t p5, size_t p6, int p7, double p8, double p9, space p10, int p11);
+extern struct Streaming_return Streaming(space p0, double* p1, size_t p2, size_t p3, long int p4, int p5, double p6, double p7, space p8, int p9);
 
 #ifdef __cplusplus
 }

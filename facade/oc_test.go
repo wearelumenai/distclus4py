@@ -9,8 +9,8 @@ func TestCreateError(t *testing.T) {
 	var elemts = makeElements()
 	var arr, l1, l2 = RealElemtsToArray(elemts)
 	var _, msg = MCMC(
-		0, 0, 2, 6305689164243,
-		arr, l1, l2,
+		0, arr, l1, l2,
+		0, 2, 6305689164243,
 		2, 0, 3, 30, 10000,
 		100.0, 1.0, 2.0, 1.0,
 		1,
@@ -26,15 +26,15 @@ func TestRun(t *testing.T) {
 	var elemts = makeElements()
 	var arr, l1, l2 = RealElemtsToArray(elemts)
 	var descr, _ = MCMC(
-		0, 0, 2, 6305689164243,
-		arr, l1, l2,
+		0, arr, l1, l2,
+		0, 2, 6305689164243,
 		2, 2, 3, 100000000, 10000,
 		1.0, 1.0, 2.0, 1.0,
 		1,
 		0, 0,
 	)
 
-	var _, _, _, msgErr = RealCentroids(descr)
+	var _, _, _, _, msgErr = Centroids(descr)
 	if m := goString(msgErr); m != "clustering not started" {
 		t.Error("expected error", m)
 	}
@@ -42,7 +42,7 @@ func TestRun(t *testing.T) {
 	elemts = makeElements()
 	arr, l1, l2 = RealElemtsToArray(elemts)
 
-	var msgPush = Push(descr, arr, l1, l2)
+	var msgPush = Push(descr, arr, l1, l2, 0)
 	if msgPush != nil {
 		t.Error("unexpected error")
 	}
@@ -54,7 +54,7 @@ func TestRun(t *testing.T) {
 
 	Close(descr)
 
-	var centroids, c1, c2, msgCentroids = RealCentroids(descr)
+	var centroids, c1, c2, _, msgCentroids = Centroids(descr)
 	if msgCentroids != nil {
 		t.Error("unexpected error")
 	}
@@ -69,7 +69,7 @@ func TestRun(t *testing.T) {
 
 	assertCentroids(ArrayToRealElemts(centroids, c1, c2), t)
 
-	var labels, l, msgPredict = Predict(descr, arr, l1, l2)
+	var labels, l, msgPredict = Predict(descr, arr, l1, l2, 0)
 	if msgPredict != nil {
 		t.Error("unexpected error")
 	}

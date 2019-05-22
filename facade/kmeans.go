@@ -16,14 +16,11 @@ import (
 // The facade works with C input and output parameters that are bound to Go types inside the functions.
 // The real MCMC instance is stored in a global table and accessed with a descriptor.
 
-// KMEANS algorithm
-//export KMEANS
-func KMEANS(
-	space C.space,
-	par C.int,
-	initializer C.initializer,
-	seed C.long,
-	data *C.double, l1 C.size_t, l2 C.size_t,
+// KMeans algorithm
+//export KMeans
+func KMeans(
+	space C.space, data *C.double, l1 C.size_t, l2 C.size_t,
+	par C.int, initializer C.initializer, seed C.long,
 	k C.int, iter C.int, framesize C.int,
 	innerSpace C.space, window C.int,
 ) (descr C.int, errMsg *C.char) {

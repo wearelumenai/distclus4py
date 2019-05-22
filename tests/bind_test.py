@@ -28,8 +28,8 @@ class TestBind(unittest.TestCase):
         for i in range(20):
             data[i] = float(i)
 
-        ptr = bind.Array1D(addr=data, l1=20)
-        arr = bind.to_managed_1d_array(ptr)
+        ptr = bind.Array(addr=data, l1=20)
+        arr = bind.to_managed_array(ptr)
         self.assertEqual(20, len(arr))
 
         for i, value in enumerate(arr):
@@ -41,8 +41,8 @@ class TestBind(unittest.TestCase):
         for i in range(40):
             data[i] = float(i)
 
-        ptr = bind.Array2D(addr=data, l1=20, l2=2)
-        arr = bind.to_managed_2d_array(ptr)
+        ptr = bind.Array(addr=data, l1=20, l2=2)
+        arr = bind.to_managed_array(ptr)
         self.assertEqual(20, len(arr))
 
         for i, values in enumerate(arr):

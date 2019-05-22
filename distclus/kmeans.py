@@ -1,5 +1,6 @@
 import numpy as np
 
+from distclus import bind
 from .ffi import lib
 from .oc import OnlineClust
 
@@ -13,8 +14,8 @@ class KMeans(OnlineClust):
             inner_space=0, window=10
     ):
         super(KMeans, self).__init__(
-            space, par, init, seed, data, k, mcmc_iter, frame_size,
-            inner_space, window
+            lib.KMeans, space, data, bind.par(par), bind.initializer(init), bind.seed(seed),
+            k, mcmc_iter, frame_size, inner_space, window
         )
 
     @property

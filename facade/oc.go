@@ -9,7 +9,7 @@ import "C"
 
 // Push push an element in a specific algorithm
 //export Push
-func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t) (errMsg *C.char) {
+func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var elemts = ArrayToRealElemts(data, l1, l2)
 	var algo = GetAlgorithm((AlgorithmDescr)(descr))
@@ -37,9 +37,9 @@ func Run(descr C.int, async C.int) (errMsg *C.char) {
 
 // Predict predicts an element in a specific algorithm
 //export Predict
-func Predict(descr C.int, data *C.double, i1 C.size_t, i2 C.size_t) (labels *C.long, l1 C.size_t, errMsg *C.char) {
+func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (labels *C.long, n1 C.size_t, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
-	var elemts = ArrayToRealElemts(data, i1, i2)
+	var elemts = ArrayToRealElemts(data, l1, l2)
 	var algo = GetAlgorithm((AlgorithmDescr)(descr))
 
 	var predictions = make([]int, len(elemts))
@@ -54,13 +54,13 @@ func Predict(descr C.int, data *C.double, i1 C.size_t, i2 C.size_t) (labels *C.l
 		predictions[i] = label
 	}
 
-	labels, l1 = IntsToArray(predictions)
+	labels, n1 = IntsToArray(predictions)
 	return
 }
 
-// RealCentroids returns specific on centroids
-//export RealCentroids
-func RealCentroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, errMsg *C.char) {
+// Centroids returns specific on centroids
+//export Centroids
+func Centroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo = GetAlgorithm((AlgorithmDescr)(descr))
 	var centroids, err = algo.Centroids()

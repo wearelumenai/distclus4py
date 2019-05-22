@@ -1,5 +1,6 @@
 import numpy as np
 
+from distclus import bind
 from .ffi import lib
 from .oc import OnlineClust
 
@@ -13,7 +14,7 @@ class Streaming(OnlineClust):
             inner_space=0, window=10
     ):
         super(Streaming, self).__init__(
-            space, par, 'given', seed, data, buffer_size, b, lambd,
+            lib.Streaming, space, data, bind.seed(seed), buffer_size, b, lambd,
             inner_space, window
         )
 

@@ -15,8 +15,8 @@ import (
 // MCMC algorithm
 //export MCMC
 func MCMC(
-	space C.space, par C.int, initializer C.initializer, seed C.long,
-	data *C.double, l1 C.size_t, l2 C.size_t,
+	space C.space, data *C.double, l1 C.size_t, l2 C.size_t,
+	par C.int, initializer C.initializer, seed C.long,
 	dim C.size_t, initK C.int, maxK C.int, mcmcIter C.int, framesize C.int,
 	b C.double, amp C.double, norm C.double, nu C.double,
 	initIter C.int,

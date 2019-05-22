@@ -8,8 +8,8 @@ func TestMCMC(t *testing.T) {
 	var elemts = makeElements()
 	var arr, l1, l2 = RealElemtsToArray(elemts)
 	var descr, msg = MCMC(
-		0, 0, 2, 6305689164243,
-		arr, l1, l2,
+		0, arr, l1, l2,
+		0, 2, 6305689164243,
 		2, 2, 3, 30, 10000,
 		100.0, 1.0, 2.0, 1.0,
 		1,
