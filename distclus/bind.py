@@ -11,7 +11,8 @@ TYPE_MAP = {
     'long': np.dtype('i8')
 }
 
-Array = namedtuple("Array", "addr l1 l2 l3", defaults=(None, 0, 0, 0))
+Array = namedtuple("Array", "addr l1 l2 l3")
+Array.__new__.__defaults__ = (None, 0, 0, 0)
 
 
 def to_c_array(data):
