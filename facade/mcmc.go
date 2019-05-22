@@ -29,7 +29,7 @@ func MCMC(
 	var implSpace = getSpace(space, window, innerSpace)
 	var implInit = Initializer(initializer)
 	var algo *core.Algo
-	if l3 > 0 {
+	if space == C.S_SERIES {
 		algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit, mcmc.NewIdentity())
 	} else {
 		algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit)

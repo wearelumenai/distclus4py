@@ -40,8 +40,7 @@ func TestRunVectors(t *testing.T) {
 }
 
 func TestRunSeries(t *testing.T) {
-	var elemts = makeSeries()
-	var arr, l1, l2, l3 = RealElemtsToArray(elemts)
+	var arr, l1, l2, l3 = RealElemtsToArray(make([]core.Elemt, 0))
 	var descr, _ = MCMC(
 		2, arr, l1, l2, l3,
 		0, 2, 6305689164243,
