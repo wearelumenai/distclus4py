@@ -18,8 +18,11 @@ def to_c_array(data):
     """
     Convert a numpy 2D array to C pointer
     """
+    if data is None:
+        return Array(addr=ffi.NULL, l1=0, l2=0, l3=0)
     arr = ffi.cast("double*", data.ctypes.data)
-    l1, l2, l3 = ffi.cast("size_t", data.shape[0]), 0, 0
+    zero = ffi.cast("size_t", 0)
+    l1, l2, l3 = ffi.cast("size_t", data.shape[0]), zero, zero
     if len(data.shape) > 1:
         l2 = ffi.cast("size_t", data.shape[1])
     if len(data.shape) > 2:

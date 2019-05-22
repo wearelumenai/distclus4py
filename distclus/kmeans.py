@@ -10,7 +10,7 @@ class KMeans(OnlineClust):
 
     def __init__(
             self, space='vectors', par=True, init='kmeanspp',
-            k=16, mcmc_iter=100, frame_size=0, seed=None, data=np.empty([0, 0]),
+            k=16, mcmc_iter=100, frame_size=0, seed=None, data=None,
             inner_space=0, window=10
     ):
         super(KMeans, self).__init__(

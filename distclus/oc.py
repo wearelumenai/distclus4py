@@ -10,11 +10,11 @@ from .ffi import lib
 class OnlineClust:
     """Base class for algorithm implementation using a native library"""
 
-    def __init__(self, builder, space='vectors', data=np.empty([0, 0]), *args):
+    def __init__(self, builder, space='vectors', data=None, *args):
         self.builder = builder
         space = bind.space(space)
-        arr, l1, l2, _ = bind.to_c_array(data)
-        self.args = [space, arr, l1, l2] + list(args)
+        arr, l1, l2, l3 = bind.to_c_array(data)
+        self.args = [space, arr, l1, l2, l3] + list(args)
         self._set_descr()
 
     def _set_descr(self):

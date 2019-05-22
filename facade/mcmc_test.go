@@ -29,3 +29,17 @@ func TestMCMC(t *testing.T) {
 
 	Free(descr)
 }
+
+func TestErr(t *testing.T) {
+	var _, d = MCMC(
+		0, nil, 0, 0, 0,
+		1, 2, 654126513379,
+		0, 2, 16, 5, 0,
+		1.0, 0.1, 2.0, 3.0,
+		1,
+		0, 10,
+	)
+	if d != nil {
+		t.Error("unexpected error")
+	}
+}

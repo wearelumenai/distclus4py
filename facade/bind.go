@@ -92,19 +92,21 @@ func ArrayToInts(arr *C.long, l C.size_t) []int {
 // RealElemtsToArray convert real elements to an array
 func RealElemtsToArray(elemts []core.Elemt) (arr *C.double, l1, l2, l3 C.size_t) {
 	var n1 = len(elemts)
-	var n2, n3 int
-	var slice []float64
-	switch e := elemts[0].(type) {
-	case []float64:
-		n2 = len(e)
-		slice, arr = makeArray(n1 * n2)
-		copyFrom2D(slice, elemts, n2)
-	case [][]float64:
-		n2, n3 = len(e), len(e[0])
-		slice, arr = makeArray(n1 * n2 * n3)
-		copyFrom3D(slice, elemts, n2, n3)
+	if n1 > 0 {
+		var n2, n3 int
+		var slice []float64
+		switch e := elemts[0].(type) {
+		case []float64:
+			n2 = len(e)
+			slice, arr = makeArray(n1 * n2)
+			copyFrom2D(slice, elemts, n2)
+		case [][]float64:
+			n2, n3 = len(e), len(e[0])
+			slice, arr = makeArray(n1 * n2 * n3)
+			copyFrom3D(slice, elemts, n2, n3)
+		}
+		l1, l2, l3 = C.size_t(n1), C.size_t(n2), C.size_t(n3)
 	}
-	l1, l2, l3 = C.size_t(n1), C.size_t(n2), C.size_t(n3)
 	return
 }
 
@@ -140,14 +142,16 @@ func ArrayToRealElemts(arr *C.double, l1, l2, l3 C.size_t) []core.Elemt {
 	var n1, n2, n3 = (int)(l1), (int)(l2), (int)(l3)
 	var n int
 	var data = make([]core.Elemt, n1)
-	if n3 > 0 {
-		n = n1 * n2 * n3
-		var slice = makeSlice(arr, n)
-		copyTo3D(data, slice, n2, n3)
-	} else {
-		n = n1 * n2
-		var slice = makeSlice(arr, n)
-		copyTo2D(data, slice, n2)
+	if n1 > 0 {
+		if n3 > 0 {
+			n = n1 * n2 * n3
+			var slice = makeSlice(arr, n)
+			copyTo3D(data, slice, n2, n3)
+		} else {
+			n = n1 * n2
+			var slice = makeSlice(arr, n)
+			copyTo2D(data, slice, n2)
+		}
 	}
 	return data
 }

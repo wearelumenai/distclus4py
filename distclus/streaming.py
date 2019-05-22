@@ -10,7 +10,7 @@ class Streaming(OnlineClust):
 
     def __init__(
             self, space='vectors', par=True,
-            buffer_size=0, b=.95, lambd=3., seed=None, data=np.empty([0, 0]),
+            buffer_size=0, b=.95, lambd=3., seed=None, data=None,
             inner_space=0, window=10
     ):
         super(Streaming, self).__init__(
