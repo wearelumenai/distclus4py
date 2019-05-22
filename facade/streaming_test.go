@@ -6,7 +6,7 @@ import (
 
 func TestStreaming(t *testing.T) {
 	var elemts = makeElements()
-	var arr, l1, l2 = RealElemtsToArray(elemts)
+	var arr, l1, l2, _ = RealElemtsToArray(elemts)
 	var descr, msg = Streaming(
 		0, arr, l1, l2,
 		6305689164243, 50,

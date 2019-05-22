@@ -7,7 +7,7 @@ import (
 
 func TestCreateError(t *testing.T) {
 	var elemts = makeElements()
-	var arr, l1, l2 = RealElemtsToArray(elemts)
+	var arr, l1, l2, _ = RealElemtsToArray(elemts)
 	var _, msg = MCMC(
 		0, arr, l1, l2,
 		0, 2, 6305689164243,
@@ -24,7 +24,7 @@ func TestCreateError(t *testing.T) {
 
 func TestRun(t *testing.T) {
 	var elemts = makeElements()
-	var arr, l1, l2 = RealElemtsToArray(elemts)
+	var arr, l1, l2, _ = RealElemtsToArray(elemts)
 	var descr, _ = MCMC(
 		0, arr, l1, l2,
 		0, 2, 6305689164243,
@@ -40,7 +40,7 @@ func TestRun(t *testing.T) {
 	}
 
 	elemts = makeElements()
-	arr, l1, l2 = RealElemtsToArray(elemts)
+	arr, l1, l2, _ = RealElemtsToArray(elemts)
 
 	var msgPush = Push(descr, arr, l1, l2, 0)
 	if msgPush != nil {
@@ -67,7 +67,7 @@ func TestRun(t *testing.T) {
 		t.Error("Expected", l2, "got", c2)
 	}
 
-	assertCentroids(ArrayToRealElemts(centroids, c1, c2), t)
+	assertCentroids(ArrayToRealElemts(centroids, c1, c2, 0), t)
 
 	var labels, l, msgPredict = Predict(descr, arr, l1, l2, 0)
 	if msgPredict != nil {

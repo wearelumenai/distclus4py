@@ -23,7 +23,7 @@ func MCMC(
 	innerSpace C.space, window C.int,
 ) (descr C.int, errMsg *C.char) {
 	defer handlePanic(0, &errMsg)
-	var elemts = ArrayToRealElemts(data, l1, l2)
+	var elemts = ArrayToRealElemts(data, l1, l2, 0)
 	var implConf = mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed)
 	var implSpace = getSpace(space, window, innerSpace)
 	var implInit = Initializer(initializer)

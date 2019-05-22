@@ -11,7 +11,7 @@ import "C"
 //export Push
 func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
-	var elemts = ArrayToRealElemts(data, l1, l2)
+	var elemts = ArrayToRealElemts(data, l1, l2, l3)
 	var algo = GetAlgorithm((AlgorithmDescr)(descr))
 	for i := range elemts {
 		var err = algo.Push(elemts[i])
@@ -39,7 +39,7 @@ func Run(descr C.int, async C.int) (errMsg *C.char) {
 //export Predict
 func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (labels *C.long, n1 C.size_t, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
-	var elemts = ArrayToRealElemts(data, l1, l2)
+	var elemts = ArrayToRealElemts(data, l1, l2, l3)
 	var algo = GetAlgorithm((AlgorithmDescr)(descr))
 
 	var predictions = make([]int, len(elemts))
@@ -68,7 +68,7 @@ func Centroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	} else {
-		data, l1, l2 = RealElemtsToArray(centroids)
+		data, l1, l2, l3 = RealElemtsToArray(centroids)
 	}
 
 	return

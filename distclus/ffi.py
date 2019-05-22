@@ -62,13 +62,13 @@ extern struct Algo Streaming(
 	space innerSpace, int window
 );
 
-extern const char* Push(int descr, double* data, size_t l1, size_t l2);
+extern const char* Push(int descr, double* data, size_t l1, size_t l2, size_t l3);
 
 extern const char* Run(int descr, int async);
 
 extern struct RealArray Centroids(int descr);
 
-extern struct IntArray Predict(int descr, double* data, size_t l1, size_t l2);
+extern struct IntArray Predict(int descr, double* data, size_t l1, size_t l2, size_t l3);
 
 extern struct Figure RuntimeFigure(int descr, figure fig);
 

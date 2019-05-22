@@ -39,8 +39,8 @@ class OnlineClust:
         """Push input data to process.
 
         :param data: data to push in the algorithme."""
-        arr, l1, l2, _ = bind.to_c_array(data)
-        err = lib.Push(self.descr, arr, l1, l2)
+        arr, l1, l2, l3 = bind.to_c_array(data)
+        err = lib.Push(self.descr, arr, l1, l2, l3)
         handle_error(err)
 
     def __radd__(self, data):
@@ -63,8 +63,8 @@ class OnlineClust:
 
     def predict(self, data):
         """Predict """
-        arr, l1, l2, _ = bind.to_c_array(data)
-        result = lib.Predict(self.descr, arr, l1, l2)
+        arr, l1, l2, l3 = bind.to_c_array(data)
+        result = lib.Predict(self.descr, arr, l1, l2, l3)
         handle_error(result.err)
         return bind.to_managed_array(result)
 

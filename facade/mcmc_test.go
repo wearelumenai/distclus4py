@@ -6,7 +6,7 @@ import (
 
 func TestMCMC(t *testing.T) {
 	var elemts = makeElements()
-	var arr, l1, l2 = RealElemtsToArray(elemts)
+	var arr, l1, l2, _ = RealElemtsToArray(elemts)
 	var descr, msg = MCMC(
 		0, arr, l1, l2,
 		0, 2, 6305689164243,

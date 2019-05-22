@@ -30,7 +30,7 @@ class TestMCMC(unittest.TestCase):
 
     def test_push_run_centroids_predict(self):
         algo = MCMC(
-            init_k=2, b=1, mcmc_iter=5, seed=653126513379
+            init_k=2, b=1, mcmc_iter=5, seed=654126513379
         )
         algo.push(self.data[:5])
         algo.push(self.data[5:])
