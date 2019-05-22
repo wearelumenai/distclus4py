@@ -67,6 +67,6 @@ func TestSetError(t *testing.T) {
 func makeAlgorithm() AlgorithmDescr {
 	var elemts = makeElements()
 	var implConf = mcmc.Conf{InitK: 2}
-	var oc, _ = factory.CreateOC(implConf, spaceConf, elemts, kmeans.PPInitializer)
+	var oc, _ = factory.CreateOC(implConf, getSpace, elemts, kmeans.PPInitializer)
 	return RegisterAlgorithm(oc)
 }

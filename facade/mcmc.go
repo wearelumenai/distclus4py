@@ -21,10 +21,15 @@ func MCMC(
 	b C.double, amp C.double, norm C.double, nu C.double,
 	initIter C.int,
 	innerSpace C.space, window C.int,
-) (C.int, *C.char) {
+) (descr C.int, errMsg *C.char) {
+	defer handlePanic(0, &errMsg)
+	var elemts = ArrayToRealElemts(data, l1, l2)
 	var implConf = mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed)
-	var spaceConf = spaceConf(space, window, innerSpace)
-	return CreateOC(implConf, spaceConf, initializer, data, l1, l2)
+	var implSpace = getSpace(space, window, innerSpace)
+	var implInit = Initializer(initializer)
+	var algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit)
+	descr = C.int(RegisterAlgorithm(algo))
+	return
 }
 
 func mcmcConf(par C.int,

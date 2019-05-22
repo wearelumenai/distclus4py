@@ -8,6 +8,7 @@ import (
 	"distclus/kmeans"
 	"distclus/series"
 	"distclus/vectors"
+	"fmt"
 	"golang.org/x/exp/rand"
 )
 
@@ -25,10 +26,15 @@ func KMEANS(
 	data *C.double, l1 C.size_t, l2 C.size_t,
 	k C.int, iter C.int, framesize C.int,
 	innerSpace C.space, window C.int,
-) (C.int, *C.char) {
+) (descr C.int, errMsg *C.char) {
+	defer handlePanic(0, &errMsg)
+	var elemts = ArrayToRealElemts(data, l1, l2)
 	var implConf = kmeansConf(par, k, iter, framesize, seed)
-	var spaceConf = spaceConf(space, window, innerSpace)
-	return CreateOC(implConf, spaceConf, initializer, data, l1, l2)
+	var implSpace = getSpace(space, window, innerSpace)
+	var implInit = Initializer(initializer)
+	var algo = kmeans.NewAlgo(implConf, implSpace, elemts, implInit)
+	descr = C.int(RegisterAlgorithm(algo))
+	return
 }
 
 func kmeansConf(
@@ -41,17 +47,21 @@ func kmeansConf(
 	}
 }
 
-func spaceConf(spaceName C.space, window C.int, innerSpace C.space) (conf core.SpaceConf) {
+func getSpace(spaceName C.space, window C.int, innerSpace C.space) core.Space {
 	switch spaceName {
 	case C.S_SERIES:
-		conf = series.Conf{
-			InnerSpace: vectors.Space{},
+		var conf = series.Conf{
+			InnerSpace: getSpace(innerSpace, 0, 0),
 			Window:     (int)(window),
 		}
+		return series.NewSpace(conf)
 	case C.S_VECTORS:
-		conf = vectors.Conf{}
+		var conf = vectors.Conf{}
+		return vectors.NewSpace(conf)
 	case C.S_COSINUS:
-		conf = cosinus.Conf{}
+		var conf = cosinus.Conf{}
+		return cosinus.NewSpace(conf)
+	default:
+		panic(fmt.Sprintf("unknown space %v", spaceName))
 	}
-	return
 }

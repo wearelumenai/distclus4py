@@ -2,10 +2,6 @@ package main
 
 //#include "bind.h"
 import "C"
-import (
-	"distclus/core"
-	"distclus/factory"
-)
 
 // These functions act as a facade on a MCMC algorithm instance.
 // The facade works with C input and output parameters that are bound to Go types inside the functions.
@@ -106,14 +102,6 @@ func Close(descr C.int) {
 func Free(descr C.int) {
 	Close(descr)
 	UnregisterAlgorithm((AlgorithmDescr)(descr))
-}
-
-// CreateOC creates an OC according to configurable parameters
-func CreateOC(implConf core.ImplConf, spaceConf core.SpaceConf, initializer C.initializer, data *C.double, l1 C.size_t, l2 C.size_t) (descr C.int, errMsg *C.char) {
-	defer handlePanic(0, &errMsg)
-	var elemts = ArrayToRealElemts(data, l1, l2)
-	var oc, _ = factory.CreateOC(implConf, spaceConf, elemts, Initializer(initializer))
-	return C.int(RegisterAlgorithm(oc)), errMsg
 }
 
 func handlePanic(descr C.int, msg **C.char) {

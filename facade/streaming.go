@@ -20,10 +20,14 @@ func STREAMING(
 	bufsize C.int,
 	b C.double, lambda C.double,
 	innerSpace C.space, window C.int,
-) (C.int, *C.char) {
+) (descr C.int, errMsg *C.char) {
+	defer handlePanic(0, &errMsg)
+	var elemts = ArrayToRealElemts(data, l1, l2)
 	var implConf = streamConf(par, bufsize, b, lambda, seed)
-	var spaceConf = spaceConf(space, window, innerSpace)
-	return CreateOC(implConf, spaceConf, C.I_GIVEN, data, l1, l2)
+	var implSpace = getSpace(space, window, innerSpace)
+	var algo = streaming.NewAlgo(implConf, implSpace, elemts)
+	descr = C.int(RegisterAlgorithm(algo))
+	return
 }
 
 func streamConf(par C.int, bufsize C.int, b C.double, lambda C.double, seed C.long) streaming.Conf {
