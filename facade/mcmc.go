@@ -3,7 +3,6 @@ package main
 //#include "bind.h"
 import "C"
 import (
-	"distclus/core"
 	"distclus/mcmc"
 
 	"golang.org/x/exp/rand"
@@ -28,12 +27,13 @@ func MCMC(
 	var implConf = mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed)
 	var implSpace = getSpace(space, window, innerSpace)
 	var implInit = Initializer(initializer)
-	var algo *core.Algo
+	var distrib func(mcmc.Conf) mcmc.Distrib
 	if space == C.S_SERIES {
-		algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit, mcmc.NewIdentity())
+		distrib = func(mcmc.Conf) mcmc.Distrib { return mcmc.NewIdentity() }
 	} else {
-		algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit)
+		distrib = func(conf mcmc.Conf) mcmc.Distrib { return mcmc.NewMultivT(mcmc.MultivTConf{conf}) }
 	}
+	var algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit, distrib)
 	descr = C.int(RegisterAlgorithm(algo))
 	return
 }
