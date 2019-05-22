@@ -15,13 +15,13 @@ import (
 // Streaming algorithm
 //export Streaming
 func Streaming(
-	space C.space, data *C.double, l1 C.size_t, l2 C.size_t,
+	space C.space, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t,
 	seed C.long, bufsize C.int,
 	b C.double, lambda C.double,
 	innerSpace C.space, window C.int,
 ) (descr C.int, errMsg *C.char) {
 	defer handlePanic(0, &errMsg)
-	var elemts = ArrayToRealElemts(data, l1, l2, 0)
+	var elemts = ArrayToRealElemts(data, l1, l2, l3)
 	var implConf = streamConf(bufsize, b, lambda, seed)
 	var implSpace = getSpace(space, window, innerSpace)
 	var algo = streaming.NewAlgo(implConf, implSpace, elemts)

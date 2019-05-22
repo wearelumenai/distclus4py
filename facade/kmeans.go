@@ -19,13 +19,13 @@ import (
 // KMeans algorithm
 //export KMeans
 func KMeans(
-	space C.space, data *C.double, l1 C.size_t, l2 C.size_t,
+	space C.space, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t,
 	par C.int, initializer C.initializer, seed C.long,
 	k C.int, iter C.int, framesize C.int,
 	innerSpace C.space, window C.int,
 ) (descr C.int, errMsg *C.char) {
 	defer handlePanic(0, &errMsg)
-	var elemts = ArrayToRealElemts(data, l1, l2, 0)
+	var elemts = ArrayToRealElemts(data, l1, l2, l3)
 	var implConf = kmeansConf(par, k, iter, framesize, seed)
 	var implSpace = getSpace(space, window, innerSpace)
 	var implInit = Initializer(initializer)

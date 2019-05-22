@@ -5,10 +5,10 @@ import (
 )
 
 func TestMCMC(t *testing.T) {
-	var elemts = makeElements()
-	var arr, l1, l2, _ = RealElemtsToArray(elemts)
+	var elemts = makeVectors()
+	var arr, l1, l2, l3 = RealElemtsToArray(elemts)
 	var descr, msg = MCMC(
-		0, arr, l1, l2,
+		0, arr, l1, l2, l3,
 		0, 2, 6305689164243,
 		2, 2, 3, 30, 10000,
 		100.0, 1.0, 2.0, 1.0,

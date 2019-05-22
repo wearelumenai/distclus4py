@@ -163,7 +163,7 @@ func copyTo2D(data []core.Elemt, slice []float64, n2 int) {
 func copyTo3D(data []core.Elemt, slice []float64, n2 int, n3 int) {
 	for i := range data {
 		var sl = make([][]float64, n2)
-		for j := range data {
+		for j := range sl {
 			sl[j] = make([]float64, n3)
 			copy(sl[j], slice[i*n2*n3+j*n3:i*n2*n3+(j+1)*n3])
 		}

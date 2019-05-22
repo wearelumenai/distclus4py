@@ -15,7 +15,7 @@ import (
 // MCMC algorithm
 //export MCMC
 func MCMC(
-	space C.space, data *C.double, l1 C.size_t, l2 C.size_t,
+	space C.space, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t,
 	par C.int, initializer C.initializer, seed C.long,
 	dim C.size_t, initK C.int, maxK C.int, mcmcIter C.int, framesize C.int,
 	b C.double, amp C.double, norm C.double, nu C.double,
@@ -23,11 +23,17 @@ func MCMC(
 	innerSpace C.space, window C.int,
 ) (descr C.int, errMsg *C.char) {
 	defer handlePanic(0, &errMsg)
-	var elemts = ArrayToRealElemts(data, l1, l2, 0)
+	var elemts = ArrayToRealElemts(data, l1, l2, l3)
 	var implConf = mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed)
 	var implSpace = getSpace(space, window, innerSpace)
 	var implInit = Initializer(initializer)
-	var algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit)
+	var distrib mcmc.Distrib
+	if l3 > 0 {
+		distrib = mcmc.NewIdentity()
+	} else {
+		distrib = mcmc.NewMultivT(mcmc.MultivTConf{implConf})
+	}
+	var algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit, distrib)
 	descr = C.int(RegisterAlgorithm(algo))
 	return
 }

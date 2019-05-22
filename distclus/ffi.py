@@ -41,14 +41,14 @@ extern void FreeRealArray(double* p0);
 extern void FreeIntArray(long* p0);
 
 extern struct Algo KMeans(
-    space space, double* data, size_t l1, size_t l2,
+    space space, double* data, size_t l1, size_t l2, size_t l3,
     int par, initializer init, long seed,
     int k, int iter, int framesize,
     space innerSpace, int window
 );
 
 extern struct Algo MCMC(
-    space space, double* data, size_t l1, size_t l2,
+    space space, double* data, size_t l1, size_t l2, size_t l3,
     int par, initializer init, long seed,
     size_t dim, int initK, int maxK, int mcmcIter, int framesize, double b,
     double amp, double norm, double nu, int initIter,
@@ -56,7 +56,7 @@ extern struct Algo MCMC(
 );
 
 extern struct Algo Streaming(
-	space space, double* data, size_t l1, size_t l2,
+	space space, double* data, size_t l1, size_t l2, size_t l3,
     long seed, int bufsize,
 	double b, double lambda,
 	space innerSpace, int window

@@ -46,9 +46,25 @@ class TestBind(unittest.TestCase):
         self.assertEqual(20, len(arr))
 
         for i, values in enumerate(arr):
-            self.assertEqual(2, len(arr[i]))
+            self.assertEqual(2, len(values))
             self.assertEqual(float(2 * i), values[0])
             self.assertEqual(float(2 * i + 1), values[1])
+
+    def test_to_array_3d(self):
+        data = self.alloc_double_array(40)
+
+        for i in range(40):
+            data[i] = float(i)
+
+        ptr = bind.Array(addr=data, l1=5, l2=4, l3=2)
+        arr = bind.to_managed_array(ptr)
+        self.assertEqual(5, len(arr))
+
+        for i, row in enumerate(arr):
+            self.assertEqual(4, len(row))
+            for j, values in enumerate(row):
+                self.assertEqual(float(8 * i + 2 * j), values[0])
+                self.assertEqual(float(8 * i + 2 * j + 1), values[1])
 
     def alloc_double_array(self, size):
         p = C.malloc(size * tffi.sizeof("double"))
