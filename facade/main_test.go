@@ -1,7 +1,7 @@
 package main
 
 import (
-	"distclus/factory"
+	"distclus/euclid"
 	"distclus/kmeans"
 	"distclus/mcmc"
 	"testing"
@@ -67,6 +67,6 @@ func TestSetError(t *testing.T) {
 func makeAlgorithm() AlgorithmDescr {
 	var elemts = makeVectors()
 	var implConf = mcmc.Conf{InitK: 2}
-	var oc, _ = factory.CreateOC(implConf, getSpace, elemts, kmeans.PPInitializer)
+	var oc = mcmc.NewAlgo(implConf, euclid.Space{}, elemts, kmeans.PPInitializer)
 	return RegisterAlgorithm(oc)
 }

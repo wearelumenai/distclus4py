@@ -5,9 +5,9 @@ import "C"
 import (
 	"distclus/core"
 	"distclus/cosinus"
+	"distclus/dtw"
+	"distclus/euclid"
 	"distclus/kmeans"
-	"distclus/series"
-	"distclus/vectors"
 	"fmt"
 	"golang.org/x/exp/rand"
 )
@@ -47,14 +47,14 @@ func kmeansConf(
 func getSpace(spaceName C.space, window C.int, innerSpace C.space) core.Space {
 	switch spaceName {
 	case C.S_SERIES:
-		var conf = series.Conf{
+		var conf = dtw.Conf{
 			InnerSpace: getSpace(innerSpace, 0, 0),
 			Window:     (int)(window),
 		}
-		return series.NewSpace(conf)
+		return dtw.NewSpace(conf)
 	case C.S_VECTORS:
-		var conf = vectors.Conf{}
-		return vectors.NewSpace(conf)
+		var conf = euclid.Conf{}
+		return euclid.NewSpace(conf)
 	case C.S_COSINUS:
 		var conf = cosinus.Conf{}
 		return cosinus.NewSpace(conf)

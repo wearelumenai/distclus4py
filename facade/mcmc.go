@@ -29,7 +29,7 @@ func MCMC(
 	var implInit = Initializer(initializer)
 	var distrib func(mcmc.Conf) mcmc.Distrib
 	if space == C.S_SERIES {
-		distrib = func(mcmc.Conf) mcmc.Distrib { return mcmc.NewIdentity() }
+		distrib = func(mcmc.Conf) mcmc.Distrib { return mcmc.NewDirac() }
 	} else {
 		distrib = func(conf mcmc.Conf) mcmc.Distrib { return mcmc.NewMultivT(mcmc.MultivTConf{conf}) }
 	}
