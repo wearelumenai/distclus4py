@@ -3,6 +3,7 @@ package main
 //#include "bind.h"
 import "C"
 import (
+	"distclus/core"
 	"distclus/mcmc"
 
 	"golang.org/x/exp/rand"
@@ -24,24 +25,43 @@ func MCMC(
 ) (descr C.int, errMsg *C.char) {
 	defer handlePanic(0, &errMsg)
 	var elemts = ArrayToRealElemts(data, l1, l2, l3)
-	var implConf = mcmcConf(par, dim, initK, maxK, mcmcIter, framesize, b, amp, norm, nu, initIter, seed)
+	var implConf = mcmcConf(par, initK, maxK, mcmcIter, framesize, b, amp, norm, initIter, seed)
 	var implSpace = getSpace(space, window, innerSpace)
 	var implInit = Initializer(initializer)
-	var distrib func(mcmc.Conf) mcmc.Distrib
-	if space == C.S_SERIES {
-		distrib = func(mcmc.Conf) mcmc.Distrib { return mcmc.NewDirac() }
-	} else {
-		distrib = func(conf mcmc.Conf) mcmc.Distrib { return mcmc.NewMultivT(mcmc.MultivTConf{conf}) }
-	}
+	var distrib = buildDistrib(implConf, implSpace, dim, nu, space)
 	var algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit, distrib)
 	descr = C.int(RegisterAlgorithm(algo))
 	return
 }
 
+func buildDistrib(implConf mcmc.Conf, implSpace core.Space, dim C.size_t, nu C.double, space C.space) (distrib mcmc.Distrib) {
+	switch {
+	case space == C.S_SERIES:
+		distrib = mcmc.NewDirac()
+	case (int)(dim) == 0:
+		var init = func(data core.Elemt) mcmc.Distrib {
+			var c = mcmc.MultivTConf{
+				Conf: implConf,
+				Dim:  implSpace.Dim([]core.Elemt{data}),
+				Nu:   (float64)(nu),
+			}
+			return mcmc.NewMultivT(c)
+		}
+		distrib = mcmc.NewLazyDistrib(init)
+	default:
+		var c = mcmc.MultivTConf{
+			Conf: implConf,
+			Dim:  (int)(dim),
+			Nu:   (float64)(nu),
+		}
+		distrib = mcmc.NewMultivT(c)
+	}
+	return
+}
+
 func mcmcConf(par C.int,
-	l2 C.size_t,
 	initK C.int, maxK C.int, mcmcIter C.int, framesize C.int,
-	b C.double, amp C.double, norm C.double, nu C.double,
+	b C.double, amp C.double, norm C.double,
 	initIter C.int, seed C.long) mcmc.Conf {
 
 	var rgen *rand.Rand
@@ -50,9 +70,9 @@ func mcmcConf(par C.int,
 	}
 
 	return mcmc.Conf{
-		Par: par != 0,
-		Dim: (int)(l2), FrameSize: (int)(framesize), B: (float64)(b), Amp: (float64)(amp),
-		Norm: (float64)(norm), Nu: (float64)(nu), InitK: (int)(initK), MaxK: (int)(maxK), McmcIter: (int)(mcmcIter),
+		Par:       par != 0,
+		FrameSize: (int)(framesize), B: (float64)(b), Amp: (float64)(amp),
+		Norm: (float64)(norm), InitK: (int)(initK), MaxK: (int)(maxK), McmcIter: (int)(mcmcIter),
 		InitIter: (int)(initIter),
 		RGen:     rgen,
 	}

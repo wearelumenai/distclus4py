@@ -1,6 +1,7 @@
 package main
 
 import (
+	"distclus/core"
 	"distclus/euclid"
 	"distclus/kmeans"
 	"distclus/mcmc"
@@ -67,6 +68,14 @@ func TestSetError(t *testing.T) {
 func makeAlgorithm() AlgorithmDescr {
 	var elemts = makeVectors()
 	var implConf = mcmc.Conf{InitK: 2}
-	var oc = mcmc.NewAlgo(implConf, euclid.Space{}, elemts, kmeans.PPInitializer)
+	var init = func(elemt core.Elemt) mcmc.Distrib {
+		var tConf = mcmc.MultivTConf{
+			Conf: implConf,
+			Dim:  2,
+		}
+		return mcmc.NewMultivT(tConf)
+	}
+	var distrib = mcmc.NewLazyDistrib(init)
+	var oc = mcmc.NewAlgo(implConf, euclid.Space{}, elemts, kmeans.PPInitializer, distrib)
 	return RegisterAlgorithm(oc)
 }
