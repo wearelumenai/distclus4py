@@ -15,7 +15,7 @@ class TestStreaming(unittest.TestCase):
 
 
     def test_streaming(self):
-        algo = Streaming(lambd=5, buffer_size=300)
+        algo = Streaming(lambd=5)
         algo.push(self.data[:1])
         algo.run(rasync=True)
         algo.push(self.data[1:])
