@@ -4,6 +4,7 @@ import numpy as np
 
 
 class LateAlgo:
+    """Wrapper to a late initialized algorithm"""
 
     def __init__(self, builder):
         self._builder = builder
@@ -13,8 +14,10 @@ class LateAlgo:
         self._mu = Lock()
 
     def push(self, data):
-        self._buffer = [*self._buffer, *data]
-        self._try_initialize()
+        if self._algo:
+            self._algo.push(data)
+        else:
+            self._try_initialize(data)
 
     def run(self, rasync=False):
         if self._algo:
@@ -43,9 +46,9 @@ class LateAlgo:
     def close(self):
         self._algo.close()
 
-    def _try_initialize(self):
-        if self._algo is None:
+    def _try_initialize(self, data):
             self._mu.acquire()
+            self._buffer = [*self._buffer, *data]
             if self._algo is None:
                 self._initialize()
             self._mu.release()

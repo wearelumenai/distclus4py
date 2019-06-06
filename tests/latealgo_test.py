@@ -8,19 +8,6 @@ from distclus import MCMC
 from distclus.latealgo import LateAlgo
 
 
-class LateMCMC(LateAlgo):
-
-    def build(self, data):
-        if len(data) >= self.init_k:
-            kwargs = {**self.kwargs, 'init_k': self.init_k, 'dim': len(data[0])}
-            return MCMC(**kwargs, data=data)
-
-    def __init__(self, init_k, **kwargs):
-        super(LateMCMC, self).__init__(self.build)
-        self.init_k = init_k
-        self.kwargs = kwargs
-
-
 class TestLateInit(unittest.TestCase):
 
     def setUp(self):
@@ -98,9 +85,23 @@ class TestLateInit(unittest.TestCase):
         late.run(True)
         threads = []
         for d in self.data:
-            t = Thread(target=late.push, args=([d],))
+            t = Thread(target=late.push, args=(np.array([d]),))
             t.start()
             threads.append(t)
         for t in threads:
             t.join()
+        time.sleep(.3)
         late.close()
+
+
+class LateMCMC(LateAlgo):
+
+    def build(self, data):
+        if len(data) >= self.init_k:
+            kwargs = {**self.kwargs, 'init_k': self.init_k, 'dim': len(data[0])}
+            return MCMC(**kwargs, data=data)
+
+    def __init__(self, init_k, **kwargs):
+        super(LateMCMC, self).__init__(self.build)
+        self.init_k = init_k
+        self.kwargs = kwargs
