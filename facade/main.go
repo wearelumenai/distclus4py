@@ -20,6 +20,7 @@ const errorMsgSize = 100
 
 type container struct {
 	algo    core.OnlineClust
+	space   core.Space
 	lastErr *C.char
 }
 
@@ -58,10 +59,11 @@ func UnregisterAlgorithm(descr AlgorithmDescr) {
 }
 
 // GetAlgorithm returns an OC
-func GetAlgorithm(descr AlgorithmDescr) core.OnlineClust {
+func GetAlgorithm(descr AlgorithmDescr) (core.OnlineClust, core.Space) {
 	lock.Lock()
 	defer lock.Unlock()
-	return table[descr].algo
+	var cont = table[descr]
+	return cont.algo, cont.space
 }
 
 func setError(descr AlgorithmDescr, errMsg string) *C.char {

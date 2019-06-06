@@ -12,7 +12,7 @@ import "C"
 func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var elemts = ArrayToRealElemts(data, l1, l2, l3)
-	var algo = GetAlgorithm((AlgorithmDescr)(descr))
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
 	for i := range elemts {
 		var err = algo.Push(elemts[i])
 		if err != nil {
@@ -27,7 +27,7 @@ func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (e
 //export Run
 func Run(descr C.int, async C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
-	var algo = GetAlgorithm((AlgorithmDescr)(descr))
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
 	var err = algo.Run((AlgorithmDescr)(async) != 0)
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
@@ -40,7 +40,7 @@ func Run(descr C.int, async C.int) (errMsg *C.char) {
 func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (labels *C.long, n1 C.size_t, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var elemts = ArrayToRealElemts(data, l1, l2, l3)
-	var algo = GetAlgorithm((AlgorithmDescr)(descr))
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
 
 	var predictions = make([]int, len(elemts))
 	for i := range elemts {
@@ -62,7 +62,7 @@ func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t)
 //export Centroids
 func Centroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
-	var algo = GetAlgorithm((AlgorithmDescr)(descr))
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
 	var centroids, err = algo.Centroids()
 
 	if err != nil {
@@ -78,7 +78,7 @@ func Centroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size
 //export RuntimeFigure
 func RuntimeFigure(descr C.int, figure C.figure) (value C.double, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
-	var algo = GetAlgorithm((AlgorithmDescr)(descr))
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
 	var figures, err = algo.RuntimeFigures()
 
 	if err != nil {
@@ -93,7 +93,7 @@ func RuntimeFigure(descr C.int, figure C.figure) (value C.double, errMsg *C.char
 // Close terminates an oc execution
 //export Close
 func Close(descr C.int) {
-	var algo = GetAlgorithm((AlgorithmDescr)(descr))
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
 	_ = algo.Close()
 }
 

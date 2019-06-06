@@ -19,7 +19,7 @@ func TestKMEANS(t *testing.T) {
 		return
 	}
 
-	var algo = GetAlgorithm((int)(descr))
+	var algo, _ = GetAlgorithm((int)(descr))
 
 	if algo == nil {
 		t.Error("Expected pointer got nil")

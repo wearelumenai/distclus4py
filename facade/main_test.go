@@ -24,13 +24,13 @@ func TestGetAlgorithm(t *testing.T) {
 	var descr0 = makeAlgorithm()
 	var descr1 = makeAlgorithm()
 
-	var algo0 = GetAlgorithm(descr0)
+	var algo0, _ = GetAlgorithm(descr0)
 
 	if algo0 == nil {
 		t.Error("Expected pointer got nil")
 	}
 
-	var algo1 = GetAlgorithm(descr1)
+	var algo1, _ = GetAlgorithm(descr1)
 
 	if algo1 == nil {
 		t.Error("Expected pointer got nil")
@@ -48,7 +48,7 @@ func TestUnregisterAlgorithm(t *testing.T) {
 	var descr0 = makeAlgorithm()
 	UnregisterAlgorithm(descr0)
 
-	var algo0 = GetAlgorithm(descr0)
+	var algo0, _ = GetAlgorithm(descr0)
 
 	if algo0 != nil {
 		t.Error("Expected nil got pointer")
@@ -70,12 +70,11 @@ func makeAlgorithm() AlgorithmDescr {
 	var implConf = mcmc.Conf{InitK: 2}
 	var init = func(elemt core.Elemt) mcmc.Distrib {
 		var tConf = mcmc.MultivTConf{
-			Conf: implConf,
-			Dim:  2,
+			Dim: 2,
 		}
 		return mcmc.NewMultivT(tConf)
 	}
-	var distrib = mcmc.NewLazyDistrib(init)
+	var distrib = mcmc.NewLateDistrib(init)
 	var oc = mcmc.NewAlgo(implConf, euclid.Space{}, elemts, kmeans.PPInitializer, distrib)
 	return RegisterAlgorithm(oc)
 }

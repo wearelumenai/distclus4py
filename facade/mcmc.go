@@ -41,18 +41,16 @@ func buildDistrib(implConf mcmc.Conf, implSpace core.Space, dim C.size_t, nu C.d
 	case (int)(dim) == 0:
 		var init = func(data core.Elemt) mcmc.Distrib {
 			var c = mcmc.MultivTConf{
-				Conf: implConf,
-				Dim:  implSpace.Dim([]core.Elemt{data}),
-				Nu:   (float64)(nu),
+				Dim: implSpace.Dim([]core.Elemt{data}),
+				Nu:  (float64)(nu),
 			}
 			return mcmc.NewMultivT(c)
 		}
-		distrib = mcmc.NewLazyDistrib(init)
+		distrib = mcmc.NewLateDistrib(init)
 	default:
 		var c = mcmc.MultivTConf{
-			Conf: implConf,
-			Dim:  (int)(dim),
-			Nu:   (float64)(nu),
+			Dim: (int)(dim),
+			Nu:  (float64)(nu),
 		}
 		distrib = mcmc.NewMultivT(c)
 	}
