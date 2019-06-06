@@ -25,7 +25,7 @@ func Streaming(
 	var implConf = streamConf(bufsize, b, lambda, seed)
 	var implSpace = getSpace(space, window, innerSpace)
 	var algo = streaming.NewAlgo(implConf, implSpace, elemts)
-	descr = C.int(RegisterAlgorithm(algo))
+	descr = C.int(RegisterAlgorithm(algo, implSpace))
 	return
 }
 

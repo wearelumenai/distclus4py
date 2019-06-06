@@ -66,14 +66,34 @@ class OnlineClust:
         arr, l1, l2, l3 = bind.to_c_array(data)
         result = lib.Predict(self.descr, arr, l1, l2, l3)
         handle_error(result.err)
-        return bind.to_managed_array(result)
+        labels = bind.Array(addr=result.labels, l1=result.n1)
+        return bind.to_managed_array(labels)
+
+    def predict_online(self, data):
+        """Predict """
+        arr, l1, l2, l3 = bind.to_c_array(data)
+        result = lib.Predict(self.descr, arr, l1, l2, l3)
+        handle_error(result.err)
+        labels = bind.Array(
+            addr=result.labels,
+            l1=result.n1
+        )
+        centroids = bind.Array(
+            addr=result.centroids,
+            l1=result.l1, l2=result.l2, l3=result.l3
+        )
+        return bind.to_managed_array(centroids), bind.to_managed_array(labels)
 
     @property
     def centroids(self):
         """Get centroids."""
         result = lib.Centroids(self.descr)
         handle_error(result.err)
-        return bind.to_managed_array(result)
+        centroids = bind.Array(
+            addr=result.centroids,
+            l1=result.l1, l2=result.l2, l3=result.l3
+        )
+        return bind.to_managed_array(centroids)
 
 
 def _make_free(descr):

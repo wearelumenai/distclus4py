@@ -129,7 +129,11 @@ extern char* Run(int p0, int p1);
 struct Predict_return {
 	long int* r0; /* labels */
 	size_t r1; /* n1 */
-	char* r2; /* errMsg */
+	double* r2; /* centers */
+	size_t r3; /* c1 */
+	size_t r4; /* c2 */
+	size_t r5; /* c3 */
+	char* r6; /* errMsg */
 };
 
 // Predict predicts an element in a specific algorithm

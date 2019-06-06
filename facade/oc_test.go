@@ -80,7 +80,7 @@ func assertAlgo(t *testing.T, d int, elemts []core.Elemt) {
 		t.Error("Expected", l2, "got", c2)
 	}
 	assertCentroids(ArrayToRealElemts(centroids, c1, c2, c3), t)
-	var labels, l, msgPredict = Predict(descr, arr, l1, l2, l3)
+	var labels, l, _, _, _, _, msgPredict = Predict(descr, arr, l1, l2, l3)
 	if msgPredict != nil {
 		t.Error("unexpected error")
 	}

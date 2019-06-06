@@ -12,33 +12,14 @@ typedef enum {S_VECTORS, S_COSINUS, S_SERIES} space;
 typedef enum {O_KMEANS, O_MCMC, O_KNN, O_STREAMING} oc;
 typedef enum {F_ITERATIONS} figure;
 
-struct IntArray {
-    long* addr;
-    size_t l1;
-    const char* err;
-};
+extern void FreeRealArray(double* p0);
 
-struct RealArray {
-    double* addr;
-    size_t l1;
-    size_t l2;
-    size_t l3;
-    const char* err;
-};
+extern void FreeIntArray(long* p0);
 
 struct Algo {
     int descr;
     const char* err;
 };
-
-struct Figure {
-    double value;
-    const char *err;
-};
-
-extern void FreeRealArray(double* p0);
-
-extern void FreeIntArray(long* p0);
 
 extern struct Algo KMeans(
     space space, double* data, size_t l1, size_t l2, size_t l3,
@@ -66,11 +47,34 @@ extern const char* Push(int descr, double* data, size_t l1, size_t l2, size_t l3
 
 extern const char* Run(int descr, int async);
 
-extern struct RealArray Centroids(int descr);
+struct CentroidsResult {
+    double* centroids;
+    size_t l1;
+    size_t l2;
+    size_t l3;
+    const char* err;
+};
 
-extern struct IntArray Predict(int descr, double* data, size_t l1, size_t l2, size_t l3);
+extern struct CentroidsResult Centroids(int descr);
 
-extern struct Figure RuntimeFigure(int descr, figure fig);
+struct PredictResult {
+    long* labels;
+    size_t n1;
+    double* centroids;
+    size_t l1;
+    size_t l2;
+    size_t l3;
+    const char* err;
+};
+
+extern struct PredictResult Predict(int descr, double* data, size_t l1, size_t l2, size_t l3);
+
+struct FigureResult {
+    double value;
+    const char *err;
+};
+
+extern struct FigureResult RuntimeFigure(int descr, figure fig);
 
 extern void Close(int descr);
 

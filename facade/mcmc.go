@@ -30,7 +30,7 @@ func MCMC(
 	var implInit = Initializer(initializer)
 	var distrib = buildDistrib(implConf, implSpace, dim, nu, space)
 	var algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit, distrib)
-	descr = C.int(RegisterAlgorithm(algo))
+	descr = C.int(RegisterAlgorithm(algo, implSpace))
 	return
 }
 

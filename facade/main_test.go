@@ -75,6 +75,7 @@ func makeAlgorithm() AlgorithmDescr {
 		return mcmc.NewMultivT(tConf)
 	}
 	var distrib = mcmc.NewLateDistrib(init)
-	var oc = mcmc.NewAlgo(implConf, euclid.Space{}, elemts, kmeans.PPInitializer, distrib)
-	return RegisterAlgorithm(oc)
+	var space = euclid.Space{}
+	var oc = mcmc.NewAlgo(implConf, space, elemts, kmeans.PPInitializer, distrib)
+	return RegisterAlgorithm(oc, space)
 }

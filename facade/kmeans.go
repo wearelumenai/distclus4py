@@ -30,7 +30,7 @@ func KMeans(
 	var implSpace = getSpace(space, window, innerSpace)
 	var implInit = Initializer(initializer)
 	var algo = kmeans.NewAlgo(implConf, implSpace, elemts, implInit)
-	descr = C.int(RegisterAlgorithm(algo))
+	descr = C.int(RegisterAlgorithm(algo, implSpace))
 	return
 }
 

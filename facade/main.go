@@ -27,23 +27,24 @@ type container struct {
 var lock = &sync.Mutex{}
 var sequence = 1
 var table = map[int]container{
-	0: newContainer(nil),
+	0: newContainer(nil, nil),
 }
 
 // RegisterAlgorithm registers an algorithm and retuns a descriptor
-func RegisterAlgorithm(algo core.OnlineClust) AlgorithmDescr {
+func RegisterAlgorithm(algo core.OnlineClust, space core.Space) AlgorithmDescr {
 	lock.Lock()
 	defer lock.Unlock()
 
 	var descr = sequence
 	sequence++
-	table[descr] = newContainer(algo)
+	table[descr] = newContainer(algo, space)
 	return descr
 }
 
-func newContainer(algo core.OnlineClust) container {
+func newContainer(algo core.OnlineClust, space core.Space) container {
 	return container{
 		algo:    algo,
+		space:   space,
 		lastErr: (*C.char)(C.calloc(errorMsgSize, C.sizeof_char)),
 	}
 }

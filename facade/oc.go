@@ -2,6 +2,7 @@ package main
 
 //#include "bind.h"
 import "C"
+import "runtime"
 
 // These functions act as a facade on a MCMC algorithm instance.
 // The facade works with C input and output parameters that are bound to Go types inside the functions.
@@ -37,24 +38,19 @@ func Run(descr C.int, async C.int) (errMsg *C.char) {
 
 // Predict predicts an element in a specific algorithm
 //export Predict
-func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (labels *C.long, n1 C.size_t, errMsg *C.char) {
+func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (labels *C.long, n1 C.size_t, centers *C.double, c1 C.size_t, c2 C.size_t, c3 C.size_t, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var elemts = ArrayToRealElemts(data, l1, l2, l3)
-	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
+	var algo, space = GetAlgorithm((AlgorithmDescr)(descr))
+	var centroids, err = algo.Centroids()
 
-	var predictions = make([]int, len(elemts))
-	for i := range elemts {
-		var _, label, err = algo.Predict(elemts[i])
-
-		if err != nil {
-			errMsg = setError((AlgorithmDescr)(descr), err.Error())
-			return
-		}
-
-		predictions[i] = label
+	if err != nil {
+		errMsg = setError((AlgorithmDescr)(descr), err.Error())
+	} else {
+		var predictions = centroids.ParMapLabel(elemts, space, runtime.NumCPU())
+		labels, n1 = IntsToArray(predictions)
+		centers, c1, c2, c3 = RealElemtsToArray(centroids)
 	}
-
-	labels, n1 = IntsToArray(predictions)
 	return
 }
 
