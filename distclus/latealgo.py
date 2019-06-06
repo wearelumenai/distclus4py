@@ -48,12 +48,14 @@ class LateAlgo:
 
     def _try_initialize(self, data):
             self._mu.acquire()
-            self._buffer = [*self._buffer, *data]
-            if self._algo is None:
-                self._initialize()
+            if self._algo:
+                self._algo.push(data)
+            else:
+                self._initialize(data)
             self._mu.release()
 
-    def _initialize(self):
+    def _initialize(self, data):
+        self._buffer = [*self._buffer, *data]
         algo = self._builder(np.array(self._buffer))
         if algo:
             if self._latestart:
