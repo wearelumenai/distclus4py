@@ -8,6 +8,19 @@ from distclus import MCMC
 from distclus.latealgo import LateAlgo
 
 
+class LateMCMC(LateAlgo):
+
+    def build(self, data):
+        if len(data) >= self.init_k:
+            kwargs = {**self.kwargs, 'init_k': self.init_k, 'dim': len(data[0])}
+            return MCMC(**kwargs, data=data)
+
+    def __init__(self, init_k, **kwargs):
+        super(LateMCMC, self).__init__(self.build)
+        self.init_k = init_k
+        self.kwargs = kwargs
+
+
 class TestLateInit(unittest.TestCase):
 
     def setUp(self):
@@ -17,16 +30,12 @@ class TestLateInit(unittest.TestCase):
         )
         np.random.shuffle(self.data)
 
-    def build(self, data):
-        if len(data) >= 2:
-            return MCMC(dim=len(data[0]), init_k=2, mcmc_iter=20, seed=166348259467)
-
     def test_build(self):
-        late = LateAlgo(self.build)
+        late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
         self.assertIsNone(late._algo)
 
     def test_push(self):
-        late = LateAlgo(self.build)
+        late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
         late.push(self.data[0:1])
         self.assertIsNone(late._algo)
         self.assertEqual(1, len(late._buffer))
@@ -38,20 +47,20 @@ class TestLateInit(unittest.TestCase):
         self.assertIs(algo, late._algo)
 
     def test_run_sync(self):
-        late = LateAlgo(self.build)
+        late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467, dim=12)
         self.assertRaises(ValueError, late.run, False)
         late.push(self.data)
         late.run(False)
 
     def test_run_async(self):
-        late = LateAlgo(self.build)
+        late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
         late.run(True)
         self.assertIsNone(late._algo)
         late.push(self.data)
         late.close()
 
     def test_centroids(self):
-        late = LateAlgo(self.build)
+        late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
         self.assertRaises(ValueError, lambda: late.centroids)
         late.run(True)
         late.push(self.data)
@@ -60,7 +69,7 @@ class TestLateInit(unittest.TestCase):
         late.close()
 
     def test_predict(self):
-        late = LateAlgo(self.build)
+        late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
         late.push(self.data)
         late.run(False)
         centroids = late.centroids
@@ -72,7 +81,7 @@ class TestLateInit(unittest.TestCase):
         late.close()
 
     def test_predict_online(self):
-        late = LateAlgo(self.build)
+        late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
         late.run(True)
         self.assertRaises(ValueError, late.predict, self.data)
         late.push(self.data)
@@ -85,7 +94,7 @@ class TestLateInit(unittest.TestCase):
         late.close()
 
     def test_push_parallel(self):
-        late = LateAlgo(self.build)
+        late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
         late.run(True)
         threads = []
         for d in self.data:

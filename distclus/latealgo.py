@@ -51,13 +51,12 @@ class LateAlgo:
             self._mu.release()
 
     def _initialize(self):
-        algo = self._builder(self._buffer)
+        algo = self._builder(np.array(self._buffer))
         if algo:
-            algo.push(np.array(self._buffer))
-            self._buffer.clear()
             if self._latestart:
                 algo.run(True)
             self._algo = algo
+            self._buffer.clear()
 
     def _raise_unitialized(self):
         raise ValueError('algorithm has not been initialized')
