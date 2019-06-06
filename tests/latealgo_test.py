@@ -5,7 +5,7 @@ from threading import Thread
 import numpy as np
 
 from distclus import MCMC
-from distclus.late import LateAlgo
+from distclus.latealgo import LateAlgo
 
 
 class TestLateInit(unittest.TestCase):
