@@ -32,7 +32,7 @@ extern struct Algo MCMC(
     space space, double* data, size_t l1, size_t l2, size_t l3,
     int par, initializer init, long seed,
     size_t dim, int initK, int maxK, int mcmcIter, int framesize, double b,
-    double amp, double norm, double nu, int initIter,
+    double amp, double norm, double nu,
     space innerSpace, int window
 );
 

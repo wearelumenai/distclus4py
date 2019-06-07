@@ -115,7 +115,7 @@ struct MCMC_return {
 
 // MCMC builds and registers a mcmc algorithm
 
-extern struct MCMC_return MCMC(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, long int p7, size_t p8, int p9, int p10, int p11, int p12, double p13, double p14, double p15, double p16, int p17, space p18, int p19);
+extern struct MCMC_return MCMC(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, long int p7, size_t p8, int p9, int p10, int p11, int p12, double p13, double p14, double p15, double p16, space p17, int p18);
 
 // Push pushes an array of element to the algorithm corresponding to the given descriptor
 

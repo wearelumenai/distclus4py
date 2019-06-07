@@ -32,4 +32,12 @@ All three algorithms implements the following interface, compliant with [scikit-
  
  ## MCMC
  
- 
+ ```python
+class distclus.MCMC(
+    space='vectors', par=True, init='kmeanspp',
+    init_k=8, max_k=16, mcmc_iter=100, frame_size=0, 
+    b=1, amp=0.1, dim=0, nu=3,
+    norm=2, seed=None,
+    data=None, inner_space=None, window=None
+)
+```

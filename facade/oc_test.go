@@ -15,7 +15,6 @@ func TestCreateError(t *testing.T) {
 		0, 2, 6305689164243,
 		2, 0, 3, 30, 1000,
 		10.0, 1.0, 2.0, 1.0,
-		1,
 		0, 0,
 	)
 
@@ -32,7 +31,6 @@ func TestRunVectors(t *testing.T) {
 		0, 2, 6305689164243,
 		2, 2, 3, 1000, 10000,
 		10.0, 1.0, 2.0, 1.0,
-		1,
 		0, 0,
 	)
 
@@ -47,7 +45,6 @@ func TestRunSeries(t *testing.T) {
 		0, 2, 6305689164243,
 		2, 2, 3, 1000, 10000,
 		10.0, 1.0, 2.0, 1.0,
-		1,
 		0, 0,
 	)
 	assertAlgo(t, (int)(descr), makeSeries())
