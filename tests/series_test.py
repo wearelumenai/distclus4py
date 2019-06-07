@@ -14,7 +14,7 @@ class TestSeries(unittest.TestCase):
         )
 
     def test_mcmc(self):
-        algo = MCMC(space='series', init_k=2, b=500, seed=353875342)
+        algo = MCMC(space='series', init_k=2, b=500, amp=.1, seed=353875342)
         algo.fit(self.data)
 
         self.assertEqual(2, len(algo.centroids))

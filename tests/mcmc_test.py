@@ -18,7 +18,7 @@ class TestMCMC(unittest.TestCase):
 
     def test_centroids_error(self):
         algo = MCMC(
-            init_k=2, b=1, mcmc_iter=5, seed=653126513379
+            init_k=2, b=1, amp=0.1, mcmc_iter=5, seed=653126513379
         )
         try:
             algo.centroids()
@@ -29,7 +29,7 @@ class TestMCMC(unittest.TestCase):
 
     def test_push_run_centroids_predict(self):
         algo = MCMC(
-            init_k=2, b=1, mcmc_iter=5, seed=654126513379
+            init_k=2, b=1, amp=0.1, mcmc_iter=5, seed=654126513379
         )
         algo.push(self.data[:5])
         algo.push(self.data[5:])
@@ -47,7 +47,7 @@ class TestMCMC(unittest.TestCase):
         self.check_centroids(centroids, label0, label10)
 
     def test_fit_predict(self):
-        algo = MCMC(init_k=2, b=500)
+        algo = MCMC(init_k=2, b=500, amp=0.1)
         algo.fit(self.data)
 
         labels = algo.predict(self.data)
@@ -57,13 +57,13 @@ class TestMCMC(unittest.TestCase):
         self.check_centroids(centroids, label0, label10)
 
     def test_iterations(self):
-        algo = MCMC(init_k=2, b=500, mcmc_iter=5)
+        algo = MCMC(init_k=2, b=500, amp=0.1, mcmc_iter=5)
         algo.fit(self.data)
 
         self.assertEqual(5, algo.iterations)
 
     def test_acceptations(self):
-        algo = MCMC(init_k=16, b=500, mcmc_iter=5)
+        algo = MCMC(init_k=16, b=500, amp=0.1, mcmc_iter=5)
         algo.fit(self.data)
 
         self.assertLessEqual(1, algo.acceptations)
