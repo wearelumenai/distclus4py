@@ -1,7 +1,5 @@
 import weakref
 
-import numpy as np
-
 from distclus.bind import handle_error
 from . import bind
 from .ffi import lib

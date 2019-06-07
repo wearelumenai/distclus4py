@@ -78,12 +78,12 @@ class LateAlgo:
         self._algo.close()
 
     def _try_initialize(self, data):
-            self._mu.acquire()
-            if self._algo:
-                self._algo.push(data)
-            else:
-                self._initialize(data)
-            self._mu.release()
+        self._mu.acquire()
+        if self._algo:
+            self._algo.push(data)
+        else:
+            self._initialize(data)
+        self._mu.release()
 
     def _initialize(self, data):
         self._buffer = [*self._buffer, *data]

@@ -13,7 +13,6 @@ class TestStreaming(unittest.TestCase):
         )
         np.random.shuffle(self.data)
 
-
     def test_streaming(self):
         algo = Streaming(lambd=5)
         algo.push(self.data[:1])
@@ -24,5 +23,5 @@ class TestStreaming(unittest.TestCase):
         self.assertLessEqual(2, len(centroids))
         labels = algo.predict(self.data)
         for i, label in enumerate(labels):
-            d = np.abs(centroids[label]-self.data[i])
+            d = np.abs(centroids[label] - self.data[i])
             self.assertLess(np.sum(d), 15)

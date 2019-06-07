@@ -28,13 +28,13 @@ func MCMC(
 	var implConf = mcmcConf(par, initK, maxK, mcmcIter, framesize, b, amp, norm, initIter, seed)
 	var implSpace = getSpace(space, window, innerSpace)
 	var implInit = initializer(init)
-	var distrib = buildDistrib(implConf, implSpace, dim, nu, space)
+	var distrib = buildDistrib(implSpace, dim, nu, space)
 	var algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit, distrib)
 	descr = C.int(RegisterAlgorithm(algo, implSpace))
 	return
 }
 
-func buildDistrib(implConf mcmc.Conf, implSpace core.Space, dim C.size_t, nu C.double, space C.space) (distrib mcmc.Distrib) {
+func buildDistrib(implSpace core.Space, dim C.size_t, nu C.double, space C.space) (distrib mcmc.Distrib) {
 	switch {
 	case space == C.S_SERIES:
 		distrib = mcmc.NewDirac()

@@ -105,18 +105,18 @@ def figure(name):
     return getattr(lib, 'F_{0}'.format(name.upper()))
 
 
-def par(par):
+def par(p):
     """
     Convert a boolean parallel indicator to an int for CFFI binding
     """
-    return 1 if par else 0
+    return 1 if p else 0
 
 
-def seed(seed):
+def seed(s):
     """
     Convert a None seed value to 0 for CFFI binding
     """
-    return 0 if seed is None else seed
+    return 0 if s is None else s
 
 
 def handle_error(err):

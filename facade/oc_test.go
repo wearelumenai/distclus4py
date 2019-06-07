@@ -4,6 +4,7 @@ import (
 	"distclus/core"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestCreateError(t *testing.T) {
@@ -12,8 +13,8 @@ func TestCreateError(t *testing.T) {
 	var _, msg = MCMC(
 		0, arr, l1, l2, l3,
 		0, 2, 6305689164243,
-		2, 0, 3, 30, 10000,
-		100.0, 1.0, 2.0, 1.0,
+		2, 0, 3, 30, 1000,
+		10.0, 1.0, 2.0, 1.0,
 		1,
 		0, 0,
 	)
@@ -29,8 +30,8 @@ func TestRunVectors(t *testing.T) {
 	var descr, _ = MCMC(
 		0, arr, l1, l2, l3,
 		0, 2, 6305689164243,
-		2, 2, 3, 100000000, 10000,
-		1.0, 1.0, 2.0, 1.0,
+		2, 2, 3, 1000, 10000,
+		10.0, 1.0, 2.0, 1.0,
 		1,
 		0, 0,
 	)
@@ -44,8 +45,8 @@ func TestRunSeries(t *testing.T) {
 	var descr, _ = MCMC(
 		2, arr, l1, l2, l3,
 		0, 2, 6305689164243,
-		2, 2, 3, 100000000, 10000,
-		1.0, 1.0, 2.0, 1.0,
+		2, 2, 3, 1000, 10000,
+		10.0, 1.0, 2.0, 1.0,
 		1,
 		1, 3,
 	)
@@ -68,6 +69,7 @@ func assertAlgo(t *testing.T, d int, elemts []core.Elemt) {
 	if msgRun != nil {
 		t.Error("unexpected error")
 	}
+	time.Sleep(500 * time.Millisecond)
 	Close(descr)
 	var centroids, c1, c2, c3, msgCentroids = Centroids(descr)
 	if msgCentroids != nil {
@@ -88,4 +90,11 @@ func assertAlgo(t *testing.T, d int, elemts []core.Elemt) {
 		t.Error("Expected", l1, "got", l)
 	}
 	assertLabels(arrayToInts(labels, l), t)
+	var iters, msgFig = RuntimeFigure(descr, 0)
+	if msgFig != nil {
+		t.Error("unexpected error")
+	}
+	if iters < 50 {
+		t.Error("Expected more iterations got", iters)
+	}
 }

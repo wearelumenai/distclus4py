@@ -21,12 +21,11 @@ class TestMCMC(unittest.TestCase):
             init_k=2, b=1, mcmc_iter=5, seed=653126513379
         )
         try:
-            centroids = algo.centroids
-            self.fail()
+            algo.centroids()
         except RuntimeError as x:
             self.assertEqual(x.args[0], b'clustering not started')
-        except:
-            self.fail()
+            return
+        self.fail()
 
     def test_push_run_centroids_predict(self):
         algo = MCMC(
@@ -87,11 +86,11 @@ class TestMCMC(unittest.TestCase):
     def check_centroids(self, centroids, label0, label10):
         self.assertEqual(2, len(centroids))
 
-        mean0 = np.mean(self.data[:10, ], axis=0)
-        mean10 = np.mean(self.data[10:, ], axis=0)
+        mean0 = np.mean(self.data[:10], axis=0)
+        mean10 = np.mean(self.data[10:], axis=0)
 
-        centroid0 = centroids[label0,]
-        centroid10 = centroids[label10,]
+        centroid0 = centroids[label0]
+        centroid10 = centroids[label10]
 
         dist0 = np.linalg.norm(mean0 - centroid0)
         dist10 = np.linalg.norm(mean10 - centroid10)

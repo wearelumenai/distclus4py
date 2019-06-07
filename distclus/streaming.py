@@ -1,5 +1,3 @@
-import numpy as np
-
 from distclus import bind
 from .ffi import lib
 from .oc import OnlineClust
@@ -9,7 +7,7 @@ class Streaming(OnlineClust):
     """Proxy a Streaming algorithm implemented in native library"""
 
     def __init__(
-            self, space='vectors', par=True,
+            self, space='vectors',
             buffer_size=0, b=.95, lambd=3., seed=None, data=None,
             inner_space=0, window=10
     ):

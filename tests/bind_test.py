@@ -23,7 +23,7 @@ class TestBind(unittest.TestCase):
         self.assertEqual(lib.O_STREAMING, bind.oc("streaming"))
 
     def test_to_array_1d(self):
-        data = self.alloc_double_array(20)
+        data = alloc_double_array(20)
 
         for i in range(20):
             data[i] = float(i)
@@ -36,7 +36,7 @@ class TestBind(unittest.TestCase):
             self.assertEqual(float(i), value)
 
     def test_to_array_2d(self):
-        data = self.alloc_double_array(40)
+        data = alloc_double_array(40)
 
         for i in range(40):
             data[i] = float(i)
@@ -51,7 +51,7 @@ class TestBind(unittest.TestCase):
             self.assertEqual(float(2 * i + 1), values[1])
 
     def test_to_array_3d(self):
-        data = self.alloc_double_array(40)
+        data = alloc_double_array(40)
 
         for i in range(40):
             data[i] = float(i)
@@ -66,7 +66,8 @@ class TestBind(unittest.TestCase):
                 self.assertEqual(float(8 * i + 2 * j), values[0])
                 self.assertEqual(float(8 * i + 2 * j + 1), values[1])
 
-    def alloc_double_array(self, size):
-        p = C.malloc(size * tffi.sizeof("double"))
-        data = tffi.cast("double*", p)
-        return data
+
+def alloc_double_array(size):
+    p = C.malloc(size * tffi.sizeof("double"))
+    data = tffi.cast("double*", p)
+    return data

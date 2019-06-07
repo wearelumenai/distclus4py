@@ -1,5 +1,3 @@
-import numpy as np
-
 from distclus import bind
 from .ffi import lib
 from .oc import OnlineClust

@@ -37,10 +37,10 @@ extern struct Algo MCMC(
 );
 
 extern struct Algo Streaming(
-	space space, double* data, size_t l1, size_t l2, size_t l3,
+    space space, double* data, size_t l1, size_t l2, size_t l3,
     long seed, int bufsize,
-	double b, double lambda,
-	space innerSpace, int window
+    double b, double lambda,
+    space innerSpace, int window
 );
 
 extern const char* Push(int descr, double* data, size_t l1, size_t l2, size_t l3);
