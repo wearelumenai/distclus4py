@@ -42,7 +42,7 @@ class distclus.MCMC(
 )
 ```
 
-Parameter name | values | default | description
+Parameter name | values | default | description*
 -------------- | ------ | ------- | -----------
 ```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
 ```par``` | *boolean* | *True* | indicates if computation is done in parallel
@@ -60,3 +60,5 @@ Parameter name | values | default | description
 ```data``` | *ndarray* | *None* | data to be pushed at algorithm construction time (optional)
 ```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
 ```window``` | *int* | *None* | size of window for *```space='series'```*
+
+<sup>*for more information on parameter values please refer to the article https://hal.inria.fr/hal-01264233</sup>
