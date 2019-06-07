@@ -10,12 +10,12 @@ class MCMC(OnlineClust):
             self, dim=0, space='vectors', par=True, init='kmeanspp',
             init_k=8, max_k=16, mcmc_iter=100, frame_size=0, b=1,
             amp=0.1, norm=2, nu=3, init_iter=1, seed=None,
-            data=None, inner_space=0, window=10
+            data=None, inner_space=None, window=None
     ):
         super(MCMC, self).__init__(
-            lib.MCMC, space, data, bind.par(par), bind.initializer(init), bind.seed(seed),
+            lib.MCMC, space, data, bind.par(par), bind.initializer(init), bind.none2zero(seed),
             dim, init_k, max_k, mcmc_iter, frame_size, b, amp, norm, nu,
-            init_iter, inner_space, window
+            init_iter, bind.none2zero(inner_space), bind.none2zero(window)
         )
 
     @property

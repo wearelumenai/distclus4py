@@ -12,7 +12,7 @@ class KMeans(OnlineClust):
             inner_space=0, window=10
     ):
         super(KMeans, self).__init__(
-            lib.KMeans, space, data, bind.par(par), bind.initializer(init), bind.seed(seed),
+            lib.KMeans, space, data, bind.par(par), bind.initializer(init), bind.none2zero(seed),
             k, mcmc_iter, frame_size, inner_space, window
         )
 

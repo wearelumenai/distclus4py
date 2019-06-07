@@ -112,9 +112,9 @@ def par(p):
     return 1 if p else 0
 
 
-def seed(s):
+def none2zero(s):
     """
-    Convert a None seed value to 0 for CFFI binding
+    Convert a None value to 0 for CFFI binding
     """
     return 0 if s is None else s
 

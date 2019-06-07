@@ -48,7 +48,7 @@ func TestRunSeries(t *testing.T) {
 		2, 2, 3, 1000, 10000,
 		10.0, 1.0, 2.0, 1.0,
 		1,
-		1, 3,
+		0, 0,
 	)
 	assertAlgo(t, (int)(descr), makeSeries())
 	Free(descr)
