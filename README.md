@@ -49,8 +49,8 @@ Parameter name | values | default | description
 ```init``` | *'kmeanspp', 'random', 'given'* | *'kmeanspp'* | the way initial centers are chosen
 ```init_k``` | *int* | *8* | the number of initial centers
 ```max_k``` | *int* | *16* | the maximum number of center
-```mcmc_iter``` | *int* | 100 | the number of mcmc iteration (only used if *```par=False```*)
-```frame_size``` | *int* | None | the number of data used for computation: <br> - None means all data, <br> - N > 0 means the N last pushed values
+```mcmc_iter``` | *int* | *100* | the number of mcmc iteration (only used if *```par=False```*)
+```frame_size``` | *int* | *None* | the number of data used for computation: <br> - None means all data, <br> - N > 0 means the N last pushed values
 ```b``` | *float* | *1.* | the value of the *b* parameter (used for the acceptation computation)
 ```amp``` | *float* | *1.* | the value of the *b* parameter (used for the acceptation computation)
 ```dim``` | *int* | *None* | the size of the data points (used by the student distribution)
