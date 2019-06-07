@@ -13,11 +13,11 @@ import (
 // The facade works with C input and output parameters that are bound to Go types inside the functions.
 // The real MCMC instance is stored in a global table and accessed with a descriptor.
 
-// MCMC algorithm
+// MCMC builds and registers a mcmc algorithm
 //export MCMC
 func MCMC(
 	space C.space, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t,
-	par C.int, initializer C.initializer, seed C.long,
+	par C.int, init C.initializer, seed C.long,
 	dim C.size_t, initK C.int, maxK C.int, mcmcIter C.int, framesize C.int,
 	b C.double, amp C.double, norm C.double, nu C.double,
 	initIter C.int,
@@ -27,7 +27,7 @@ func MCMC(
 	var elemts = ArrayToRealElemts(data, l1, l2, l3)
 	var implConf = mcmcConf(par, initK, maxK, mcmcIter, framesize, b, amp, norm, initIter, seed)
 	var implSpace = getSpace(space, window, innerSpace)
-	var implInit = Initializer(initializer)
+	var implInit = initializer(init)
 	var distrib = buildDistrib(implConf, implSpace, dim, nu, space)
 	var algo = mcmc.NewAlgo(implConf, implSpace, elemts, implInit, distrib)
 	descr = C.int(RegisterAlgorithm(algo, implSpace))

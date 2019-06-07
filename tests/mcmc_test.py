@@ -63,6 +63,12 @@ class TestMCMC(unittest.TestCase):
 
         self.assertEqual(5, algo.iterations)
 
+    def test_acceptations(self):
+        algo = MCMC(init_k=16, b=500, mcmc_iter=5)
+        algo.fit(self.data)
+
+        self.assertLessEqual(1, algo.acceptations)
+
     def check_labels(self, labels):
         self.assertEqual(20, len(labels))
         label0, label10 = -1, -1

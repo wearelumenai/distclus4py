@@ -8,7 +8,7 @@ import (
 
 func TestCreateError(t *testing.T) {
 	var elemts = makeVectors()
-	var arr, l1, l2, l3 = RealElemtsToArray(elemts)
+	var arr, l1, l2, l3 = realElemtsToArray(elemts)
 	var _, msg = MCMC(
 		0, arr, l1, l2, l3,
 		0, 2, 6305689164243,
@@ -25,7 +25,7 @@ func TestCreateError(t *testing.T) {
 
 func TestRunVectors(t *testing.T) {
 	var elemts = makeVectors()
-	var arr, l1, l2, l3 = RealElemtsToArray(elemts)
+	var arr, l1, l2, l3 = realElemtsToArray(elemts)
 	var descr, _ = MCMC(
 		0, arr, l1, l2, l3,
 		0, 2, 6305689164243,
@@ -40,7 +40,7 @@ func TestRunVectors(t *testing.T) {
 }
 
 func TestRunSeries(t *testing.T) {
-	var arr, l1, l2, l3 = RealElemtsToArray(make([]core.Elemt, 0))
+	var arr, l1, l2, l3 = realElemtsToArray(make([]core.Elemt, 0))
 	var descr, _ = MCMC(
 		2, arr, l1, l2, l3,
 		0, 2, 6305689164243,
@@ -59,7 +59,7 @@ func assertAlgo(t *testing.T, d int, elemts []core.Elemt) {
 	if m := goString(msgErr); m != "clustering not started" {
 		t.Error("expected error", m)
 	}
-	var arr, l1, l2, l3 = RealElemtsToArray(elemts)
+	var arr, l1, l2, l3 = realElemtsToArray(elemts)
 	var msgPush = Push(descr, arr, l1, l2, l3)
 	if msgPush != nil {
 		t.Error("unexpected error")
@@ -87,5 +87,5 @@ func assertAlgo(t *testing.T, d int, elemts []core.Elemt) {
 	if l != l1 {
 		t.Error("Expected", l1, "got", l)
 	}
-	assertLabels(ArrayToInts(labels, l), t)
+	assertLabels(arrayToInts(labels, l), t)
 }

@@ -32,7 +32,7 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 #line 1 "cgo-generated-wrapper"
 
-#line 3 "oc.go"
+#line 7 "oc.go"
 #include "bind.h"
 
 #line 1 "cgo-generated-wrapper"
@@ -89,11 +89,11 @@ extern "C" {
 #endif
 
 
-// FreeRealArray free an array of reals
+// FreeRealArray is a convenient function to free a C double array allocated by the facade
 
 extern void FreeRealArray(double* p0);
 
-// FreeIntArray free an array of integers
+// FreeIntArray is a convenient function to free a C long array allocated by the facade
 
 extern void FreeIntArray(long int* p0);
 
@@ -103,7 +103,7 @@ struct KMeans_return {
 	char* r1; /* errMsg */
 };
 
-// KMeans algorithm
+// KMeans builds and registers a kmeans algorithm
 
 extern struct KMeans_return KMeans(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, long int p7, int p8, int p9, int p10, space p11, int p12);
 
@@ -113,15 +113,15 @@ struct MCMC_return {
 	char* r1; /* errMsg */
 };
 
-// MCMC algorithm
+// MCMC builds and registers a mcmc algorithm
 
 extern struct MCMC_return MCMC(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, long int p7, size_t p8, int p9, int p10, int p11, int p12, double p13, double p14, double p15, double p16, int p17, space p18, int p19);
 
-// Push push an element in a specific algorithm
+// Push pushes an array of element to the algorithm corresponding to the given descriptor
 
 extern char* Push(int p0, double* p1, size_t p2, size_t p3, size_t p4);
 
-// Run executes a specific algorithm
+// Run runs the algorithm corresponding to the given descriptor
 
 extern char* Run(int p0, int p1);
 
@@ -136,7 +136,8 @@ struct Predict_return {
 	char* r6; /* errMsg */
 };
 
-// Predict predicts an element in a specific algorithm
+// Predict returns the centroids and labels for the input data
+// from the algorithm corresponding to the given descriptor
 
 extern struct Predict_return Predict(int p0, double* p1, size_t p2, size_t p3, size_t p4);
 
@@ -149,7 +150,8 @@ struct Centroids_return {
 	char* r4; /* errMsg */
 };
 
-// Centroids returns specific on centroids
+// Centroids returns the centroids
+// from the algorithm corresponding to the given descriptor
 
 extern struct Centroids_return Centroids(int p0);
 
@@ -159,15 +161,17 @@ struct RuntimeFigure_return {
 	char* r1; /* errMsg */
 };
 
-// Iterations returns number of iterations per execution
+// RuntimeFigure returns runtime figures
+// from the algorithm corresponding to the given descriptor
 
 extern struct RuntimeFigure_return RuntimeFigure(int p0, figure p1);
 
-// Close terminates an oc execution
+// Close terminates the algorithm corresponding to the given descriptor
 
 extern void Close(int p0);
 
-// Free terminates an oc execution and unregister it from global registry
+// Free terminates the algorithm corresponding to the given descriptor
+// and free allocated resources
 
 extern void Free(int p0);
 
@@ -177,7 +181,7 @@ struct Streaming_return {
 	char* r1; /* errMsg */
 };
 
-// Streaming algorithm
+// Streaming builds and registers a streaming algorithm
 
 extern struct Streaming_return Streaming(space p0, double* p1, size_t p2, size_t p3, size_t p4, long int p5, int p6, double p7, double p8, space p9, int p10);
 

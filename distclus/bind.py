@@ -32,7 +32,8 @@ def to_c_array(data):
 
 
 def to_managed_array(ptr):
-    """Convert a C pointer to a numpy 2D array and ensure it will be freed when
+    """
+    Convert a C pointer to a numpy 2D array and ensure it will be freed when
     array is garbage collected
     """
     length = ptr.l1
@@ -73,7 +74,7 @@ def get_type(cdata):
 
 def initializer(name):
     """
-    convert a string to a CFFI initializer enum type
+    Convert a string to a CFFI initializer enum type
     """
     if name in ['random', 'rand']:
         return lib.I_RANDOM
@@ -84,28 +85,43 @@ def initializer(name):
 
 
 def space(name):
-    """convert a string to a CFFI space enum type"""
+    """
+    Convert a string to a CFFI space enum type
+    """
     return getattr(lib, 'S_{0}'.format(name.upper()))
 
 
 def oc(name):
-    """convert a string to a CFFI oc enum type"""
+    """
+    Convert a string to a CFFI oc enum type
+    """
     return getattr(lib, 'O_{0}'.format(name.upper()))
 
 
 def figure(name):
-    """convert a string to a CFFI oc enum type"""
+    """
+    Convert a string to a CFFI oc enum type
+    """
     return getattr(lib, 'F_{0}'.format(name.upper()))
 
 
 def par(par):
+    """
+    Convert a boolean parallel indicator to an int for CFFI binding
+    """
     return 1 if par else 0
 
 
+def seed(seed):
+    """
+    Convert a None seed value to 0 for CFFI binding
+    """
+    return 0 if seed is None else seed
+
+
 def handle_error(err):
+    """
+    Raise an error from a CFFI message string
+    """
     if err:
         raise RuntimeError(ffi.string(err))
-
-
-def seed(seed):
-    return 0 if seed is None else seed

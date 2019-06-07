@@ -27,50 +27,63 @@ class OnlineClust:
         self.__finalize = weakref.finalize(self, _make_free(self.descr))
 
     def fit(self, data):
-        """Execute sequentially push, run and close methods.
-
-        :param data: data to process"""
+        """
+        Sequentially push train data, run in synchronous mode
+        and close the algorithm.
+        :param data: train data
+        """
         self._set_descr()
         self.push(data)
         self.run()
         self.close()
 
     def push(self, data):
-        """Push input data to process.
-
-        :param data: data to push in the algorithme."""
+        """
+        Push train data to the algorithm
+        :param data: train data
+        """
         arr, l1, l2, l3 = bind.to_c_array(data)
         err = lib.Push(self.descr, arr, l1, l2, l3)
         handle_error(err)
 
-    def __radd__(self, data):
-        return self.push(data)
-
     def run(self, rasync=False):
-        """Execute (a-)synchronously the alogrithm
-
-        :param bool rasync: Asynchronous execution if True. Default is False.
+        """
+        Execute the algorithm in synchronous or asynchronous mode
+        :param bool rasync: if True run in asynchronous mode
+        otherwise run in synchronous mode (default)
         """
         err = lib.Run(self.descr, 1 if rasync else 0)
         handle_error(err)
 
-    def __call__(self, rasync=False):
-        return self.run(rasync)
-
-    def close(self):
-        """Close algorithm execution."""
-        lib.Close(self.descr)
-
     def predict(self, data):
-        """Predict """
+        """
+        Get labels for input data
+        :param data: input data
+        :return: output labels
+        """
         arr, l1, l2, l3 = bind.to_c_array(data)
         result = lib.Predict(self.descr, arr, l1, l2, l3)
         handle_error(result.err)
         labels = bind.Array(addr=result.labels, l1=result.n1)
         return bind.to_managed_array(labels)
 
+    @property
+    def centroids(self):
+        """Get centroids"""
+        result = lib.Centroids(self.descr)
+        handle_error(result.err)
+        centroids = bind.Array(
+            addr=result.centroids,
+            l1=result.l1, l2=result.l2, l3=result.l3
+        )
+        return bind.to_managed_array(centroids)
+
     def predict_online(self, data):
-        """Predict """
+        """
+        Get centroids and labels for input data
+        :param data: input data
+        :return: centroids and output labels
+        """
         arr, l1, l2, l3 = bind.to_c_array(data)
         result = lib.Predict(self.descr, arr, l1, l2, l3)
         handle_error(result.err)
@@ -84,16 +97,11 @@ class OnlineClust:
         )
         return bind.to_managed_array(centroids), bind.to_managed_array(labels)
 
-    @property
-    def centroids(self):
-        """Get centroids."""
-        result = lib.Centroids(self.descr)
-        handle_error(result.err)
-        centroids = bind.Array(
-            addr=result.centroids,
-            l1=result.l1, l2=result.l2, l3=result.l3
-        )
-        return bind.to_managed_array(centroids)
+    def close(self):
+        """
+        Stop the algorithm and release resources
+        """
+        lib.Close(self.descr)
 
 
 def _make_free(descr):

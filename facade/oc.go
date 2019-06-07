@@ -1,14 +1,14 @@
+// Package main is intended to export a native library that provides a facade
+// to the distclus (https://github.com/wearelumenai/distclus) library.
+// It is used by the Python module https://github.com/wearelumenai/distclus4py/tree/master/distclus
+// to proxy the algorithms offered by distclus.
 package main
 
 //#include "bind.h"
 import "C"
 import "runtime"
 
-// These functions act as a facade on a MCMC algorithm instance.
-// The facade works with C input and output parameters that are bound to Go types inside the functions.
-// The real MCMC instance is stored in a global table and accessed with a descriptor.
-
-// Push push an element in a specific algorithm
+// Push pushes an array of element to the algorithm corresponding to the given descriptor
 //export Push
 func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
@@ -24,7 +24,7 @@ func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (e
 	return
 }
 
-// Run executes a specific algorithm
+// Run runs the algorithm corresponding to the given descriptor
 //export Run
 func Run(descr C.int, async C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
@@ -36,7 +36,8 @@ func Run(descr C.int, async C.int) (errMsg *C.char) {
 	return
 }
 
-// Predict predicts an element in a specific algorithm
+// Predict returns the centroids and labels for the input data
+// from the algorithm corresponding to the given descriptor
 //export Predict
 func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (labels *C.long, n1 C.size_t, centers *C.double, c1 C.size_t, c2 C.size_t, c3 C.size_t, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
@@ -48,13 +49,14 @@ func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t)
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	} else {
 		var predictions = centroids.ParMapLabel(elemts, space, runtime.NumCPU())
-		labels, n1 = IntsToArray(predictions)
-		centers, c1, c2, c3 = RealElemtsToArray(centroids)
+		labels, n1 = intsToArray(predictions)
+		centers, c1, c2, c3 = realElemtsToArray(centroids)
 	}
 	return
 }
 
-// Centroids returns specific on centroids
+// Centroids returns the centroids
+// from the algorithm corresponding to the given descriptor
 //export Centroids
 func Centroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
@@ -64,15 +66,16 @@ func Centroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	} else {
-		data, l1, l2, l3 = RealElemtsToArray(centroids)
+		data, l1, l2, l3 = realElemtsToArray(centroids)
 	}
 
 	return
 }
 
-// Iterations returns number of iterations per execution
+// RuntimeFigure returns runtime figures
+// from the algorithm corresponding to the given descriptor
 //export RuntimeFigure
-func RuntimeFigure(descr C.int, figure C.figure) (value C.double, errMsg *C.char) {
+func RuntimeFigure(descr C.int, fig C.figure) (value C.double, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
 	var figures, err = algo.RuntimeFigures()
@@ -80,20 +83,21 @@ func RuntimeFigure(descr C.int, figure C.figure) (value C.double, errMsg *C.char
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	} else {
-		value = (C.double)(figures[Figure(figure)])
+		value = (C.double)(figures[figure(fig)])
 	}
 
 	return
 }
 
-// Close terminates an oc execution
+// Close terminates the algorithm corresponding to the given descriptor
 //export Close
 func Close(descr C.int) {
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
 	_ = algo.Close()
 }
 
-// Free terminates an oc execution and unregister it from global registry
+// Free terminates the algorithm corresponding to the given descriptor
+// and free allocated resources
 //export Free
 func Free(descr C.int) {
 	Close(descr)

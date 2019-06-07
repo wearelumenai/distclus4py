@@ -12,7 +12,7 @@ import (
 // The facade works with C input and output parameters that are bound to Go types inside the functions.
 // The real Streaming instance is stored in a global table and accessed with a descriptor.
 
-// Streaming algorithm
+// Streaming builds and registers a streaming algorithm
 //export Streaming
 func Streaming(
 	space C.space, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t,

@@ -4,15 +4,15 @@ package main
 import "C"
 import (
 	"distclus/core"
+	"distclus/figures"
 	"distclus/kmeans"
+	"github.com/pkg/errors"
 	"reflect"
 	"unsafe"
 )
 
-// These functions bind C types to Go types and conversely.
-
-// Initializer returns a specific OC initializer
-func Initializer(i C.initializer) (fi core.Initializer) {
+// initializer returns a specific OC initializer
+func initializer(i C.initializer) (fi core.Initializer) {
 	switch i {
 	case C.I_RANDOM:
 		fi = kmeans.RandInitializer
@@ -24,45 +24,20 @@ func Initializer(i C.initializer) (fi core.Initializer) {
 	return
 }
 
-// Space retuns a specific OC space name
-func Space(s C.space) (fs string) {
-	switch s {
-	case C.S_VECTORS:
-		fs = "vectors"
-	case C.S_COSINUS:
-		fs = "cosinus"
-	case C.S_SERIES:
-		fs = "series"
-	}
-	return
-}
-
-// OC returns a specific oc name
-func OC(o C.oc) (fo string) {
-	switch o {
-	case C.O_KMEANS:
-		fo = "kmeans"
-	case C.O_MCMC:
-		fo = "mcmc"
-	case C.O_KNN:
-		fo = "knn"
-	case C.O_STREAMING:
-		fo = "streaming"
-	}
-	return
-}
-
-// Initializer returns a specific OC initializer
-func Figure(figure C.figure) (name string) {
+// figure converts a C figure enum to a figure constant
+func figure(figure C.figure) (name string) {
 	switch figure {
 	case C.F_ITERATIONS:
-		name = "iterations"
+		name = figures.Iterations
+	case C.F_ACCEPTATIONS:
+		name = figures.Acceptations
 	}
 	return
 }
 
-// IntsToArray convert integers to an array
-func IntsToArray(arr []int) (*C.long, C.size_t) {
+// intsToArray convert integer Go slice to a C long array.
+// It returns the pointer to the C array and its size.
+func intsToArray(arr []int) (*C.long, C.size_t) {
 	var l = len(arr)
 	var mem = (*C.long)(C.calloc(C.size_t(l), C.sizeof_long))
 	var sh = reflect.SliceHeader{
@@ -75,8 +50,8 @@ func IntsToArray(arr []int) (*C.long, C.size_t) {
 	return mem, C.size_t(l)
 }
 
-// ArrayToInts convert an array to integers
-func ArrayToInts(arr *C.long, l C.size_t) []int {
+// arrayToInts convert a C long array with the given size to element Go slice
+func arrayToInts(arr *C.long, l C.size_t) []int {
 	var ls = (int)(l)
 	var data = make([]int, ls)
 	var sh = reflect.SliceHeader{
@@ -89,8 +64,11 @@ func ArrayToInts(arr *C.long, l C.size_t) []int {
 	return data
 }
 
-// RealElemtsToArray convert real elements to an array
-func RealElemtsToArray(elemts []core.Elemt) (arr *C.double, l1, l2, l3 C.size_t) {
+// realElemtsToArray converts core.Elemt Go Slice to a C double array.
+// Element type must be []float64 or [][]float64.
+// It returns a pointer to the C array in row major layout
+// and the size of its 3 dimensions, if element type os []float64 then l3 = 0.
+func realElemtsToArray(elemts []core.Elemt) (arr *C.double, l1, l2, l3 C.size_t) {
 	var n1 = len(elemts)
 	if n1 > 0 {
 		var n2, n3 int
@@ -104,11 +82,17 @@ func RealElemtsToArray(elemts []core.Elemt) (arr *C.double, l1, l2, l3 C.size_t)
 			n2, n3 = len(e), len(e[0])
 			slice, arr = makeArray(n1 * n2 * n3)
 			copyFrom3D(slice, elemts, n2, n3)
+		default:
+			panic(errUnauthorizedType)
 		}
 		l1, l2, l3 = C.size_t(n1), C.size_t(n2), C.size_t(n3)
 	}
 	return
 }
+
+// errUnauthorizedType describes an error when using
+// an unauthorized type in slice to array conversion
+var errUnauthorizedType = errors.New("unauthorized element type")
 
 func copyFrom2D(slice []float64, elemts []core.Elemt, n2 int) {
 	for i := range elemts {
@@ -137,7 +121,8 @@ func makeArray(n int) ([]float64, *C.double) {
 	return slice, arr
 }
 
-// ArrayToRealElemts free an array of real elements
+// ArrayToRealElemts convert a C double array with the given 3 dimensions size
+// to element Go slice. If l3 = 0 element type is []float64 otherwise [][]float64.
 func ArrayToRealElemts(arr *C.double, l1, l2, l3 C.size_t) []core.Elemt {
 	var n1, n2, n3 = (int)(l1), (int)(l2), (int)(l3)
 	var n int
@@ -185,13 +170,13 @@ func makeSlice(arr *C.double, n int) []float64 {
 	return slice
 }
 
-// FreeRealArray free an array of reals
+// FreeRealArray is a convenient function to free a C double array allocated by the facade
 //export FreeRealArray
 func FreeRealArray(arr *C.double) {
 	C.free(unsafe.Pointer(arr))
 }
 
-// FreeIntArray free an array of integers
+// FreeIntArray is a convenient function to free a C long array allocated by the facade
 //export FreeIntArray
 func FreeIntArray(arr *C.long) {
 	C.free(unsafe.Pointer(arr))

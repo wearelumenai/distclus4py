@@ -6,7 +6,7 @@ import (
 
 func TestKMEANS(t *testing.T) {
 	var elemts = makeVectors()
-	var arr, l1, l2, l3 = RealElemtsToArray(elemts)
+	var arr, l1, l2, l3 = realElemtsToArray(elemts)
 	var descr, msg = KMeans(
 		0, arr, l1, l2, l3,
 		0, 2, 6305689164243,

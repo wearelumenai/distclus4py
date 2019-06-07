@@ -22,7 +22,20 @@ class MCMC(OnlineClust):
 
     @property
     def iterations(self):
+        """
+        Get the number of iterations done so far
+        """
         figure = lib.RuntimeFigure(self.descr, lib.F_ITERATIONS)
+        if figure.err:
+            raise RuntimeError(figure.err)
+        return figure.value
+
+    @property
+    def acceptations(self):
+        """
+        Get the number of iterations done so far
+        """
+        figure = lib.RuntimeFigure(self.descr, lib.F_ACCEPTATIONS)
         if figure.err:
             raise RuntimeError(figure.err)
         return figure.value

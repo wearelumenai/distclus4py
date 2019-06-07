@@ -14,12 +14,24 @@ class LateAlgo:
         self._mu = Lock()
 
     def push(self, data):
+        """
+        Push the data to the wrapped algorithm if initialized
+        otherwise try to initialize
+        :param data: train data
+        """
         if self._algo:
             self._algo.push(data)
         else:
             self._try_initialize(data)
 
     def run(self, rasync=False):
+        """
+        Run the wrapped algorithm if initialized 
+        otherwise delay the run after initialization if rasync=True
+        or raise an error if rasync=False
+        :param rasync: if True run in asynchronous mode
+        otherwise run in synchronous mode (default)
+        """
         if self._algo:
             self._algo.run(rasync)
         elif rasync:
@@ -29,21 +41,40 @@ class LateAlgo:
 
     @property
     def centroids(self):
+        """
+        Get the centroids from wrapped algorithm if initialized
+        otherwise raise an error
+        """
         if self._algo:
             return self._algo.centroids
         self._raise_unitialized()
 
     def predict(self, data):
+        """
+        Predict the labels from wrapped algorithm if initialized
+        otherwise raise an error
+        :param data: input data
+        :return: labels
+        """
         if self._algo:
             return self._algo.predict(data)
         self._raise_unitialized()
 
     def predict_online(self, data):
+        """
+        Get centroids and predict the labels from wrapped algorithm
+        if initialized otherwise raise an error
+        :param data: input data
+        :return: centroids and output labels
+        """
         if self._algo:
             return self._algo.predict_online(data)
         self._raise_unitialized()
 
     def close(self):
+        """
+        Stop the wrapped algorithm and release resources
+        """
         self._algo.close()
 
     def _try_initialize(self, data):
