@@ -8,12 +8,12 @@ class KMeans(OnlineClust):
 
     def __init__(
             self, space='vectors', par=True, init='kmeanspp',
-            k=16, mcmc_iter=100, frame_size=0, seed=None, data=None,
-            inner_space=0, window=10
+            k=16, nb_iter=100, frame_size=None, seed=None, data=None,
+            inner_space=None, window=None
     ):
         super(KMeans, self).__init__(
             lib.KMeans, space, data, bind.par(par), bind.initializer(init), bind.none2zero(seed),
-            k, mcmc_iter, frame_size, inner_space, window
+            k, nb_iter, bind.none2zero(frame_size), bind.none2zero(inner_space), bind.none2zero(window)
         )
 
     @property

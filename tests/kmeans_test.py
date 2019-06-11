@@ -17,7 +17,7 @@ class TestKMeans(unittest.TestCase):
 
     def test_push_run_centroids_predict(self):
         algo = KMeans(
-            k=2, mcmc_iter=5, seed=653126513379
+            k=2, nb_iter=5, seed=653126513379
         )
         algo.push(self.data[:5])
         algo.push(self.data[5:])
@@ -45,7 +45,7 @@ class TestKMeans(unittest.TestCase):
         self.check_centroids(centroids, label0, label10)
 
     def test_iterations(self):
-        algo = KMeans(k=2, mcmc_iter=5)
+        algo = KMeans(k=2, nb_iter=5)
         algo.fit(self.data)
 
         self.assertEqual(5, algo.iterations)

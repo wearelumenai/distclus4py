@@ -61,7 +61,7 @@ Parameter name | values | default | description *
 ```init``` | *'kmeanspp', 'random', 'given'* | *'kmeanspp'* | the way initial centers are chosen
 ```init_k``` | *int* | *8* | the number of initial centers
 ```max_k``` | *int* | *16* | the maximum number of center
-```mcmc_iter``` | *int* | *100* | the number of mcmc iteration (only used if *```par=False```*)
+```mcmc_iter``` | *int* | *100* | the number of mcmc iteration
 ```frame_size``` | *int* | *None* | the number of data used for computation: <br> - None means all data, <br> - N > 0 means the N last pushed values
 ```b``` | *float* | *1.* | the value of the *b* parameter (used for the acceptation computation)
 ```amp``` | *float* | *1.* | the value of the *b* parameter (used for the acceptation computation)
@@ -85,9 +85,9 @@ The following example create the algorithm, fit train data then predict sample d
 >>>
 >>> algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
 >>> algo.fit(train)
->>> algo.centroids
-array([[15.        ,  4.        ],
-       [ 0.        ,  5.33333333]])
+>>> print(algo.centroids)
+[[ 0.          5.33333333]
+ [15.          4.        ]]
        
 >>> labels = algo.predict(train)
 >>> print(labels)
@@ -123,18 +123,65 @@ Parameter name | values | default | description
 
 The following example create the algorithm, fit train data then predict sample data :
 ```python
-import numpy as np
-from distclus import Streaming
-
-train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
-test = np.array([[1., 4.], [13., 2.]])
-
-algo = Streaming()
-algo.fit(train)
-algo.centroids
-array([[15.        ,  4.        ],
-       [ 0.        ,  5.33333333]])
+>>> import numpy as np
+>>> from distclus import Streaming
+>>> 
+>>> train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
+>>> test = np.array([[1., 4.], [13., 2.]])
+>>> 
+>>> algo = Streaming()
+>>> algo.fit(train)
+>>> print(algo.centroids)
+[[ 0.          5.33333333]
+ [15.          4.        ]]
        
+>>> labels = algo.predict(train)
+>>> print(labels)
+[0 1 0 0 1 1]
+
+>>> predictions = algo.predict(test)
+>>> print(predictions)
+[0 1]
+```
+
+## KMeans
+
+```python
+
+class distclus.KMeans(
+    space='vectors', par=True, init='kmeanspp',
+    k=16, nb_iter=100, frame_size=None,
+    seed=None, data=None, inner_space=None, window=None
+)
+```
+
+Parameter name | values | default | description
+-------------- | ------ | ------- | -----------
+```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
+```par``` | *boolean* | *True* | indicates if computation is done in parallel
+```init``` | *'kmeanspp', 'random', 'given'* | *'kmeanspp'* | the way initial centers are chosen
+```k``` | *int* | *8* | the number of clusters
+```nb_iter``` | *int* | *100* | the number of iteration
+```frame_size``` | *int* | *None* | the number of data used for computation: <br> - None means all data, <br> - N > 0 means the N last pushed values
+```seed``` | *int* | *None* | the seed of the pseudo-random number generator. If None the seed is computed from epoch.
+```data``` | *ndarray* | *None* | data to be pushed at algorithm construction time (optional)
+```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
+```window``` | *int* | *None* | size of window for *```space='series'```*
+
+The following example create the algorithm, fit train data then predict sample data :
+```python
+>>> import numpy as np
+>>> from distclus import KMeans
+>>> 
+>>> train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
+>>> test = np.array([[1., 4.], [13., 2.]])
+>>> 
+>>> algo = KMeans(k=2)
+>>> algo.fit(train)
+>>> print(algo.centroids)
+[[ 0.          5.33333333]
+ [15.          4.        ]]
+ 
 >>> labels = algo.predict(train)
 >>> print(labels)
 [0 1 0 0 1 1]
