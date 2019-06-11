@@ -39,9 +39,9 @@ The algorithm provided by this library implements a specific interface, dedicate
 # Algorithms
  
 The library offers 3 clustering algorithms :
- - [MCMC](##MCMC)
- - [Streaming](##Streaming)
- - [KMeans](##KMeans)
+ - [MCMC](#mcmc)
+ - [Streaming](#streaming)
+ - [KMeans](#kmeans)
  
 ## MCMC
  
