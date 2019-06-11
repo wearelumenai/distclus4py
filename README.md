@@ -27,8 +27,8 @@ The library offers 3 clustering algorithms :
  - Streaming
  
 All three algorithms implements the following interface, compliant with [scikit-learn](https://scikit-learn.org) :
- - ```fit(X)```: Compute the clustering.
- - ```predict(X)```: Predict the closest cluster each sample in X belongs to.
+ - ```fit(data)```: Compute the clustering using *data* as training samples.
+ - ```predict(data)```: Predict the closest cluster each sample in *data* belongs to.
  
  ## MCMC
  
@@ -42,8 +42,8 @@ class distclus.MCMC(
 )
 ```
 
-Parameter name | values | default | description*
--------------- | ------ | ------- | -----------
+Parameter name | values | default | description *
+-------------- | ------ | ------- | -------------
 ```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
 ```par``` | *boolean* | *True* | indicates if computation is done in parallel
 ```init``` | *'kmeanspp', 'random', 'given'* | *'kmeanspp'* | the way initial centers are chosen
@@ -61,4 +61,27 @@ Parameter name | values | default | description*
 ```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
 ```window``` | *int* | *None* | size of window for *```space='series'```*
 
-<sup>*for more information on parameter values please refer to the article https://hal.inria.fr/hal-01264233</sup>
+<sup>* for more information on parameter values please refer to the article https://hal.inria.fr/hal-01264233</sup>
+
+The following example create the algorithm, fit train data then predict sample data :
+```python
+>>> import numpy as np
+>>> from distclus import MCMC
+>>> 
+>>> train = np.array([[0., 3.], [0., 5.], [0., 8.], [15., 1.], [15., 5.], [15., 6.]])
+>>> test = np.array([[1., 4.], [13., 2.]])
+>>>
+>>> algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
+>>> algo.fit(train)
+>>> algo.centroids
+array([[15.        ,  4.        ],
+       [ 0.        ,  5.33333333]])
+       
+>>> labels = algo.predict(train)
+>>> print(labels)
+[0 0 0 1 1 1]
+
+>>> predictions = algo.predict(test)
+>>> print(predictions)
+[0 1]
+```
