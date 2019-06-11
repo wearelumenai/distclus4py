@@ -16,7 +16,7 @@ class TestStreaming(unittest.TestCase):
         np.random.shuffle(self.data)
 
     def test_streaming(self):
-        algo = Streaming(lambd=5)
+        algo = Streaming(lambd=5, seed=1367098323)
         algo.push(self.data[:1])
         algo.run(rasync=True)
         algo.push(self.data[1:])
