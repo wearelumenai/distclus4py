@@ -100,7 +100,7 @@ class TestMCMC(unittest.TestCase):
         self.assertGreater(1, dist10)
 
     def test_cosinus(self):
-        algo = MCMC(space="cosinus", init_k=2, b=1, amp=1)
+        algo = MCMC(space="cosinus", init_k=2, b=.5, amp=1)
         algo.fit(self.data)
 
         centroids = algo.centroids

@@ -33,7 +33,7 @@ class OnlineClust:
         """
         self._set_descr()
         self.push(data)
-        self.run()
+        self.run(rasync=False)
         self.close()
 
     def push(self, data):
@@ -46,7 +46,7 @@ class OnlineClust:
         err = lib.Push(self.descr, arr, l1, l2, l3)
         handle_error(err)
 
-    def run(self, rasync=False):
+    def run(self, rasync=True):
         """
         Execute the algorithm in synchronous or asynchronous mode
         :param bool rasync: if True run in asynchronous mode
@@ -78,6 +78,12 @@ class OnlineClust:
             l1=result.l1, l2=result.l2, l3=result.l3
         )
         return bind.to_managed_array(centroids)
+
+    @property
+    def cluster_centers_(self):
+        """Get cluster centers (equivalent to centroids attribute)"""
+        return self.centroids
+
 
     def predict_online(self, data):
         """

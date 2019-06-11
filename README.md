@@ -19,22 +19,31 @@ $ make build
 $ make test
 ```
 
-# Static usage
+# Static learning
 
-Static usage means that when the algorithm is run, all train data are already known
+Static learning means that when the algorithm is run, all train data are already known
 (this is the common way to do machine learning).
+ 
+The algorithms in this library implements the following interface, compliant with [scikit-learn](https://scikit-learn.org) :
+ - ```fit(data)```: Compute the clustering using *data* as training samples.
+ - ```predict(data)```: Predict the closest cluster each sample in *data* belongs to.
+ - ```cluster_centers_``` : once the model is fitted, the centers of the clusters.
+ 
+# Online learning
+
+Online learning occurs when new data are used to update the model after the algorithm is started.
+
+The algorithm provided by this library implements a specific interface, dedicated to online learning :
+ - ```run(rasync=True)```
+
+# Algorithms
+ 
+## MCMC
+ 
 The library offers 3 clustering algorithms :
  - MCMC
  - KMeans
  - Streaming
- 
-All three algorithms implements the following interface, compliant with [scikit-learn](https://scikit-learn.org) :
- - ```fit(data)```: Compute the clustering using *data* as training samples.
- - ```predict(data)```: Predict the closest cluster each sample in *data* belongs to.
- 
-Once the model is fitted, the centroids of the clusters are available through the ```centroids``` attribute.
- 
- ## MCMC
  
  ```python
 class distclus.MCMC(
@@ -89,7 +98,7 @@ array([[15.        ,  4.        ],
 [0 1]
 ```
 
-# Streaming
+## Streaming
 
 ```python
 class distclus.Streaming(
