@@ -19,8 +19,10 @@ $ make build
 $ make test
 ```
 
-# Basic usage
+# Static usage
 
+Static usage means that when the algorithm is run, all train data are already known
+(this is the common way to do machine learning).
 The library offers 3 clustering algorithms :
  - MCMC
  - KMeans
@@ -30,15 +32,16 @@ All three algorithms implements the following interface, compliant with [scikit-
  - ```fit(data)```: Compute the clustering using *data* as training samples.
  - ```predict(data)```: Predict the closest cluster each sample in *data* belongs to.
  
+Once the model is fitted, the centroids of the clusters are available through the ```centroids``` attribute.
+ 
  ## MCMC
  
  ```python
 class distclus.MCMC(
     space='vectors', par=True, init='kmeanspp',
     init_k=8, max_k=16, mcmc_iter=100, frame_size=None, 
-    b=1., amp=1., dim=None, nu=3.,
-    norm=2, seed=None,
-    data=None, inner_space=None, window=None
+    b=1., amp=1., dim=None, nu=3., norm=2,
+    seed=None, data=None, inner_space=None, window=None
 )
 ```
 
@@ -68,7 +71,7 @@ The following example create the algorithm, fit train data then predict sample d
 >>> import numpy as np
 >>> from distclus import MCMC
 >>> 
->>> train = np.array([[0., 3.], [0., 5.], [0., 8.], [15., 1.], [15., 5.], [15., 6.]])
+>>> train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
 >>> test = np.array([[1., 4.], [13., 2.]])
 >>>
 >>> algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
@@ -79,9 +82,56 @@ array([[15.        ,  4.        ],
        
 >>> labels = algo.predict(train)
 >>> print(labels)
-[0 0 0 1 1 1]
+[0 1 0 0 1 1]
 
 >>> predictions = algo.predict(test)
 >>> print(predictions)
 [0 1]
 ```
+
+# Streaming
+
+```python
+class distclus.Streaming(
+    space='vectors', buffer_size=0,
+    b=.95, lambd=3.,
+    seed=None, data=None, inner_space=0, window=10
+)
+```
+
+Parameter name | values | default | description
+-------------- | ------ | ------- | -----------
+```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
+```buffer_size``` | *int* | *100* | the size of the buffer used to store samples before being consumed by the algorithm *
+```b``` | *float* | *.95* | the value of the *b* parameter
+```labmd``` | *float* | *3.* | the value of the *lambda* parameter
+```seed``` | *int* | *None* | the seed of the pseudo-random number generator. If None the seed is computed from epoch.
+```data``` | *ndarray* | *None* | data to be pushed at algorithm construction time (optional)
+```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
+```window``` | *int* | *None* | size of window for *```space='series'```*
+
+<sup>* this algorithm is designed for online usage (see below). For static usage, ```buffer_size``` must be set to the number of samples.</sup>
+
+The following example create the algorithm, fit train data then predict sample data :
+```python
+import numpy as np
+from distclus import Streaming
+
+train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
+test = np.array([[1., 4.], [13., 2.]])
+
+algo = Streaming()
+algo.fit(train)
+algo.centroids
+array([[15.        ,  4.        ],
+       [ 0.        ,  5.33333333]])
+       
+>>> labels = algo.predict(train)
+>>> print(labels)
+[0 1 0 0 1 1]
+
+>>> predictions = algo.predict(test)
+>>> print(predictions)
+[0 1]
+```
+
