@@ -27,14 +27,18 @@ Static learning means that when the algorithm is run, all train data are already
 The algorithms in this library implements the following interface, compliant with [scikit-learn](https://scikit-learn.org) :
  - ```fit(data)```: Compute the clustering using *data* as training samples.
  - ```predict(data)```: Predict the closest cluster each sample in *data* belongs to.
- - ```cluster_centers_``` : once the model is fitted, the centers of the clusters.
+ - ```cluster_centers_``` : Once the model is fitted, the centers of the clusters.
  
 # Online learning
 
 Online learning occurs when new data are used to update the model after the algorithm is started.
 
 The algorithm provided by this library implements a specific interface, dedicated to online learning :
- - ```run(rasync=True)```
+ - ```push(data)``` : Push data to feed the algorithm and update the model
+ - ```run(rasync=True)``` : Start the algorithm in asynchronous (background) mode
+ - ```predict_online(data)``` : Get a tuple current centroids and labels of the closest one for the given data
+ - ```close()``` : Stop the background algorithm and release resources
+ - ```centroids``` : Get the current centroids
 
 # Algorithms
  
