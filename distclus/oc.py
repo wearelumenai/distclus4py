@@ -11,6 +11,7 @@ class OnlineClust:
     def __init__(self, builder, space='vectors', data=None, *args):
         self.builder = builder
         space = bind.space(space)
+        data = as_float64(data)
         arr, l1, l2, l3 = bind.to_c_array(data)
         self.args = [space, arr, l1, l2, l3] + list(args)
         self._set_descr()
@@ -40,6 +41,7 @@ class OnlineClust:
         Push train data to the algorithm
         :param data: train data
         """
+        data = as_float64(data)
         arr, l1, l2, l3 = bind.to_c_array(data)
         err = lib.Push(self.descr, arr, l1, l2, l3)
         handle_error(err)
@@ -59,6 +61,7 @@ class OnlineClust:
         :param data: input data
         :return: output labels
         """
+        data = as_float64(data)
         arr, l1, l2, l3 = bind.to_c_array(data)
         result = lib.Predict(self.descr, arr, l1, l2, l3)
         handle_error(result.err)
@@ -82,6 +85,7 @@ class OnlineClust:
         :param data: input data
         :return: centroids and output labels
         """
+        data = as_float64(data)
         arr, l1, l2, l3 = bind.to_c_array(data)
         result = lib.Predict(self.descr, arr, l1, l2, l3)
         handle_error(result.err)
@@ -100,6 +104,12 @@ class OnlineClust:
         Stop the algorithm and release resources
         """
         lib.Close(self.descr)
+
+
+def as_float64(data):
+    if data is not None and data.dtype != 'float64':
+        data = data.astype('float64')
+    return data
 
 
 def _make_free(descr):
