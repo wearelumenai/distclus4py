@@ -17,5 +17,8 @@ class TestStreaming(unittest.TestCase):
         with algo.run(rasync=True):
             algo.push(self.data[1:])
             time.sleep(.3)
-            centroids, labels = algo.predict_online(self.data)
+            self.check_online(algo)
+
+    def check_online(self, algo):
+        centroids, labels = algo.predict_online(self.data)
         self.assertLessEqual(rmse(self.data, centroids, labels), 1.)

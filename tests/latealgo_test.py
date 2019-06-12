@@ -56,10 +56,8 @@ class TestLateInit(unittest.TestCase):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
         late.push(self.data)
         late.run(False)
-        centroids = late.centroids
-        labels = late.predict(self.data)
+        self.check_static(late)
         late.close()
-        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
 
     def test_predict_online(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
@@ -67,16 +65,14 @@ class TestLateInit(unittest.TestCase):
         self.assertRaises(ValueError, late.predict, self.data)
         late.push(self.data)
         time.sleep(.3)
-        centroids, labels = late.predict_online(self.data)
+        self.check_online(late)
         late.close()
-        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
 
     def test_context(self):
         with LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467) as late:
             late.push(self.data)
             time.sleep(.3)
-            centroids, labels = late.predict_online(self.data)
-            self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
+            self.check_online(late)
 
     def test_push_parallel(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
@@ -86,10 +82,21 @@ class TestLateInit(unittest.TestCase):
             t = Thread(target=late.push, args=(np.array([d]),))
             t.start()
             threads.append(t)
+        time.sleep(.1)
+        self.check_online(late)
         for t in threads:
             t.join()
-        time.sleep(.3)
         late.close()
+        self.check_static(late)
+
+    def check_static(self, late):
+        centroids = late.centroids
+        labels = late.predict(self.data)
+        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
+
+    def check_online(self, late):
+        centroids, labels = late.predict_online(self.data)
+        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
 
 
 class LateMCMC(LateAlgo):

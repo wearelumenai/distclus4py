@@ -34,9 +34,8 @@ class TestMCMC(unittest.TestCase):
 
         algo.push(self.data[5:])
         time.sleep(.3)
-        centroids, labels = algo.predict_online(self.data)
+        self.check_online(algo)
         algo.close()
-        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
 
     def test_context(self):
         algo = MCMC(
@@ -47,17 +46,13 @@ class TestMCMC(unittest.TestCase):
         with algo.run(rasync=True):
             algo.push(self.data[5:])
             time.sleep(.3)
-            centroids, labels = algo.predict_online(self.data)
-
-        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
+            self.check_online(algo)
 
     def test_fit_predict(self):
         algo = MCMC(init_k=2, b=500, amp=0.1)
         algo.fit(self.data)
 
-        labels = algo.predict(self.data)
-        centroids = algo.centroids
-        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
+        self.check_static(algo)
 
     def test_iterations(self):
         algo = MCMC(init_k=2, b=500, amp=0.1, mcmc_iter=5)
@@ -77,3 +72,12 @@ class TestMCMC(unittest.TestCase):
 
         centroids = algo.centroids
         self.assertGreater(len(centroids), 1)
+
+    def check_static(self, algo):
+        labels = algo.predict(self.data)
+        centroids = algo.centroids
+        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
+
+    def check_online(self, algo):
+        centroids, labels = algo.predict_online(self.data)
+        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)

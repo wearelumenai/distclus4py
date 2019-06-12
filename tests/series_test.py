@@ -15,9 +15,7 @@ class TestSeries(unittest.TestCase):
     def test_mcmc(self):
         algo = MCMC(space='series', init_k=2, b=500, amp=.1, seed=353875342)
         algo.fit(self.data)
-        labels = algo.predict(self.data)
-        centroids = algo.centroids
-        self.assertLessEqual(rmse(self.data, centroids, labels), 2.)
+        self.check_static(algo)
 
     def test_online(self):
         algo = MCMC(space='series', init_k=2, b=500, amp=.1, seed=353875342)
@@ -25,6 +23,13 @@ class TestSeries(unittest.TestCase):
         with algo.run():
             algo.push(self.data[5:])
             time.sleep(.3)
-            centroids, labels = algo.predict_online(self.data)
+            self.check_online(algo)
 
+    def check_static(self, algo):
+        labels = algo.predict(self.data)
+        centroids = algo.centroids
+        self.assertLessEqual(rmse(self.data, centroids, labels), 2.)
+
+    def check_online(self, algo):
+        centroids, labels = algo.predict_online(self.data)
         self.assertLessEqual(rmse(self.data, centroids, labels), 2.)

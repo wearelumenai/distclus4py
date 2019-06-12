@@ -1,5 +1,4 @@
 from threading import Lock
-from contextlib import contextmanager
 
 import numpy as np
 
@@ -49,6 +48,10 @@ class LateAlgo:
         if self._algo:
             return self._algo.centroids
         self._raise_unitialized()
+
+    @property
+    def cluster_centers_(self):
+        return self.centroids
 
     def predict(self, data):
         """
