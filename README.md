@@ -29,6 +29,28 @@ The algorithms in this library implements the following interface, compliant wit
  - ```predict(data)```: Predict the closest cluster each sample in *data* belongs to.
  - ```cluster_centers_``` : Once the model is fitted, the centers of the clusters.
  
+Example of usage : create the algorithm, fit train data then predict sample data.
+```python
+>>> import numpy as np
+>>> from distclus import MCMC
+>>> 
+>>> train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
+>>> test = np.array([[1., 4.], [13., 2.]])
+>>>
+>>> algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
+>>> algo.fit(train)
+>>> print(algo.centroids)
+[[ 0.          5.33333333]
+ [15.          4.        ]]
+       
+>>> labels = algo.predict(train)
+>>> print(labels)
+[0 1 0 0 1 1]
+
+>>> predictions = algo.predict(test)
+>>> print(predictions)
+[0 1]
+```
 # Online learning
 
 Online learning occurs when new data are used to update the model after the algorithm is started.
@@ -39,6 +61,46 @@ The algorithm provided by this library implements a specific interface, dedicate
  - ```predict_online(data)``` : Get a tuple current centroids and labels of the closest one for the given data
  - ```close()``` : Stop the background algorithm and release resources
  - ```centroids``` : Get the current centroids
+ 
+ Before starting the algorithm (with the ```run``` method),
+ it must have been fed with enough data to initialize properly (with the ```push```).
+ This behavior can be enhanced thanks to the ```LateAlgo``` decorator (see below).
+ 
+Example of usage : create the algorithm, push enough train data to initialize, run the algorithm in background mode,
+push more data then predict test data
+```python
+import time
+import numpy as np
+from distclus import MCMC
+
+data = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.], [1., 4.], [13., 2.]])
+
+algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
+# algorithm initialization needs data
+algo.push(data[:2])
+algo.run()
+for o in [2, 4, 6]:
+    time.sleep(.5) # wait for the algorithm to converge
+    # simulate new data arrival
+    chunk = data[o:o+2]
+    centroids, labels = algo.predict_online(chunk)
+    algo.push(chunk)
+    print("chunk", o, o+2)
+    print(centroids)
+    print(labels)
+
+chunk 2 4
+[[ 0.  3.]
+ [15.  5.]]
+[0 0]
+chunk 4 6
+[[3.75 5.25]]
+[0 0]
+chunk 6 8
+[[ 0.          5.33333333]
+ [15.          4.        ]]
+[0 1]
+```
 
 # Algorithms
  
@@ -79,28 +141,6 @@ Parameter name | values | default | description *
 
 <sup>* for more information on parameter values please refer to the article https://hal.inria.fr/hal-01264233</sup>
 
-The following example create the algorithm, fit train data then predict sample data :
-```python
->>> import numpy as np
->>> from distclus import MCMC
->>> 
->>> train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
->>> test = np.array([[1., 4.], [13., 2.]])
->>>
->>> algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
->>> algo.fit(train)
->>> print(algo.centroids)
-[[ 0.          5.33333333]
- [15.          4.        ]]
-       
->>> labels = algo.predict(train)
->>> print(labels)
-[0 1 0 0 1 1]
-
->>> predictions = algo.predict(test)
->>> print(predictions)
-[0 1]
-```
 
 ## Streaming
 
@@ -122,31 +162,6 @@ Parameter name | values | default | description
 ```data``` | *ndarray* | *None* | data to be pushed at algorithm construction time (optional)
 ```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
 ```window``` | *int* | *None* | size of window for *```space='series'```*
-
-<sup>* this algorithm is designed for online usage (see below). For static usage, ```buffer_size``` must be set to the number of samples.</sup>
-
-The following example create the algorithm, fit train data then predict sample data :
-```python
->>> import numpy as np
->>> from distclus import Streaming
->>> 
->>> train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
->>> test = np.array([[1., 4.], [13., 2.]])
->>> 
->>> algo = Streaming()
->>> algo.fit(train)
->>> print(algo.centroids)
-[[ 0.          5.33333333]
- [15.          4.        ]]
-       
->>> labels = algo.predict(train)
->>> print(labels)
-[0 1 0 0 1 1]
-
->>> predictions = algo.predict(test)
->>> print(predictions)
-[0 1]
-```
 
 ## KMeans
 
@@ -171,27 +186,4 @@ Parameter name | values | default | description
 ```data``` | *ndarray* | *None* | data to be pushed at algorithm construction time (optional)
 ```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
 ```window``` | *int* | *None* | size of window for *```space='series'```*
-
-The following example create the algorithm, fit train data then predict sample data :
-```python
->>> import numpy as np
->>> from distclus import KMeans
->>> 
->>> train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
->>> test = np.array([[1., 4.], [13., 2.]])
->>> 
->>> algo = KMeans(k=2)
->>> algo.fit(train)
->>> print(algo.centroids)
-[[ 0.          5.33333333]
- [15.          4.        ]]
- 
->>> labels = algo.predict(train)
->>> print(labels)
-[0 1 0 0 1 1]
-
->>> predictions = algo.predict(test)
->>> print(predictions)
-[0 1]
-```
 
