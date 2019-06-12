@@ -31,24 +31,28 @@ The algorithms in this library implements the following interface, compliant wit
  
 Example of usage : create the algorithm, fit train data then predict sample data.
 ```python
->>> import numpy as np
->>> from distclus import MCMC
->>> 
->>> train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
->>> test = np.array([[1., 4.], [13., 2.]])
->>>
->>> algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
->>> algo.fit(train)
->>> print(algo.centroids)
+import numpy as np
+from distclus import MCMC
+
+train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]])
+test = np.array([[1., 4.], [13., 2.]])
+
+algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
+algo.fit(train)
+print(algo.centroids)
+labels = algo.predict(train)
+print(labels)
+
+predictions = algo.predict(test)
+print(predictions)
+```
+output :
+```
 [[ 0.          5.33333333]
  [15.          4.        ]]
        
->>> labels = algo.predict(train)
->>> print(labels)
 [0 1 0 0 1 1]
 
->>> predictions = algo.predict(test)
->>> print(predictions)
 [0 1]
 ```
 # Online learning
@@ -88,14 +92,17 @@ for o in [2, 4, 6]:
     print("chunk", o, o+2)
     print(centroids)
     print(labels)
-
+```
+output :
+```
 chunk 2 4
 [[ 0.  3.]
  [15.  5.]]
 [0 0]
 chunk 4 6
-[[3.75 5.25]]
-[0 0]
+[[ 0.          5.33333333]
+ [15.          5.        ]]
+[1 1]
 chunk 6 8
 [[ 0.          5.33333333]
  [15.          4.        ]]
@@ -187,3 +194,42 @@ Parameter name | values | default | description
 ```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
 ```window``` | *int* | *None* | size of window for *```space='series'```*
 
+# Advanced usage
+
+The library offers two decorators :
+ - ```LateAlgo``` : differ the initialization of an algorithm until data arrives
+ - ```Batch``` : use an algorithm by running subsequent mini-batches
+ 
+## LateAlgo
+```LateAlgo``` is useful when data knowledge is needed to initialize the algorithm.
+The following example builds a MCMC algorithm when ```init_k``` data are known
+to initialize the algorithm, it also deduce the ```dim``` from the data. 
+
+```python
+import numpy as np
+from distclus import LateAlgo, MCMC
+
+def LateMCMC(init_k, **kwargs):
+
+    def builder(data):
+        if len(data) >= init_k:
+            kw = {**kwargs, 'init_k': init_k, 'dim': len(data[0])}
+            return MCMC(**kw, data=data)
+
+    return LateAlgo(builder)
+    
+
+data = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.], [1., 4.], [13., 2.]])
+late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
+late.run()
+late.push(data) # the algorithm will initialize properly
+# ...
+late.close()
+```
+
+```LateAlgo``` has also a context manager :
+```python
+with LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467) as late:
+    late.push(data)
+    # ...
+```

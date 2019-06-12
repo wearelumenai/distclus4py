@@ -99,14 +99,10 @@ class TestLateInit(unittest.TestCase):
         self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
 
 
-class LateMCMC(LateAlgo):
+def LateMCMC(init_k, **kwargs):
+    def builder(data):
+        if len(data) >= init_k:
+            kw = {**kwargs, 'init_k': init_k, 'dim': len(data[0])}
+            return MCMC(**kw, data=data)
 
-    def build(self, data):
-        if len(data) >= self.init_k:
-            kwargs = {**self.kwargs, 'init_k': self.init_k, 'dim': len(data[0])}
-            return MCMC(**kwargs, data=data)
-
-    def __init__(self, init_k, **kwargs):
-        super(LateMCMC, self).__init__(self.build)
-        self.init_k = init_k
-        self.kwargs = kwargs
+    return LateAlgo(builder)
