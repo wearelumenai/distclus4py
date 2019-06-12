@@ -16,11 +16,10 @@ class TestBatch(unittest.TestCase):
         for b in chunker(self.data, 5):
             batch_data = np.array(b)
             algo.push(batch_data)
-            self.check_static(algo, batch_data)
+            self.check_online(algo, batch_data)
 
-    def check_static(self, algo, batch_data):
-        labels = algo.predict(batch_data)
-        centroids = algo.centroids
+    def check_online(self, algo, batch_data):
+        centroids, labels = algo.predict_online(batch_data)
         self.assertLessEqual(rmse(batch_data, centroids, labels), 1.)
 
 
