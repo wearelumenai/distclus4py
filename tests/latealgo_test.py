@@ -83,7 +83,6 @@ class TestLateInit(unittest.TestCase):
             t.start()
             threads.append(t)
         time.sleep(.1)
-        self.check_online(late)
         for t in threads:
             t.join()
         late.close()
