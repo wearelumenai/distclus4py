@@ -6,16 +6,13 @@ import numpy as np
 
 from distclus import MCMC
 from distclus.latealgo import LateAlgo
+from tests.util import rmse, sample
 
 
 class TestLateInit(unittest.TestCase):
 
     def setUp(self):
-        self.data = np.concatenate(
-            ((np.array(np.random.rand(100, 2), dtype=np.float64) + np.array([2, 4])),
-             np.array(np.random.rand(100, 2), dtype=np.float64) + np.array([30, -15]))
-        )
-        np.random.shuffle(self.data)
+        self.data = sample(10, 2)
 
     def test_build(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
@@ -61,11 +58,8 @@ class TestLateInit(unittest.TestCase):
         late.run(False)
         centroids = late.centroids
         labels = late.predict(self.data)
-        mse = 0.
-        for i, label in enumerate(labels):
-            mse += np.linalg.norm(centroids[label] - self.data[i]) / len(self.data)
-        self.assertLessEqual(mse, 1.)
         late.close()
+        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
 
     def test_predict_online(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
@@ -74,11 +68,15 @@ class TestLateInit(unittest.TestCase):
         late.push(self.data)
         time.sleep(.3)
         centroids, labels = late.predict_online(self.data)
-        mse = 0.
-        for i, label in enumerate(labels):
-            mse += np.linalg.norm(centroids[label] - self.data[i]) / len(self.data)
-        self.assertLessEqual(mse, 1.)
         late.close()
+        self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
+
+    def test_context(self):
+        with LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467) as late:
+            late.push(self.data)
+            time.sleep(.3)
+            centroids, labels = late.predict_online(self.data)
+            self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
 
     def test_push_parallel(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)

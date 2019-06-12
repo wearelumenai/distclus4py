@@ -1,3 +1,4 @@
+import contextlib
 import weakref
 
 from distclus.bind import handle_error
@@ -33,8 +34,8 @@ class OnlineClust:
         """
         self._set_descr()
         self.push(data)
-        self.run(rasync=False)
-        self.close()
+        with self.run(rasync=False):
+            pass
 
     def push(self, data):
         """
@@ -54,6 +55,7 @@ class OnlineClust:
         """
         err = lib.Run(self.descr, 1 if rasync else 0)
         handle_error(err)
+        return contextlib.closing(self)
 
     def predict(self, data):
         """
