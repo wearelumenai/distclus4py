@@ -32,7 +32,6 @@ class OnlineClust:
         and close the algorithm.
         :param data: train data
         """
-        self._set_descr()
         self.push(data)
         with self.run(rasync=False):
             pass

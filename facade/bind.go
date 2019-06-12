@@ -12,7 +12,7 @@ import (
 )
 
 // initializer returns a specific OC initializer
-func initializer(i C.initializer) (fi core.Initializer) {
+func initializer(i C.initializer, initDescr C.int) (fi core.Initializer) {
 	switch i {
 	case C.I_RANDOM:
 		fi = kmeans.RandInitializer
@@ -20,8 +20,19 @@ func initializer(i C.initializer) (fi core.Initializer) {
 		fi = kmeans.GivenInitializer
 	case C.I_KMEANSPP:
 		fi = kmeans.PPInitializer
+	case C.I_OC:
+		fi = descrInitializer(initDescr)
 	}
 	return
+}
+
+func descrInitializer(initDescr C.int) core.Initializer {
+	var algo, _ = GetAlgorithm((int)(initDescr))
+	var centroids, err = algo.Centroids()
+	if err != nil {
+		panic(err)
+	}
+	return centroids.Initializer
 }
 
 // figure converts a C figure enum to a figure constant

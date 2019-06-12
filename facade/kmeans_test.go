@@ -9,7 +9,7 @@ func TestKMEANS(t *testing.T) {
 	var arr, l1, l2, l3 = realElemtsToArray(elemts)
 	var descr, msg = KMeans(
 		0, arr, l1, l2, l3,
-		0, 2, 6305689164243,
+		0, 2, 0, 6305689164243,
 		2, 2, 3,
 		0, 0,
 	)

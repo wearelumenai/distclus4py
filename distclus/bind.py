@@ -76,12 +76,14 @@ def initializer(name):
     """
     Convert a string to a CFFI initializer enum type
     """
-    if name in ['random', 'rand']:
-        return lib.I_RANDOM
+    if hasattr(name, 'descr'):
+        return lib.I_OC, name.descr
+    elif name in ['random', 'rand']:
+        return lib.I_RANDOM, 0
     elif name == 'given':
-        return lib.I_GIVEN
+        return lib.I_GIVEN, 0
     elif name in ['kmeanspp', 'kmeans++']:
-        return lib.I_KMEANSPP
+        return lib.I_KMEANSPP, 0
 
 
 def space(name):

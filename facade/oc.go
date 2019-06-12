@@ -6,7 +6,11 @@ package main
 
 //#include "bind.h"
 import "C"
-import "runtime"
+import (
+	"fmt"
+	"runtime"
+	"strings"
+)
 
 // Push pushes an array of element to the algorithm corresponding to the given descriptor
 //export Push
@@ -105,14 +109,25 @@ func Free(descr C.int) {
 }
 
 func handlePanic(descr C.int, msg **C.char) {
+	var f string
+	var i = 1
+	for {
+		var _, fn, line, ok = runtime.Caller(i)
+		if strings.Contains(fn, "distclus") || !ok {
+			f = fmt.Sprintf("%s:%d %%v", fn, line)
+			break
+		}
+		i += 1
+	}
 	if r := recover(); r != nil {
 		switch v := r.(type) {
 		case error:
-			*msg = setError((AlgorithmDescr)(descr), v.Error())
+			*msg = setError((AlgorithmDescr)(descr), fmt.Sprintf(f, v.Error()))
 		case string:
-			*msg = setError((AlgorithmDescr)(descr), v)
+			sprintf := fmt.Sprintf(f, v)
+			*msg = setError((AlgorithmDescr)(descr), sprintf)
 		default:
-			*msg = setError((AlgorithmDescr)(descr), "unexpected error")
+			*msg = setError((AlgorithmDescr)(descr), fmt.Sprintf(f, "unexpected error"))
 		}
 	}
 }

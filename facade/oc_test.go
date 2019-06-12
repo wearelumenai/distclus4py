@@ -2,6 +2,7 @@ package main
 
 import (
 	"distclus/core"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -12,13 +13,13 @@ func TestCreateError(t *testing.T) {
 	var arr, l1, l2, l3 = realElemtsToArray(elemts)
 	var _, msg = MCMC(
 		0, arr, l1, l2, l3,
-		0, 2, 6305689164243,
+		0, 2, 0, 6305689164243,
 		2, 0, 3, 30, 1000,
 		10.0, 1.0, 2.0, 1.0,
 		0, 0,
 	)
 
-	if m := goString(msg); !strings.HasPrefix(m, "Illegal") {
+	if m := goString(msg); !strings.Contains(m, "Illegal") {
 		t.Error("an error message was expected")
 	}
 }
@@ -28,7 +29,7 @@ func TestRunVectors(t *testing.T) {
 	var arr, l1, l2, l3 = realElemtsToArray(elemts)
 	var descr, _ = MCMC(
 		0, arr, l1, l2, l3,
-		0, 2, 6305689164243,
+		0, 2, 0, 6305689164243,
 		2, 2, 3, 1000, 10000,
 		10.0, 1.0, 2.0, 1.0,
 		0, 0,
@@ -38,11 +39,42 @@ func TestRunVectors(t *testing.T) {
 	Free(descr)
 }
 
+func TestInitFromDescr(t *testing.T) {
+	var elemts = makeVectors()
+	var arr, l1, l2, l3 = realElemtsToArray(elemts)
+	var descr0, _ = MCMC(
+		0, arr, l1, l2, l3,
+		0, 2, 0, 6305689164243,
+		2, 2, 3, 1000, 10000,
+		10.0, 1.0, 2.0, 1.0,
+		0, 0,
+	)
+	_ = Push(descr0, arr, l1, l2, l3)
+	_ = Run(descr0, 0)
+	var centroids0, c01, c02, c03, _ = Centroids(descr0)
+	var descr1, _ = MCMC(
+		0, arr, l1, l2, l3,
+		0, 3, descr0, 6305689164243,
+		2, 2, 3, 0, 10000,
+		10.0, 1.0, 2.0, 1.0,
+		0, 0,
+	)
+	Free(descr0)
+	_ = Run(descr1, 0)
+	var centroids1, c11, c12, c13, _ = Centroids(descr1)
+
+	var elemts0 = ArrayToRealElemts(centroids0, c01, c02, c03)
+	var elemts1 = ArrayToRealElemts(centroids1, c11, c12, c13)
+	if !reflect.DeepEqual(elemts0, elemts1) {
+		t.Error("error in initialization from descriptor")
+	}
+}
+
 func TestRunSeries(t *testing.T) {
 	var arr, l1, l2, l3 = realElemtsToArray(make([]core.Elemt, 0))
 	var descr, _ = MCMC(
 		2, arr, l1, l2, l3,
-		0, 2, 6305689164243,
+		0, 2, 0, 6305689164243,
 		2, 2, 3, 1000, 10000,
 		10.0, 1.0, 2.0, 1.0,
 		0, 0,

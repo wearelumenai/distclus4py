@@ -15,4 +15,3 @@ class Streaming(OnlineClust):
             lib.Streaming, space, data, bind.none2zero(seed), buffer_size, b, lambd,
             inner_space, window
         )
-

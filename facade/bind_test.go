@@ -148,9 +148,9 @@ func TestArrayToRealElemts3D(t *testing.T) {
 }
 
 func TestInitConvert(t *testing.T) {
-	assertInitializer(t, initializer(0), kmeans.RandInitializer)
-	assertInitializer(t, initializer(1), kmeans.GivenInitializer)
-	assertInitializer(t, initializer(2), kmeans.PPInitializer)
+	assertInitializer(t, initializer(0, 0), kmeans.RandInitializer)
+	assertInitializer(t, initializer(1, 0), kmeans.GivenInitializer)
+	assertInitializer(t, initializer(2, 0), kmeans.PPInitializer)
 }
 
 func assertInitializer(t *testing.T, expected core.Initializer, actual core.Initializer) {

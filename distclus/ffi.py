@@ -7,7 +7,7 @@ header_file = os.path.join(os.path.dirname(__file__), 'lib', 'distclus.so')
 
 ffi = cffi.FFI()
 ffi.cdef("""
-typedef enum {I_RANDOM, I_GIVEN, I_KMEANSPP} initializer;
+typedef enum {I_RANDOM, I_GIVEN, I_KMEANSPP, I_OC} initializer;
 typedef enum {S_VECTORS, S_COSINUS, S_SERIES} space;
 typedef enum {O_KMEANS, O_MCMC, O_KNN, O_STREAMING} oc;
 typedef enum {F_ITERATIONS, F_ACCEPTATIONS} figure;
@@ -23,14 +23,14 @@ struct Algo {
 
 extern struct Algo KMeans(
     space space, double* data, size_t l1, size_t l2, size_t l3,
-    int par, initializer init, long seed,
+    int par, initializer init, int initdescr, long seed,
     int k, int iter, int framesize,
     space innerSpace, int window
 );
 
 extern struct Algo MCMC(
     space space, double* data, size_t l1, size_t l2, size_t l3,
-    int par, initializer init, long seed,
+    int par, initializer init, int initdescr, long seed,
     size_t dim, int initK, int maxK, int iter, int framesize, double b,
     double amp, double norm, double nu,
     space innerSpace, int window

@@ -13,7 +13,8 @@ class MCMC(OnlineClust):
             data=None, inner_space=None, window=None
     ):
         super(MCMC, self).__init__(
-            lib.MCMC, space, data, bind.par(par), bind.initializer(init), bind.none2zero(seed),
+            lib.MCMC, space, data, bind.par(par),
+            *bind.initializer(init), bind.none2zero(seed),
             bind.none2zero(dim), init_k, max_k, mcmc_iter, bind.none2zero(frame_size), b, amp, norm, nu,
             bind.none2zero(inner_space), bind.none2zero(window)
         )

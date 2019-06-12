@@ -8,9 +8,15 @@ from tests import C, tffi
 class TestBind(unittest.TestCase):
 
     def test_initializer(self):
-        self.assertEqual(lib.I_RANDOM, bind.initializer("random"))
-        self.assertEqual(lib.I_GIVEN, bind.initializer("given"))
-        self.assertEqual(lib.I_KMEANSPP, bind.initializer("kmeanspp"))
+        self.assertEqual((lib.I_RANDOM, 0), bind.initializer("random"))
+        self.assertEqual((lib.I_GIVEN, 0), bind.initializer("given"))
+        self.assertEqual((lib.I_KMEANSPP, 0), bind.initializer("kmeanspp"))
+
+        class a:
+            def __init__(self):
+                self.descr = 1
+
+        self.assertEqual((lib.I_OC, 1), bind.initializer(a()))
 
     def test_space(self):
         self.assertEqual(lib.S_VECTORS, bind.space("vectors"))
