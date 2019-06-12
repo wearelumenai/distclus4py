@@ -1,3 +1,4 @@
+import contextlib
 import itertools as it
 
 
@@ -9,7 +10,7 @@ class Batch:
         self._do_not_gc = None
 
     def run(self, rasync=True):
-        pass
+        return contextlib.closing(self)
 
     def push(self, data):
         # hack : scikit-learn compliance,

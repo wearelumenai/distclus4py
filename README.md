@@ -77,21 +77,22 @@ import time
 import numpy as np
 from distclus import MCMC
 
-data = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.], [1., 4.], [13., 2.]])
+data = np.array([[[0., 3.], [15., 5.]], [[0., 5.], [0., 8.]], [[15., 1.], [15., 6.]], [[1., 4.], [13., 2.]]])
 
 algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
 # algorithm initialization needs data
-algo.push(data[:2])
+algo.push(data[0])
 algo.run()
-for o in [2, 4, 6]:
+for i, chunk in enumerate(data):
     time.sleep(.5) # wait for the algorithm to converge
     # simulate new data arrival
-    chunk = data[o:o+2]
     centroids, labels = algo.predict_online(chunk)
     algo.push(chunk)
-    print("chunk", o, o+2)
+    print("chunk", i)
     print(centroids)
     print(labels)
+
+algo.close()
 ```
 output :
 ```
@@ -107,6 +108,15 @@ chunk 6 8
 [[ 0.          5.33333333]
  [15.          4.        ]]
 [0 1]
+```
+
+The ```run``` method returns a context manager that can be used to properly close the algorithm :
+
+```python
+with algo.run():
+    for chunk in data:
+        algo.push(chunk)
+        # ...
 ```
 
 # Algorithms
@@ -220,16 +230,33 @@ def LateMCMC(init_k, **kwargs):
     
 
 data = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.], [1., 4.], [13., 2.]])
-late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
-late.run()
-late.push(data) # the algorithm will initialize properly
+algo = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
+algo.run()
+algo.push(data) # the algorithm will initialize properly
 # ...
-late.close()
+algo.close()
 ```
 
 ```LateAlgo``` has also a context manager :
 ```python
-with LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467) as late:
-    late.push(data)
+with LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467) as algo:
+    algo.push(data)
     # ...
+```
+
+## Batch
+```Batch``` allows to implement the "mini-batch" pattern. Each time data is pushed, the algorithm runs few iterations,
+starting from the previous configuration.
+
+```python
+import numpy as np
+from distclus import Batch, MCMC
+
+data = np.array([[[0., 3.], [15., 5.], [0., 5.], [0., 8.]], [[15., 1.], [15., 6.], [1., 4.], [13., 2.]]])
+
+algo = Batch(MCMC, init_k=2, b=500, amp=0.1, mcmc_iter=10)
+with algo.run():
+    for chunk in data:
+        algo.push(chunk)
+        centroids, labels = algo.predict_online(chunk)
 ```
