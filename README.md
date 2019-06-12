@@ -261,3 +261,10 @@ with algo.run():
         centroids, labels = algo.predict_online(chunk)
         # ...
 ```
+
+```Batch``` constructor also accepts an optional parameter ```frame_size``` that indicates the size of data to be pushed 
+to the underlying algorithm. Data are memoized between ```push``` calls in order to fulfill this requirement.
+
+```python
+algo = Batch(MCMC, frame_size=100, init_k=2, b=500, amp=0.1, mcmc_iter=10)
+```

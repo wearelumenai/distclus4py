@@ -1,13 +1,19 @@
 import contextlib
 import itertools as it
+import numpy as np
+from collections import deque
 
 
 class Batch:
-    def __init__(self, builder, **kwargs):
+    def __init__(self, builder, frame_size=None, **kwargs):
         self._builder = builder
         self._kwargs = kwargs
         self._algo = self._builder(**self._kwargs)
         self._do_not_gc = None
+        if frame_size:
+            self.frame = deque([], frame_size)
+        else:
+            self.frame = None
 
     def run(self, rasync=True):
         return contextlib.closing(self)
@@ -18,7 +24,14 @@ class Batch:
         self._do_not_gc = self._algo
         self._algo = self._builder(**self._kwargs)
         self._kwargs['init'] = self._algo
-        self.fit(data)
+        self._fit_frame(data)
+
+    def _fit_frame(self, data):
+        if self.frame is not None:
+            self.frame.extend(data)
+            self.fit(np.array(self.frame))
+        else:
+            self.fit(data)
 
     def fit(self, data):
         self._algo.fit(data)
