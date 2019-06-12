@@ -259,4 +259,5 @@ with algo.run():
     for chunk in data:
         algo.push(chunk)
         centroids, labels = algo.predict_online(chunk)
+        # ...
 ```
