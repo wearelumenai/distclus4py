@@ -25,4 +25,7 @@ setup(
         'test': tests_require,
     },
     install_requires=requires,
+    package_data={
+        'distclus': ['lib/*'],     # All files from folder A
+    }
 )
