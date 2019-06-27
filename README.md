@@ -7,16 +7,14 @@
 This library implements the concepts and theoretical results described in the article https://hal.inria.fr/hal-01264233.
 It is based on a Go library (https://github.com/wearelumenai/distclus) compiled in native format and binded with CFFI.
 
+# Requirements
+A Go 1.11 proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
+
 # Installation
+This will build the go library and copy it in the python `distclus` package.
 
 ```
 $ make build
-```
-
-# Test
-
-```
-$ make test
 ```
 
 # Static learning
