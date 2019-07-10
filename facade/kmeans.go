@@ -48,7 +48,7 @@ func getSpace(spaceName C.space, window C.int, innerSpace C.space) core.Space {
 	switch spaceName {
 	case C.S_SERIES:
 		var conf = dtw.Conf{
-			InnerSpace: getSpace(innerSpace, 0, 0),
+			InnerSpace: getSpace(innerSpace, 0, 0).(dtw.PointSpace),
 			Window:     (int)(window),
 		}
 		return dtw.NewSpace(conf)
