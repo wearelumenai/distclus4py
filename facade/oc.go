@@ -52,7 +52,7 @@ func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t)
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	} else {
-		var predictions = centroids.ParMapLabel(elemts, space, runtime.NumCPU())
+		var predictions, _ = centroids.ParMapLabel(elemts, space, runtime.NumCPU())
 		labels, n1 = intsToArray(predictions)
 		centers, c1, c2, c3 = realElemtsToArray(centroids)
 	}
