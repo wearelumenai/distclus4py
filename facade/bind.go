@@ -42,6 +42,8 @@ func figure(figure C.figure) (name string) {
 		name = figures.Iterations
 	case C.F_ACCEPTATIONS:
 		name = figures.Acceptations
+	case C.F_MAX_DISTANCE:
+		name = figures.MaxDistance
 	}
 	return
 }

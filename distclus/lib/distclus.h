@@ -183,7 +183,7 @@ struct Streaming_return {
 
 // Streaming builds and registers a streaming algorithm
 
-extern struct Streaming_return Streaming(space p0, double* p1, size_t p2, size_t p3, size_t p4, long int p5, int p6, double p7, double p8, space p9, int p10);
+extern struct Streaming_return Streaming(space p0, double* p1, size_t p2, size_t p3, size_t p4, long int p5, int p6, double p7, double p8, double p9, int p10, space p11, int p12);
 
 #ifdef __cplusplus
 }

@@ -12,12 +12,13 @@ class TestStreaming(unittest.TestCase):
         self.data = sample(10, 2)
 
     def test_streaming(self):
-        algo = Streaming(lambd=5, seed=1367098323)
+        algo = Streaming(sigma=.3, seed=1367098323)
         algo.push(self.data[:1])
         with algo.run(rasync=True):
             algo.push(self.data[1:])
             time.sleep(.3)
             self.check_online(algo)
+        self.assertGreater(algo.max_distance, 10.)
 
     def check_online(self, algo):
         centroids, labels = algo.predict_online(self.data)

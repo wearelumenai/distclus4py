@@ -2,15 +2,17 @@ package main
 
 import (
 	"testing"
+	"time"
 )
 
 func TestStreaming(t *testing.T) {
 	var elemts = makeVectors()
 	var arr, l1, l2, l3 = realElemtsToArray(elemts)
 	var descr, msg = Streaming(
-		0, arr, l1, l2, l3,
+		0, nil, 0, 0, 0,
 		6305689164243, 50,
-		.95, 3,
+		.5, .1,
+		2., 5,
 		0, 0,
 	)
 
@@ -25,5 +27,13 @@ func TestStreaming(t *testing.T) {
 		t.Error("Expected pointer got nil")
 	}
 
+	Push(descr, arr, 1, l2, l3)
+	Run(descr, 1)
+	Push(descr, arr, l1, l2, l3)
+	time.Sleep(time.Second)
+	var maxDistance, _ = RuntimeFigure(descr, 2)
+	if maxDistance < .1 {
+		t.Error("max distance should be grater than .1")
+	}
 	Free(descr)
 }

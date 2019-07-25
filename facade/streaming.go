@@ -17,19 +17,20 @@ import (
 func Streaming(
 	space C.space, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t,
 	seed C.long, bufsize C.int,
-	b C.double, lambda C.double,
+	mu C.double, sigma C.double,
+	outRatio C.double, outAfter C.int,
 	innerSpace C.space, window C.int,
 ) (descr C.int, errMsg *C.char) {
 	defer handlePanic(0, &errMsg)
 	var elemts = ArrayToRealElemts(data, l1, l2, l3)
-	var implConf = streamConf(bufsize, b, lambda, seed)
+	var implConf = streamConf(bufsize, mu, sigma, outRatio, outAfter, seed)
 	var implSpace = getSpace(space, window, innerSpace)
 	var algo = streaming.NewAlgo(implConf, implSpace, elemts)
 	descr = C.int(RegisterAlgorithm(algo, implSpace))
 	return
 }
 
-func streamConf(bufsize C.int, b C.double, lambda C.double, seed C.long) streaming.Conf {
+func streamConf(bufsize C.int, mu C.double, sigma C.double, outRatio C.double, outAfter C.int, seed C.long) streaming.Conf {
 
 	var rgen *rand.Rand
 	if seed != 0 {
@@ -38,8 +39,10 @@ func streamConf(bufsize C.int, b C.double, lambda C.double, seed C.long) streami
 
 	return streaming.Conf{
 		BufferSize: int(bufsize),
-		B:          float64(b),
-		Lambda:     float64(lambda),
+		Mu:         float64(mu),
+		Sigma:      float64(sigma),
+		OutRatio:   float64(outRatio),
+		OutAfter:   int(outAfter),
 		RGen:       rgen,
 	}
 }

@@ -10,7 +10,7 @@ ffi.cdef("""
 typedef enum {I_RANDOM, I_GIVEN, I_KMEANSPP, I_OC} initializer;
 typedef enum {S_VECTORS, S_COSINUS, S_SERIES} space;
 typedef enum {O_KMEANS, O_MCMC, O_KNN, O_STREAMING} oc;
-typedef enum {F_ITERATIONS, F_ACCEPTATIONS} figure;
+typedef enum {F_ITERATIONS, F_ACCEPTATIONS, F_MAX_DISTANCE} figure;
 
 extern void FreeRealArray(double* p0);
 
@@ -39,7 +39,8 @@ extern struct Algo MCMC(
 extern struct Algo Streaming(
     space space, double* data, size_t l1, size_t l2, size_t l3,
     long seed, int bufsize,
-    double b, double lambda,
+    double mu, double sigma,
+    double outRatio , int outAfter,
     space innerSpace, int window
 );
 

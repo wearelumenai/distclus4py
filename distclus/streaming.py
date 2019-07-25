@@ -8,10 +8,20 @@ class Streaming(OnlineClust):
 
     def __init__(
             self, space='vectors',
-            buffer_size=100, b=.95, lambd=3., seed=None, data=None,
+            buffer_size=100, mu=.5, sigma=0., outRatio=2., outAfter=5, seed=None, data=None,
             inner_space=0, window=10
     ):
         super(Streaming, self).__init__(
-            lib.Streaming, space, data, bind.none2zero(seed), buffer_size, b, lambd,
+            lib.Streaming, space, data, bind.none2zero(seed), buffer_size, mu, sigma, outRatio, outAfter,
             inner_space, window
         )
+
+    @property
+    def max_distance(self):
+        """
+        Get the number of iterations done so far
+        """
+        figure = lib.RuntimeFigure(self.descr, lib.F_MAX_DISTANCE)
+        if figure.err:
+            raise RuntimeError(figure.err)
+        return figure.value
