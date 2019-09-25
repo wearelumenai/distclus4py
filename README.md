@@ -9,7 +9,7 @@ It is based on a Go library (https://github.com/wearelumenai/distclus) compiled 
 
 # Requirements
 * A Go 1.11 proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
-* Although the Makefile should do it, it is better to install separately the [distclus](https://github.com/wearelumenai/distclus) library for now.
+* Although the Makefile should do it, it is better to install previously and separately the [distclus](https://github.com/wearelumenai/distclus) library for now.
 
 # Installation
 
