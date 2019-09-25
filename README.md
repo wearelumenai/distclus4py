@@ -8,8 +8,8 @@ This library implements the concepts and theoretical results described in the ar
 It is based on a Go library (https://github.com/wearelumenai/distclus) compiled in native format and binded with CFFI.
 
 # Requirements
-A Go 1.11 proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
-[distclus](https://github.com/wearelumenai/distclus) should be installed in your system.
+* A Go 1.11 proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
+* [distclus](https://github.com/wearelumenai/distclus) should be installed in your system.
 
 # Installation
 
