@@ -9,11 +9,17 @@ It is based on a Go library (https://github.com/wearelumenai/distclus) compiled 
 
 # Requirements
 A Go 1.11 proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
+[distclus](https://github.com/wearelumenai/distclus) should be installed in your system.
 
 # Installation
+
+
 This will build the go library and copy it in the python `distclus` package.
 
 ```
+$ cd ~/go/src/
+$ git clone https://github.com/wearelumenai/distclus.git
+$ cd distclus
 $ make build
 ```
 
