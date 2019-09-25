@@ -13,6 +13,7 @@ It is based on a Go library (https://github.com/wearelumenai/distclus) compiled 
 
 # Installation
 
+The repo should be clone inside your GO environnment. One standard location for it is to put it inside `~/go/src`
 
 [//]: <> (This will build the go library and copy it in the python `distclus` package.)
 
