@@ -19,8 +19,8 @@ The repo should be clone inside your GO environnment. One standard location for 
 
 ```
 $ cd ~/go/src/
-$ git clone https://github.com/wearelumenai/distclus.git
-$ cd distclus
+$ git clone https://github.com/wearelumenai/distclus4py
+$ cd distclus4py
 $ make build
 ```
 
