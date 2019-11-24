@@ -20,7 +20,8 @@ class Batch:
 
     def push(self, data):
         # hack : scikit-learn compliance,
-        # fit reruns algorithm initialization thus previous result must not be garbage collected
+        # fit reruns algorithm initialization
+        # thus previous result must not be garbage collected
         self._do_not_gc = self._algo
         self._algo = self._builder(**self._kwargs)
         self._kwargs['init'] = self._algo

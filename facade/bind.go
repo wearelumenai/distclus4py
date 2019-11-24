@@ -6,9 +6,10 @@ import (
 	"distclus/core"
 	"distclus/figures"
 	"distclus/kmeans"
-	"github.com/pkg/errors"
 	"reflect"
 	"unsafe"
+
+	"github.com/pkg/errors"
 )
 
 // initializer returns a specific OC initializer
@@ -36,7 +37,7 @@ func descrInitializer(initDescr C.int) core.Initializer {
 }
 
 // figure converts a C figure enum to a figure constant
-func figure(figure C.figure) (name string) {
+func figure(figure C.figure) (name figures.Key) {
 	switch figure {
 	case C.F_ITERATIONS:
 		name = figures.Iterations

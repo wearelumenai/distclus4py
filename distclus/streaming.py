@@ -8,11 +8,16 @@ class Streaming(OnlineClust):
 
     def __init__(
             self, space='vectors',
-            buffer_size=100, mu=.5, sigma=0., outRatio=2., outAfter=5, seed=None, data=None,
+            buffer_size=100, mu=.5, sigma=0.1, outRatio=2., outAfter=5,
+            seed=None,
+            iter=0, iter_freq=0, data_per_iter=0, timeout=0, num_cpu=0,
+            data=None,
             inner_space=0, window=10
     ):
         super(Streaming, self).__init__(
-            lib.Streaming, space, data, bind.none2zero(seed), buffer_size, mu, sigma, outRatio, outAfter,
+            lib.Streaming, space, data, bind.none2zero(seed), buffer_size, mu,
+            sigma, outRatio, outAfter,
+            iter, iter_freq, data_per_iter, timeout, num_cpu,
             inner_space, window
         )
 

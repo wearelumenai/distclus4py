@@ -34,8 +34,7 @@ class OnlineClust:
         """
         self._set_descr()
         self.push(data)
-        with self.run(rasync=False):
-            pass
+        self.batch()
 
     def push(self, data):
         """
@@ -49,11 +48,60 @@ class OnlineClust:
 
     def run(self, rasync=True):
         """
+        @deprecated
         Execute the algorithm in synchronous or asynchronous mode
         :param bool rasync: if True run in asynchronous mode
         otherwise run in synchronous mode (default)
         """
-        err = lib.Run(self.descr, 1 if rasync else 0)
+        err = lib.Play(self.descr) if rasync else lib.Batch(self.descr)
+        handle_error(err)
+        return contextlib.closing(self)
+
+    def play(self):
+        """
+        Play the online algorithm
+        """
+        err = lib.Play(self.descr)
+        handle_error(err)
+        return contextlib.closing(self)
+
+    def batch(self):
+        """
+        Batch the online algorithm
+        """
+        err = lib.Batch(self.descr)
+        handle_error(err)
+        return contextlib.closing(self)
+
+    def pause(self):
+        """
+        Pause the online algorithm
+        """
+        err = lib.Pause(self.descr)
+        handle_error(err)
+        return contextlib.closing(self)
+
+    def wait(self):
+        """
+        Wait the online algorithm
+        """
+        err = lib.Wait(self.descr)
+        handle_error(err)
+        return contextlib.closing(self)
+
+    def stop(self):
+        """
+        Stop the online algorithm
+        """
+        err = lib.Stop(self.descr)
+        handle_error(err)
+        return contextlib.closing(self)
+
+    def init(self):
+        """
+        Initializes the online algorithm
+        """
+        err = lib.Init(self.descr)
         handle_error(err)
         return contextlib.closing(self)
 
@@ -86,7 +134,6 @@ class OnlineClust:
         """Get cluster centers (equivalent to centroids attribute)"""
         return self.centroids
 
-
     def predict_online(self, data):
         """
         Get centroids and labels for input data
@@ -109,9 +156,31 @@ class OnlineClust:
 
     def close(self):
         """
+        @deprecated
         Stop the algorithm and release resources
         """
-        lib.Close(self.descr)
+        lib.Stop(self.descr)
+
+    def __enter__(self):
+        self.play()
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.stop()
+        return self
+
+    def __dels__(self):
+        self.stop()
+
+    @property
+    def iterations(self):
+        """
+        Get the number of iterations done so far
+        """
+        figure = lib.RuntimeFigure(self.descr, lib.F_ITERATIONS)
+        if figure.err:
+            raise RuntimeError(figure.err)
+        return figure.value
 
 
 def as_float64(data):

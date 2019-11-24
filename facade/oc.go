@@ -28,12 +28,12 @@ func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (e
 	return
 }
 
-// Run runs the algorithm corresponding to the given descriptor
-//export Run
-func Run(descr C.int, async C.int) (errMsg *C.char) {
+// Play runs the algorithm corresponding to the given descriptor
+//export Play
+func Play(descr C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Run((AlgorithmDescr)(async) != 0)
+	var err = algo.Play()
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}
@@ -82,29 +82,99 @@ func Centroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size
 func RuntimeFigure(descr C.int, fig C.figure) (value C.double, errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var figures, err = algo.RuntimeFigures()
+	var rfigures, err = algo.RuntimeFigures()
 
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	} else {
-		value = (C.double)(figures[figure(fig)])
+		value = (C.double)(rfigures[figure(fig)])
 	}
 
 	return
 }
 
-// Close terminates the algorithm corresponding to the given descriptor
-//export Close
-func Close(descr C.int) {
+// Stop terminates the algorithm corresponding to the given descriptor
+//export Stop
+func Stop(descr C.int) (errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	_ = algo.Close()
+	var err = algo.Stop()
+	if err != nil {
+		errMsg = setError((AlgorithmDescr)(descr), err.Error())
+	}
+	return
+}
+
+// Wait waits the algorithm corresponding to the given descriptor
+//export Wait
+func Wait(descr C.int) (errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
+	var err = algo.Wait()
+	if err != nil {
+		errMsg = setError((AlgorithmDescr)(descr), err.Error())
+	}
+	return
+}
+
+// Pause pauses the algorithm corresponding to the given descriptor
+//export Pause
+func Pause(descr C.int) (errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
+	var err = algo.Pause()
+	if err != nil {
+		errMsg = setError((AlgorithmDescr)(descr), err.Error())
+	}
+	return
+}
+
+// Init initialises the algorithm corresponding to the given descriptor
+//export Init
+func Init(descr C.int) (errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
+	var err = algo.Init()
+	if err != nil {
+		errMsg = setError((AlgorithmDescr)(descr), err.Error())
+	}
+	return
+}
+
+// Batch batches the algorithm corresponding to the given descriptor
+//export Batch
+func Batch(descr C.int) (errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
+	var err = algo.Batch()
+	if err != nil {
+		errMsg = setError((AlgorithmDescr)(descr), err.Error())
+	}
+	return
+}
+
+// Status return the status of the algorithm corresponding to the given descriptor
+//export Status
+func Status(descr C.int) C.int {
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
+	return C.int(algo.Status())
+}
+
+// Running true iif the algorithm corresponding to the given descriptor is running
+//export Running
+func Running(descr C.int) C.int {
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
+	if algo.Running() {
+		return C.int(1)
+	}
+	return C.int(0)
 }
 
 // Free terminates the algorithm corresponding to the given descriptor
 // and free allocated resources
 //export Free
 func Free(descr C.int) {
-	Close(descr)
+	Stop(descr)
 	UnregisterAlgorithm((AlgorithmDescr)(descr))
 }
 
@@ -117,7 +187,7 @@ func handlePanic(descr C.int, msg **C.char) {
 			f = fmt.Sprintf("%s:%d %%v", fn, line)
 			break
 		}
-		i += 1
+		i++
 	}
 	if r := recover(); r != nil {
 		switch v := r.(type) {

@@ -3,14 +3,16 @@
 /* package distclus4py/facade */
 
 
-#line 1 "cgo-builtin-prolog"
+#line 1 "cgo-builtin-export-prolog"
 
 #include <stddef.h> /* for ptrdiff_t below */
 
 #ifndef GO_CGO_EXPORT_PROLOGUE_H
 #define GO_CGO_EXPORT_PROLOGUE_H
 
+#ifndef GO_CGO_GOSTRING_TYPEDEF
 typedef struct { const char *p; ptrdiff_t n; } _GoString_;
+#endif
 
 #endif
 
@@ -74,7 +76,9 @@ typedef double _Complex GoComplex128;
 */
 typedef char _check_for_64_bit_pointer_matching_GoInt[sizeof(void*)==64/8 ? 1:-1];
 
+#ifndef GO_CGO_GOSTRING_TYPEDEF
 typedef _GoString_ GoString;
+#endif
 typedef void *GoMap;
 typedef void *GoChan;
 typedef struct { void *t; void *v; } GoInterface;
@@ -105,7 +109,7 @@ struct KMeans_return {
 
 // KMeans builds and registers a kmeans algorithm
 
-extern struct KMeans_return KMeans(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, int p7, long int p8, int p9, int p10, int p11, space p12, int p13);
+extern struct KMeans_return KMeans(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, int p7, long int p8, int p9, int p10, int p11, float p12, int p13, float p14, int p15, space p16, int p17);
 
 /* Return type for MCMC */
 struct MCMC_return {
@@ -115,15 +119,15 @@ struct MCMC_return {
 
 // MCMC builds and registers a mcmc algorithm
 
-extern struct MCMC_return MCMC(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, int p7, long int p8, size_t p9, int p10, int p11, int p12, int p13, double p14, double p15, double p16, double p17, space p18, int p19);
+extern struct MCMC_return MCMC(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, int p7, long int p8, size_t p9, int p10, int p11, int p12, int p13, double p14, double p15, double p16, double p17, float p18, int p19, float p20, int p21, space p22, int p23);
 
 // Push pushes an array of element to the algorithm corresponding to the given descriptor
 
 extern char* Push(int p0, double* p1, size_t p2, size_t p3, size_t p4);
 
-// Run runs the algorithm corresponding to the given descriptor
+// Play runs the algorithm corresponding to the given descriptor
 
-extern char* Run(int p0, int p1);
+extern char* Play(int p0);
 
 /* Return type for Predict */
 struct Predict_return {
@@ -166,9 +170,33 @@ struct RuntimeFigure_return {
 
 extern struct RuntimeFigure_return RuntimeFigure(int p0, figure p1);
 
-// Close terminates the algorithm corresponding to the given descriptor
+// Stop terminates the algorithm corresponding to the given descriptor
 
-extern void Close(int p0);
+extern char* Stop(int p0);
+
+// Wait waits the algorithm corresponding to the given descriptor
+
+extern char* Wait(int p0);
+
+// Pause pauses the algorithm corresponding to the given descriptor
+
+extern char* Pause(int p0);
+
+// Init initialises the algorithm corresponding to the given descriptor
+
+extern char* Init(int p0);
+
+// Batch batches the algorithm corresponding to the given descriptor
+
+extern char* Batch(int p0);
+
+// Status return the status of the algorithm corresponding to the given descriptor
+
+extern int Status(int p0);
+
+// Running true iif the algorithm corresponding to the given descriptor is running
+
+extern int Running(int p0);
 
 // Free terminates the algorithm corresponding to the given descriptor
 // and free allocated resources
@@ -183,7 +211,7 @@ struct Streaming_return {
 
 // Streaming builds and registers a streaming algorithm
 
-extern struct Streaming_return Streaming(space p0, double* p1, size_t p2, size_t p3, size_t p4, long int p5, int p6, double p7, double p8, double p9, int p10, space p11, int p12);
+extern struct Streaming_return Streaming(space p0, double* p1, size_t p2, size_t p3, size_t p4, long int p5, int p6, double p7, double p8, double p9, int p10, int p11, float p12, int p13, float p14, int p15, space p16, int p17);
 
 #ifdef __cplusplus
 }

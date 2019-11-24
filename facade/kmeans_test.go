@@ -12,6 +12,7 @@ func TestKMEANS(t *testing.T) {
 		0, 2, 0, 6305689164243,
 		2, 2, 3,
 		0, 0,
+		0, 0, 0, 0,
 	)
 
 	if msg != nil {

@@ -20,11 +20,15 @@ func MCMC(
 	par C.int, init C.initializer, initDescr C.int, seed C.long,
 	dim C.size_t, initK C.int, maxK C.int, mcmcIter C.int, framesize C.int,
 	b C.double, amp C.double, norm C.double, nu C.double,
+	iterFreq C.float, dataPerIter C.int, timeout C.float, numCPU C.int,
 	innerSpace C.space, window C.int,
 ) (descr C.int, errMsg *C.char) {
 	defer handlePanic(0, &errMsg)
 	var elemts = ArrayToRealElemts(data, l1, l2, l3)
-	var implConf = mcmcConf(par, initK, maxK, mcmcIter, framesize, b, amp, norm, seed)
+	var implConf = mcmcConf(
+		par, initK, maxK, mcmcIter, framesize, b, amp, norm, seed,
+		iterFreq, dataPerIter, timeout, numCPU,
+	)
 	var implSpace = getSpace(space, window, innerSpace)
 	var implInit = initializer(init, initDescr)
 	var distrib = buildDistrib(implSpace, dim, nu, space)
@@ -58,7 +62,10 @@ func buildDistrib(implSpace core.Space, dim C.size_t, nu C.double, space C.space
 
 func mcmcConf(par C.int,
 	initK C.int, maxK C.int, mcmcIter C.int, framesize C.int,
-	b C.double, amp C.double, norm C.double, seed C.long) mcmc.Conf {
+	b C.double, amp C.double, norm C.double, seed C.long,
+	iterFreq C.float, dataPerIter C.int,
+	timeout C.float, numCPU C.int,
+) mcmc.Conf {
 
 	var rgen *rand.Rand
 	if seed != 0 {
@@ -68,7 +75,14 @@ func mcmcConf(par C.int,
 	return mcmc.Conf{
 		Par:       par != 0,
 		FrameSize: (int)(framesize), B: (float64)(b), Amp: (float64)(amp),
-		Norm: (float64)(norm), InitK: (int)(initK), MaxK: (int)(maxK), McmcIter: (int)(mcmcIter),
+		Norm: (float64)(norm), InitK: (int)(initK), MaxK: (int)(maxK),
 		RGen: rgen,
+		Conf: core.Conf{
+			Iter:        (int)(mcmcIter),
+			IterFreq:    (float64)(iterFreq),
+			NumCPU:      (int)(numCPU),
+			DataPerIter: (int)(dataPerIter),
+			Timeout:     (float64)(timeout),
+		},
 	}
 }

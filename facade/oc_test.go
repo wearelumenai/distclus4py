@@ -2,7 +2,8 @@ package main
 
 import (
 	"distclus/core"
-	"reflect"
+	"fmt"
+	"math"
 	"strings"
 	"testing"
 	"time"
@@ -17,6 +18,7 @@ func TestCreateError(t *testing.T) {
 		2, 0, 3, 30, 1000,
 		10.0, 1.0, 2.0, 1.0,
 		0, 0,
+		0, 0, 0, 0,
 	)
 
 	if m := goString(msg); !strings.Contains(m, "Illegal") {
@@ -33,6 +35,7 @@ func TestRunVectors(t *testing.T) {
 		2, 2, 3, 1000, 10000,
 		10.0, 1.0, 2.0, 1.0,
 		0, 0,
+		0, 0, 0, 0,
 	)
 
 	assertAlgo(t, (int)(descr), makeVectors())
@@ -48,25 +51,38 @@ func TestInitFromDescr(t *testing.T) {
 		2, 2, 3, 1000, 10000,
 		10.0, 1.0, 2.0, 1.0,
 		0, 0,
+		0, 0, 0, 0,
 	)
 	_ = Push(descr0, arr, l1, l2, l3)
-	_ = Run(descr0, 0)
+	_ = Batch(descr0)
 	var centroids0, c01, c02, c03, _ = Centroids(descr0)
 	var descr1, _ = MCMC(
 		0, arr, l1, l2, l3,
 		0, 3, descr0, 6305689164243,
-		2, 2, 3, 0, 10000,
+		2, 2, 3, 20, 10000,
 		10.0, 1.0, 2.0, 1.0,
 		0, 0,
+		0, 0, 0, 0,
 	)
 	Free(descr0)
-	_ = Run(descr1, 0)
+	_ = Batch(descr1)
 	var centroids1, c11, c12, c13, _ = Centroids(descr1)
 
 	var elemts0 = ArrayToRealElemts(centroids0, c01, c02, c03)
 	var elemts1 = ArrayToRealElemts(centroids1, c11, c12, c13)
-	if !reflect.DeepEqual(elemts0, elemts1) {
-		t.Error("error in initialization from descriptor")
+
+	var precision = math.Pow(10, 14)
+
+	for i, elemt := range elemts0 {
+		var values = elemt.([]float64)
+		for j := range values {
+			var zero = int(values[j] * precision)
+			var one = int(elemts1[i].([]float64)[j] * precision)
+			if zero != one {
+				fmt.Println(zero, one)
+				t.Error("error in initialization from descriptor")
+			}
+		}
 	}
 }
 
@@ -78,6 +94,7 @@ func TestRunSeries(t *testing.T) {
 		2, 2, 3, 1000, 10000,
 		10.0, 1.0, 2.0, 1.0,
 		0, 0,
+		0, 0, 0, 0,
 	)
 	assertAlgo(t, (int)(descr), makeSeries())
 	Free(descr)
@@ -94,12 +111,12 @@ func assertAlgo(t *testing.T, d int, elemts []core.Elemt) {
 	if msgPush != nil {
 		t.Error("unexpected error")
 	}
-	var msgRun = Run(descr, 1)
+	var msgRun = Play(descr)
 	if msgRun != nil {
 		t.Error("unexpected error")
 	}
 	time.Sleep(500 * time.Millisecond)
-	Close(descr)
+	Stop(descr)
 	var centroids, c1, c2, c3, msgCentroids = Centroids(descr)
 	if msgCentroids != nil {
 		t.Error("unexpected error")

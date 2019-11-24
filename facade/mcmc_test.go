@@ -13,6 +13,7 @@ func TestMCMC(t *testing.T) {
 		2, 2, 3, 30, 10000,
 		100.0, 1.0, 2.0, 1.0,
 		0, 0,
+		0, 0, 0, 0,
 	)
 
 	if msg != nil {
@@ -36,6 +37,7 @@ func TestErr(t *testing.T) {
 		0, 2, 16, 5, 0,
 		1.0, 0.1, 2.0, 3.0,
 		0, 10,
+		0, 0, 0, 0,
 	)
 	if d != nil {
 		t.Error("unexpected error")

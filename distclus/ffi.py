@@ -25,6 +25,7 @@ extern struct Algo KMeans(
     space space, double* data, size_t l1, size_t l2, size_t l3,
     int par, initializer init, int initdescr, long seed,
     int k, int iter, int framesize,
+    float iterFreq, int dataPerIter, float timeout, int numCPU,
     space innerSpace, int window
 );
 
@@ -33,6 +34,7 @@ extern struct Algo MCMC(
     int par, initializer init, int initdescr, long seed,
     size_t dim, int initK, int maxK, int iter, int framesize, double b,
     double amp, double norm, double nu,
+    float iterFreq, int dataPerIter, float timeout, int numCPU,
     space innerSpace, int window
 );
 
@@ -41,12 +43,29 @@ extern struct Algo Streaming(
     long seed, int bufsize,
     double mu, double sigma,
     double outRatio , int outAfter,
+    int iter, float iterFreq, int dataPerIter, float timeout, int numCPU,
     space innerSpace, int window
 );
 
-extern const char* Push(int descr, double* data, size_t l1, size_t l2, size_t l3);
+extern const char* Push(
+    int descr, double* data, size_t l1, size_t l2, size_t l3
+);
 
-extern const char* Run(int descr, int async);
+extern const char* Play(int descr);
+
+extern const char* Wait(int descr);
+
+extern const char* Pause(int descr);
+
+extern const char* Stop(int descr);
+
+extern const int Running(int descr);
+
+extern const int Status(int descr);
+
+extern const char* Batch(int descr);
+
+extern const char* Init(int descr);
 
 struct CentroidsResult {
     double* centroids;
@@ -68,7 +87,9 @@ struct PredictResult {
     const char* err;
 };
 
-extern struct PredictResult Predict(int descr, double* data, size_t l1, size_t l2, size_t l3);
+extern struct PredictResult Predict(
+    int descr, double* data, size_t l1, size_t l2, size_t l3
+);
 
 struct FigureResult {
     double value;

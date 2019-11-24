@@ -20,7 +20,9 @@ class TestBatch(unittest.TestCase):
             self.check_online(algo, batch_data)
 
     def test_frame(self):
-        algo = Batch(MCMC, frame_size=10, init_k=2, b=500, amp=0.1, mcmc_iter=10)
+        algo = Batch(
+            MCMC, frame_size=10, init_k=2, b=500, amp=0.1, mcmc_iter=10
+        )
         algo.run()
         for b in chunker(self.data, 5):
             batch_data = np.array(b)
