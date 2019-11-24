@@ -61,7 +61,7 @@ extern const char* Stop(int descr);
 
 extern const int Running(int descr);
 
-extern const int Status(int descr);
+extern const char* Status(int descr);
 
 extern const char* Batch(int descr);
 

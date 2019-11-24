@@ -155,9 +155,9 @@ func Batch(descr C.int) (errMsg *C.char) {
 
 // Status return the status of the algorithm corresponding to the given descriptor
 //export Status
-func Status(descr C.int) C.int {
+func Status(descr C.int) *C.char {
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	return C.int(algo.Status())
+	return C.CString(algo.Status().String())
 }
 
 // Running true iif the algorithm corresponding to the given descriptor is running

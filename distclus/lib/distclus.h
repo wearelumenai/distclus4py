@@ -192,7 +192,7 @@ extern char* Batch(int p0);
 
 // Status return the status of the algorithm corresponding to the given descriptor
 
-extern int Status(int p0);
+extern char* Status(int p0);
 
 // Running true iif the algorithm corresponding to the given descriptor is running
 

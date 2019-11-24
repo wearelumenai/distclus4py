@@ -53,9 +53,7 @@ class OnlineClust:
         :param bool rasync: if True run in asynchronous mode
         otherwise run in synchronous mode (default)
         """
-        err = lib.Play(self.descr) if rasync else lib.Batch(self.descr)
-        handle_error(err)
-        return contextlib.closing(self)
+        return self.play() if rasync else self.batch()
 
     def play(self):
         """
@@ -65,13 +63,16 @@ class OnlineClust:
         handle_error(err)
         return contextlib.closing(self)
 
+    def __call__(self):
+        return self.play()
+
     def batch(self):
         """
         Batch the online algorithm
         """
         err = lib.Batch(self.descr)
         handle_error(err)
-        return contextlib.closing(self)
+        return self.centroids
 
     def pause(self):
         """
@@ -79,7 +80,7 @@ class OnlineClust:
         """
         err = lib.Pause(self.descr)
         handle_error(err)
-        return contextlib.closing(self)
+        return self.centroids
 
     def wait(self):
         """
@@ -87,7 +88,7 @@ class OnlineClust:
         """
         err = lib.Wait(self.descr)
         handle_error(err)
-        return contextlib.closing(self)
+        return self.centroids
 
     def stop(self):
         """
@@ -95,7 +96,7 @@ class OnlineClust:
         """
         err = lib.Stop(self.descr)
         handle_error(err)
-        return contextlib.closing(self)
+        return self.centroids
 
     def init(self):
         """
@@ -103,7 +104,7 @@ class OnlineClust:
         """
         err = lib.Init(self.descr)
         handle_error(err)
-        return contextlib.closing(self)
+        return self.centroids
 
     def predict(self, data):
         """
@@ -117,6 +118,14 @@ class OnlineClust:
         handle_error(result.err)
         labels = bind.Array(addr=result.labels, l1=result.n1)
         return bind.to_managed_array(labels)
+
+    @property
+    def runnning(self):
+        return lib.Running(self.descr)
+
+    @property
+    def status(self):
+        return lib.Status(self.descr)
 
     @property
     def centroids(self):
