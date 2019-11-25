@@ -180,14 +180,12 @@ func Free(descr C.int) {
 
 func handlePanic(descr C.int, msg **C.char) {
 	var f string
-	var i = 1
-	for {
+	for i := 1; ; i++ {
 		var _, fn, line, ok = runtime.Caller(i)
 		if strings.Contains(fn, "distclus") || !ok {
 			f = fmt.Sprintf("%s:%d %%v", fn, line)
 			break
 		}
-		i++
 	}
 	if r := recover(); r != nil {
 		switch v := r.(type) {

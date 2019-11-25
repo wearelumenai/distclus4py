@@ -61,7 +61,7 @@ class OnlineClust:
         """
         err = lib.Play(self.descr)
         handle_error(err)
-        return contextlib.closing(self)
+        return self
 
     def __call__(self):
         return self.play()
@@ -168,10 +168,9 @@ class OnlineClust:
         @deprecated
         Stop the algorithm and release resources
         """
-        lib.Stop(self.descr)
+        return self.stop()
 
     def __enter__(self):
-        self.play()
         return self
 
     def __exit__(self, type, value, traceback):

@@ -57,7 +57,6 @@ class TestLateInit(unittest.TestCase):
         late.push(self.data)
         late.run(False)
         self.check_static(late)
-        late.close()
 
     def test_predict_online(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
