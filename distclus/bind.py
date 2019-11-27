@@ -46,7 +46,9 @@ def to_managed_array(ptr):
         shape = (ptr.l1, ptr.l2, ptr.l3)
     _type = get_type(ptr.addr)
     gc_data = finalize(ptr, _type)
-    arr = np.frombuffer(ffi.buffer(gc_data, length * ffi.sizeof(_type)), TYPE_MAP[_type])
+    arr = np.frombuffer(
+        ffi.buffer(gc_data, length * ffi.sizeof(_type)), TYPE_MAP[_type]
+    )
     arr.shape = shape
     return arr
 

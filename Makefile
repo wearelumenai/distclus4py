@@ -16,13 +16,14 @@ distclus/lib/distclus.so: ${GOSRC}
 
 build: distclus/lib/distclus.so
 
-test: build gotest pybuild pytest
+test: gotest pytest
 
-gotest: build
+gotest:
 	go test -coverprofile=coverage.out -timeout=60000ms -short -v ./...
 
-pybuild: build
+pybuild:
+	pipenv --rm
 	pipenv install "-e .[test]"
 
-pytest:
+pytest: pybuild
 	pipenv run py.test --cov=distclus tests

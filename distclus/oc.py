@@ -31,10 +31,11 @@ class OnlineClust:
         Sequentially push train data, run in synchronous mode
         and close the algorithm.
         :param data: train data
+        :return: centroids
         """
         self._set_descr()
         self.push(data)
-        self.batch()
+        return self.batch()
 
     def push(self, data):
         """
@@ -125,7 +126,7 @@ class OnlineClust:
 
     @property
     def status(self):
-        return lib.Status(self.descr)
+        return ffi.string(lib.Status(self.descr))
 
     @property
     def centroids(self):
@@ -175,7 +176,6 @@ class OnlineClust:
 
     def __exit__(self, type, value, traceback):
         self.stop()
-        return self
 
     def __dels__(self):
         self.stop()
