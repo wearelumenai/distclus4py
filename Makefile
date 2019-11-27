@@ -22,7 +22,6 @@ gotest:
 	go test -coverprofile=coverage.out -timeout=60000ms -short -v ./...
 
 pybuild:
-	pipenv --rm
 	pipenv install "-e .[test]"
 
 pytest: pybuild
