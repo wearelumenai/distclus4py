@@ -190,6 +190,16 @@ class OnlineClust:
             raise RuntimeError(figure.err)
         return figure.value
 
+    @property
+    def pushed_data(self):
+        """
+        Get the number of pushed data
+        """
+        figure = lib.RuntimeFigure(self.descr, lib.F_PUSHED_DATA)
+        if figure.err:
+            raise RuntimeError(figure.err)
+        return figure.value
+
 
 def as_float64(data):
     if data is not None and data.dtype != 'float64':
