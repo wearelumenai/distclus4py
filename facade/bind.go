@@ -37,7 +37,7 @@ func descrInitializer(initDescr C.int) core.Initializer {
 }
 
 // figure converts a C figure enum to a figure constant
-func figure(figure C.figure) (name figures.Key) {
+func figure(figure C.figure) (name string) {
 	switch figure {
 	case C.F_ITERATIONS:
 		name = figures.Iterations
