@@ -47,6 +47,12 @@ func figure(figure C.figure) (name string) {
 		name = figures.MaxDistance
 	case C.F_PUSHED_DATA:
 		name = figures.PushedData
+	case C.F_LAST_ITERATIONS:
+		name = figures.LastIterations
+	case C.F_DURATION:
+		name = figures.Duration
+	case C.F_LAST_DURATION:
+		name = figures.LastDuration
 	}
 	return
 }

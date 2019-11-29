@@ -200,6 +200,36 @@ class OnlineClust:
             raise RuntimeError(figure.err)
         return figure.value
 
+    @property
+    def last_iterations(self):
+        """
+        Get the number of last execution iterations
+        """
+        figure = lib.RuntimeFigure(self.descr, lib.F_LAST_ITERATIONS)
+        if figure.err:
+            raise RuntimeError(figure.err)
+        return figure.value
+
+    @property
+    def duration(self):
+        """
+        Get the duration so far
+        """
+        figure = lib.RuntimeFigure(self.descr, lib.F_DURATION)
+        if figure.err:
+            raise RuntimeError(figure.err)
+        return figure.value
+
+    @property
+    def last_duration(self):
+        """
+        Get the last execution duration
+        """
+        figure = lib.RuntimeFigure(self.descr, lib.F_LAST_DURATION)
+        if figure.err:
+            raise RuntimeError(figure.err)
+        return figure.value
+
 
 def as_float64(data):
     if data is not None and data.dtype != 'float64':
