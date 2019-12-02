@@ -230,6 +230,16 @@ class OnlineClust:
             raise RuntimeError(figure.err)
         return figure.value
 
+    @property
+    def last_data_time(self):
+        """
+        Get the last data time
+        """
+        figure = lib.RuntimeFigure(self.descr, lib.F_LAST_DATA_TIME)
+        if figure.err:
+            raise RuntimeError(figure.err)
+        return figure.value
+
 
 def as_float64(data):
     if data is not None and data.dtype != 'float64':

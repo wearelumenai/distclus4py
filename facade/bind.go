@@ -53,6 +53,8 @@ func figure(figure C.figure) (name string) {
 		name = figures.Duration
 	case C.F_LAST_DURATION:
 		name = figures.LastDuration
+	case C.F_LAST_DATA_TIME:
+		name = figures.LastDataTime
 	}
 	return
 }
