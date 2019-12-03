@@ -21,7 +21,7 @@ func Streaming(
 	mu C.double, sigma C.double,
 	outRatio C.double, outAfter C.int,
 	iter C.int, iterFreq C.float, dataPerIter C.int,
-	timeout C.float, numCPU C.int,
+	timeout C.int, numCPU C.int,
 	innerSpace C.space, window C.int,
 ) (descr C.int, errMsg *C.char) {
 	defer handlePanic(0, &errMsg)
@@ -37,7 +37,7 @@ func Streaming(
 
 func streamConf(
 	bufsize C.int, mu C.double, sigma C.double, outRatio C.double, outAfter C.int, seed C.long,
-	iter C.int, iterFreq C.float, dataPerIter C.int, timeout C.float, numCPU C.int,
+	iter C.int, iterFreq C.float, dataPerIter C.int, timeout C.int, numCPU C.int,
 ) streaming.Conf {
 
 	var rgen *rand.Rand
@@ -57,7 +57,7 @@ func streamConf(
 			IterFreq:    (float64)(iterFreq),
 			NumCPU:      (int)(numCPU),
 			DataPerIter: (int)(dataPerIter),
-			Timeout:     (float64)(timeout),
+			Timeout:     (int)(timeout),
 		},
 	}
 }

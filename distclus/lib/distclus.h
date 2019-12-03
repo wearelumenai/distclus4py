@@ -109,7 +109,7 @@ struct KMeans_return {
 
 // KMeans builds and registers a kmeans algorithm
 
-extern struct KMeans_return KMeans(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, int p7, long int p8, int p9, int p10, int p11, float p12, int p13, float p14, int p15, space p16, int p17);
+extern struct KMeans_return KMeans(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, int p7, long int p8, int p9, int p10, int p11, float p12, int p13, int p14, int p15, space p16, int p17);
 
 /* Return type for MCMC */
 struct MCMC_return {
@@ -119,7 +119,7 @@ struct MCMC_return {
 
 // MCMC builds and registers a mcmc algorithm
 
-extern struct MCMC_return MCMC(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, int p7, long int p8, size_t p9, int p10, int p11, int p12, int p13, double p14, double p15, double p16, double p17, float p18, int p19, float p20, int p21, space p22, int p23);
+extern struct MCMC_return MCMC(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, int p7, long int p8, size_t p9, int p10, int p11, int p12, int p13, double p14, double p15, double p16, double p17, float p18, int p19, int p20, int p21, space p22, int p23);
 
 // Push pushes an array of element to the algorithm corresponding to the given descriptor
 
@@ -211,7 +211,7 @@ struct Streaming_return {
 
 // Streaming builds and registers a streaming algorithm
 
-extern struct Streaming_return Streaming(space p0, double* p1, size_t p2, size_t p3, size_t p4, long int p5, int p6, double p7, double p8, double p9, int p10, int p11, float p12, int p13, float p14, int p15, space p16, int p17);
+extern struct Streaming_return Streaming(space p0, double* p1, size_t p2, size_t p3, size_t p4, long int p5, int p6, double p7, double p8, double p9, int p10, int p11, float p12, int p13, int p14, int p15, space p16, int p17);
 
 #ifdef __cplusplus
 }

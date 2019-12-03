@@ -20,7 +20,7 @@ func MCMC(
 	par C.int, init C.initializer, initDescr C.int, seed C.long,
 	dim C.size_t, initK C.int, maxK C.int, mcmcIter C.int, framesize C.int,
 	b C.double, amp C.double, norm C.double, nu C.double,
-	iterFreq C.float, dataPerIter C.int, timeout C.float, numCPU C.int,
+	iterFreq C.float, dataPerIter C.int, timeout C.int, numCPU C.int,
 	innerSpace C.space, window C.int,
 ) (descr C.int, errMsg *C.char) {
 	defer handlePanic(0, &errMsg)
@@ -64,7 +64,7 @@ func mcmcConf(par C.int,
 	initK C.int, maxK C.int, mcmcIter C.int, framesize C.int,
 	b C.double, amp C.double, norm C.double, seed C.long,
 	iterFreq C.float, dataPerIter C.int,
-	timeout C.float, numCPU C.int,
+	timeout C.int, numCPU C.int,
 ) mcmc.Conf {
 
 	var rgen *rand.Rand
@@ -82,7 +82,7 @@ func mcmcConf(par C.int,
 			IterFreq:    (float64)(iterFreq),
 			NumCPU:      (int)(numCPU),
 			DataPerIter: (int)(dataPerIter),
-			Timeout:     (float64)(timeout),
+			Timeout:     (int)(timeout),
 		},
 	}
 }

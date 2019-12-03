@@ -23,7 +23,7 @@ func KMeans(
 	space C.space, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t,
 	par C.int, init C.initializer, initDescr C.int, seed C.long,
 	k C.int, iter C.int, framesize C.int, iterFreq C.float, dataPerIter C.int,
-	timeout C.float, numCPU C.int,
+	timeout C.int, numCPU C.int,
 	innerSpace C.space, window C.int,
 ) (descr C.int, errMsg *C.char) {
 	defer handlePanic(0, &errMsg)
@@ -41,7 +41,7 @@ func KMeans(
 func kmeansConf(
 	par C.int,
 	k C.int, iter C.int, framesize C.int, seed C.long, iterFreq C.float, dataPerIter C.int,
-	timeout C.float, numCPU C.int,
+	timeout C.int, numCPU C.int,
 ) kmeans.Conf {
 	return kmeans.Conf{
 		Par: par != 0, K: (int)(k), FrameSize: (int)(framesize),
@@ -51,7 +51,7 @@ func kmeansConf(
 			IterFreq:    (float64)(iterFreq),
 			NumCPU:      (int)(numCPU),
 			DataPerIter: (int)(dataPerIter),
-			Timeout:     (float64)(timeout),
+			Timeout:     (int)(timeout),
 		},
 	}
 }
@@ -65,11 +65,9 @@ func getSpace(spaceName C.space, window C.int, innerSpace C.space) core.Space {
 		}
 		return dtw.NewSpace(conf)
 	case C.S_VECTORS:
-		var conf = euclid.Conf{}
-		return euclid.NewSpace(conf)
+		return euclid.NewSpace()
 	case C.S_COSINUS:
-		var conf = cosinus.Conf{}
-		return cosinus.NewSpace(conf)
+		return cosinus.NewSpace()
 	default:
 		panic(fmt.Sprintf("unknown space %v", spaceName))
 	}
