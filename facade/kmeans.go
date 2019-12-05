@@ -45,11 +45,11 @@ func kmeansConf(
 ) kmeans.Conf {
 	return kmeans.Conf{
 		Par: par != 0, K: (int)(k), FrameSize: (int)(framesize),
-		RGen: rand.New(rand.NewSource((uint64)(seed))),
+		RGen:   rand.New(rand.NewSource((uint64)(seed))),
+		NumCPU: (int)(numCPU),
 		Conf: core.Conf{
 			Iter:        (int)(iter),
 			IterFreq:    (float64)(iterFreq),
-			NumCPU:      (int)(numCPU),
 			DataPerIter: (int)(dataPerIter),
 			Timeout:     (int)(timeout),
 		},

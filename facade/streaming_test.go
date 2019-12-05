@@ -14,7 +14,7 @@ func TestStreaming(t *testing.T) {
 		.5, .1,
 		2., 5,
 		0, 0,
-		0, 0, 0, 0, 0,
+		0, 0, 0, 0,
 	)
 
 	if msg != nil {
