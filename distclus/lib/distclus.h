@@ -190,13 +190,17 @@ extern char* Init(int p0);
 
 extern char* Batch(int p0);
 
+// Close batches the algorithm corresponding to the given descriptor
+
+extern char* Close(int p0);
+
 // Status return the status of the algorithm corresponding to the given descriptor
 
 extern char* Status(int p0);
 
-// Running true iif the algorithm corresponding to the given descriptor is running
+// Alive true iif the algorithm corresponding to the given descriptor is running
 
-extern int Running(int p0);
+extern int Alive(int p0);
 
 // Free terminates the algorithm corresponding to the given descriptor
 // and free allocated resources

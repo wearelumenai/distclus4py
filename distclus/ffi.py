@@ -62,7 +62,7 @@ extern const char* Pause(int descr);
 
 extern const char* Stop(int descr);
 
-extern const int Running(int descr);
+extern const int Alive(int descr);
 
 extern const char* Status(int descr);
 
@@ -101,7 +101,7 @@ struct FigureResult {
 
 extern struct FigureResult RuntimeFigure(int descr, figure fig);
 
-extern void Close(int descr);
+extern const char* Close(int descr);
 
 extern void Free(int descr);
 """)

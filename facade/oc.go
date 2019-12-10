@@ -153,6 +153,18 @@ func Batch(descr C.int) (errMsg *C.char) {
 	return
 }
 
+// Close batches the algorithm corresponding to the given descriptor
+//export Close
+func Close(descr C.int) (errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
+	var err = algo.Close()
+	if err != nil {
+		errMsg = setError((AlgorithmDescr)(descr), err.Error())
+	}
+	return
+}
+
 // Status return the status of the algorithm corresponding to the given descriptor
 //export Status
 func Status(descr C.int) *C.char {
@@ -160,11 +172,11 @@ func Status(descr C.int) *C.char {
 	return C.CString(algo.Status().String())
 }
 
-// Running true iif the algorithm corresponding to the given descriptor is running
-//export Running
-func Running(descr C.int) C.int {
+// Alive true iif the algorithm corresponding to the given descriptor is running
+//export Alive
+func Alive(descr C.int) C.int {
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	if algo.Running() {
+	if algo.Alive() {
 		return C.int(1)
 	}
 	return C.int(0)

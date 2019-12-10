@@ -121,8 +121,8 @@ class OnlineClust:
         return bind.to_managed_array(labels)
 
     @property
-    def runnning(self):
-        return lib.Running(self.descr)
+    def alive(self):
+        return lib.Alive(self.descr)
 
     @property
     def status(self):
@@ -166,10 +166,11 @@ class OnlineClust:
 
     def close(self):
         """
-        @deprecated
-        Stop the algorithm and release resources
+        Close the algorithm and release resources
         """
-        return self.stop()
+        err = lib.Close(self.descr)
+        handle_error(err)
+        return self.centroids
 
     def __enter__(self):
         return self
