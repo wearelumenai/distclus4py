@@ -6,3 +6,4 @@ build/
 build/
 __pycache__/
 coverage.out
+venv

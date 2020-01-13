@@ -8,7 +8,7 @@ This library implements the concepts and theoretical results described in the ar
 It is based on a Go library (https://github.com/wearelumenai/distclus) compiled in native format and binded with CFFI.
 
 # Requirements
-A Go 1.11 proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
+A Go proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
 
 # Installation
 This will build the go library and copy it in the python `distclus` package.
@@ -21,12 +21,12 @@ $ make build
 
 Static learning means that when the algorithm is run, all train data are already known
 (this is the common way to do machine learning).
- 
+
 The algorithms in this library implements the following interface, compliant with [scikit-learn](https://scikit-learn.org) :
  - ```fit(data)```: Compute the clustering using *data* as training samples.
  - ```predict(data)```: Predict the closest cluster each sample in *data* belongs to.
  - ```cluster_centers_``` : Once the model is fitted, the centers of the clusters.
- 
+
 Example of usage : create the algorithm, fit train data then predict sample data.
 ```python
 import numpy as np
@@ -48,7 +48,7 @@ output :
 ```
 [[ 0.          5.33333333]
  [15.          4.        ]]
-       
+
 [0 1 0 0 1 1]
 
 [0 1]
@@ -63,11 +63,11 @@ The algorithm provided by this library implements a specific interface, dedicate
  - ```predict_online(data)``` : Get a tuple current centroids and labels of the closest one for the given data
  - ```close()``` : Stop the background algorithm and release resources
  - ```centroids``` : Get the current centroids
- 
+
  Before starting the algorithm (with the ```run``` method),
  it must have been fed with enough data to initialize properly (with the ```push```).
  This behavior can be enhanced thanks to the ```LateAlgo``` decorator (see below).
- 
+
 Example of usage : create the algorithm, push enough train data to initialize, run the algorithm in background mode,
 push more data then predict test data
 ```python
@@ -118,18 +118,18 @@ with algo.run():
 ```
 
 # Algorithms
- 
+
 The library offers 3 clustering algorithms :
  - [MCMC](#mcmc)
  - [Streaming](#streaming)
  - [KMeans](#kmeans)
- 
+
 ## MCMC
- 
+
  ```python
 class distclus.MCMC(
     space='vectors', par=True, init='kmeanspp',
-    init_k=8, max_k=16, mcmc_iter=100, frame_size=None, 
+    init_k=8, max_k=16, mcmc_iter=100, frame_size=None,
     b=1., amp=1., dim=None, nu=3., norm=2,
     seed=None, data=None, inner_space=None, window=None
 )
@@ -207,11 +207,11 @@ Parameter name | values | default | description
 The library offers two decorators :
  - ```LateAlgo``` : differ the initialization of an algorithm until data arrives
  - ```Batch``` : use an algorithm by running subsequent mini-batches
- 
+
 ## LateAlgo
 ```LateAlgo``` is useful when data knowledge is needed to initialize the algorithm.
 The following example builds a MCMC algorithm when ```init_k``` data are known
-to initialize the algorithm, it also deduce the ```dim``` from the data. 
+to initialize the algorithm, it also deduce the ```dim``` from the data.
 
 ```python
 import numpy as np
@@ -225,7 +225,7 @@ def LateMCMC(init_k, **kwargs):
             return MCMC(**kw, data=data)
 
     return LateAlgo(builder)
-    
+
 
 data = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.], [1., 4.], [13., 2.]])
 algo = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
@@ -260,7 +260,7 @@ with algo.run():
         # ...
 ```
 
-```Batch``` constructor also accepts an optional parameter ```frame_size``` that indicates the size of data to be pushed 
+```Batch``` constructor also accepts an optional parameter ```frame_size``` that indicates the size of data to be pushed
 to the underlying algorithm. To achieve this, data are memoized between ```push``` calls in order to complete new data
 with historical data if necessary.
 
