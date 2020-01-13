@@ -8,12 +8,19 @@ This library implements the concepts and theoretical results described in the ar
 It is based on a Go library (https://github.com/wearelumenai/distclus) compiled in native format and binded with CFFI.
 
 # Requirements
-A Go proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
+* A Go proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
+* Although the Makefile should do it, it is better to install previously and separately the [distclus](https://github.com/wearelumenai/distclus) library for now.
 
 # Installation
-This will build the go library and copy it in the python `distclus` package.
+
+The repo should be clone inside your GO environnment. One standard location for it is to put it inside `~/go/src`
+
+[//]: <> (This will build the go library and copy it in the python `distclus` package.)
 
 ```
+$ cd ~/go/src/
+$ git clone https://github.com/wearelumenai/distclus4py
+$ cd distclus4py
 $ make build
 ```
 
@@ -144,8 +151,7 @@ Parameter name | values | default | description *
 ```max_k``` | *int* | *16* | the maximum number of center
 ```mcmc_iter``` | *int* | *100* | the number of mcmc iteration
 ```frame_size``` | *int* | *None* | the number of data used for computation: <br> - None means all data, <br> - N > 0 means the N last pushed values
-```b``` | *float* | *1.* | the value of the *b* parameter (used for the acceptation computation)
-```amp``` | *float* | *1.* | the value of the *b* parameter (used for the acceptation computation)
+```amp``` | *float* | *1.* | The weight for the term related to the data in the acceptation. Increasing it results in a larger number of clusters.
 ```dim``` | *int* | *None* | the size of the data points (used by the student distribution)
 ```nu``` | *float* | *3.* | the size of the data points (used by the student distribution)
 ```norm``` | *float* | *2.* | the power of the p-norm used to compute the loss generalized mean
