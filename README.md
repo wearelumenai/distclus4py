@@ -10,19 +10,32 @@ It is based on a Go library (https://github.com/wearelumenai/distclus) compiled 
 # Requirements
 * A Go proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
 * Although the Makefile should do it, it is better to install previously and separately the [distclus](https://github.com/wearelumenai/distclus) library for now.
+* Python3 (we recommand you to install a virtualenv in order to not corrupt your environment)
 
 # Installation
 
 The repo should be clone inside your GO environnment. One standard location for it is to put it inside `~/go/src`
 
-[//]: <> (This will build the go library and copy it in the python `distclus` package.)
+> We highly recommand you start by using a [virtual environment](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments) in order to keep safe your main environment
 
-```
-$ cd ~/go/src/
-$ git clone https://github.com/wearelumenai/distclus4py
-$ cd distclus4py
-$ make build
-```
+1. Get source code
+
+  ```term
+  git clone https://github.com/wearelumenai/distclus4py
+  cd distclus4py
+  ```
+
+2. (optional) build [virtual environment](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments) for keeping safe your main environment
+
+  ```term
+  python3 -m venv venv
+  . venv/bin/activate
+  ```
+
+3. build libraries and binaries
+  ```term
+  make build
+  ```
 
 # Static learning
 

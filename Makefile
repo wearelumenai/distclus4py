@@ -14,15 +14,20 @@ distclus/lib/distclus.so: ${GOSRC}
 	go build -buildmode=c-shared -x -o distclus/lib/distclus.so distclus4py/facade/
 	cp facade/bind.h distclus/lib/
 
-build: distclus/lib/distclus.so
+build: gobuild pybuild
+
+gobuild: distclus/lib/distclus.so
+
+pybuild: gobuild
+	python3 setup.py build
+	python3 setup.py install
 
 test: gotest pytest
 
 gotest:
 	go test -coverprofile=coverage.out -timeout=60000ms -short -v ./...
 
-pybuild:
-	pipenv install "-e .[test]"
-
 pytest: pybuild
 	pipenv run py.test --cov=distclus tests
+
+.PHONY: build pybuild test gotest pytest
