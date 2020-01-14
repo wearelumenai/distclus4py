@@ -46,7 +46,7 @@ extern struct Algo Streaming(
     long seed, int bufsize,
     double mu, double sigma,
     double outRatio , int outAfter,
-    int iter, float iterFreq, int dataPerIter, float timeout, int numCPU,
+    int iter, float iterFreq, int dataPerIter, float timeout,
     space innerSpace, int window
 );
 

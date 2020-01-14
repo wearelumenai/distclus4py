@@ -4,8 +4,12 @@ package main
 import "C"
 import (
 	"distclus/core"
+	"distclus/cosinus"
+	"distclus/dtw"
+	"distclus/euclid"
 	"distclus/figures"
 	"distclus/kmeans"
+	"fmt"
 	"reflect"
 	"unsafe"
 
@@ -204,4 +208,21 @@ func FreeRealArray(arr *C.double) {
 //export FreeIntArray
 func FreeIntArray(arr *C.long) {
 	C.free(unsafe.Pointer(arr))
+}
+
+func getSpace(spaceName C.space, window C.int, innerSpace C.space) core.Space {
+	switch spaceName {
+	case C.S_SERIES:
+		var conf = dtw.Conf{
+			InnerSpace: getSpace(innerSpace, 0, 0).(dtw.PointSpace),
+			Window:     (int)(window),
+		}
+		return dtw.NewSpace(conf)
+	case C.S_VECTORS:
+		return euclid.NewSpace()
+	case C.S_COSINUS:
+		return cosinus.NewSpace()
+	default:
+		panic(fmt.Sprintf("unknown space %v", spaceName))
+	}
 }

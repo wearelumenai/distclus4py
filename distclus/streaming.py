@@ -15,7 +15,8 @@ class Streaming(OnlineClust):
             inner_space=0, window=10
     ):
         super(Streaming, self).__init__(
-            lib.Streaming, space, data, bind.none2zero(seed), buffer_size, mu,
+            lib.Streaming, space, data, bind.none2zero(seed),
+            buffer_size, mu,
             sigma, outRatio, outAfter,
             iter, iter_freq, data_per_iter, timeout,
             inner_space, window
