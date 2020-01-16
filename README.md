@@ -165,8 +165,8 @@ Parameter name | values | default | description *
 ```mcmc_iter``` | *int* | *100* | the number of mcmc iteration
 ```frame_size``` | *int* | *None* | the number of data used for computation: <br> - None means all data, <br> - N > 0 means the N last pushed values
 ```amp``` | *float* | *1.* | The weight for the term related to the data in the acceptation. Increasing it results in a larger number of clusters.
-```dim``` | *int* | *None* | the size of the data points (used by the student distribution)
-```nu``` | *float* | *3.* | the size of the data points (used by the student distribution)
+```dim``` | *int* | *None* | the size of the data points (used by the Student distribution)
+```nu``` | *float* | *3.* | the varince of the Student Distribution (used by the MCMC proposal distribution)
 ```norm``` | *float* | *2.* | the power of the p-norm used to compute the loss generalized mean
 ```seed``` | *int* | *None* | the seed of the pseudo-random number generator. If None the seed is computed from epoch.
 ```data``` | *ndarray* | *None* | data to be pushed at algorithm construction time (optional)
