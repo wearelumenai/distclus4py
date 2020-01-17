@@ -27,7 +27,4 @@ class Streaming(OnlineClust):
         """
         Get the number of iterations done so far
         """
-        figure = lib.RuntimeFigure(self.descr, lib.F_MAX_DISTANCE)
-        if figure.err:
-            raise RuntimeError(figure.err)
-        return figure.value
+        return self._figure(lib.F_MAX_DISTANCE)

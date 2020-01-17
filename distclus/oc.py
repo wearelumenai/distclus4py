@@ -181,65 +181,53 @@ class OnlineClust:
     def __dels__(self):
         self.stop()
 
+    def _figure(self, name):
+        figure = lib.RuntimeFigure(self.descr, name)
+        if figure.err:
+            raise RuntimeError(figure.err)
+        return figure.value
+
     @property
     def iterations(self):
         """
         Get the number of iterations done so far
         """
-        figure = lib.RuntimeFigure(self.descr, lib.F_ITERATIONS)
-        if figure.err:
-            raise RuntimeError(figure.err)
-        return figure.value
+        return self._figure(lib.F_ITERATIONS)
 
     @property
     def pushed_data(self):
         """
         Get the number of pushed data
         """
-        figure = lib.RuntimeFigure(self.descr, lib.F_PUSHED_DATA)
-        if figure.err:
-            raise RuntimeError(figure.err)
-        return figure.value
+        return self._figure(lib.F_PUSHED_DATA)
 
     @property
     def last_iterations(self):
         """
         Get the number of last execution iterations
         """
-        figure = lib.RuntimeFigure(self.descr, lib.F_LAST_ITERATIONS)
-        if figure.err:
-            raise RuntimeError(figure.err)
-        return figure.value
+        return self._figurer(lib.F_LAST_ITERATIONS)
 
     @property
     def duration(self):
         """
         Get the duration so far
         """
-        figure = lib.RuntimeFigure(self.descr, lib.F_DURATION)
-        if figure.err:
-            raise RuntimeError(figure.err)
-        return figure.value
+        return self._figure(F_DURATION)
 
     @property
     def last_duration(self):
         """
         Get the last execution duration
         """
-        figure = lib.RuntimeFigure(self.descr, lib.F_LAST_DURATION)
-        if figure.err:
-            raise RuntimeError(figure.err)
-        return figure.value
+        return self._figure(lib.F_LAST_DURATION)
 
     @property
     def last_data_time(self):
         """
         Get the last data time
         """
-        figure = lib.RuntimeFigure(self.descr, lib.F_LAST_DATA_TIME)
-        if figure.err:
-            raise RuntimeError(figure.err)
-        return figure.value
+        return self._figure(lib.F_LAST_DATA_TIME)
 
 
 def as_float64(data):

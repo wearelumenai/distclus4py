@@ -28,7 +28,20 @@ class MCMC(OnlineClust):
         """
         Get the number of iterations done so far
         """
-        figure = lib.RuntimeFigure(self.descr, lib.F_ACCEPTATIONS)
-        if figure.err:
-            raise RuntimeError(figure.err)
-        return figure.value
+        return self._figure(lib.F_ACCEPTATIONS)
+
+    @property
+    def lambda(self):
+        return self._figure(lib.F_LAMBDA)
+
+    @property
+    def rho(self):
+        return self._figure(lib.F_RHO)
+
+    @property
+    def time(self):
+        return self._figure(lib.F_TIME)
+
+    @property
+    def rGibbs(self):
+        return self._figure(lib.F_RGIBBS)

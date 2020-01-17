@@ -47,6 +47,14 @@ func figure(figure C.figure) (name string) {
 		name = figures.Iterations
 	case C.F_ACCEPTATIONS:
 		name = figures.Acceptations
+	case C.F_LAMBDA:
+		name = figures.Lambda
+	case C.F_RHO:
+		name = figures.Rho
+	case C.F_RGIBBS:
+		name = figures.RGibbs
+	case C.F_TIME:
+		name = figures.Time
 	case C.F_MAX_DISTANCE:
 		name = figures.MaxDistance
 	case C.F_PUSHED_DATA:
