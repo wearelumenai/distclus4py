@@ -31,7 +31,7 @@ class MCMC(OnlineClust):
         return self._figure(lib.F_ACCEPTATIONS)
 
     @property
-    def lambda(self):
+    def lambda_(self):
         return self._figure(lib.F_LAMBDA)
 
     @property
