@@ -4,10 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-test = {version = "*",editable = true}
 distclus = {editable = true,extras = ["test"],path = "."}
 
 [dev-packages]
+test = {version = "*",editable = true}
 
 [requires]
 python_version = "3.7"

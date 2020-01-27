@@ -15,7 +15,20 @@ class Batch:
         else:
             self.frame = None
 
+    def play(self):
+        return contextlib.closing(self)
+
+    def stop(self):
+        return contextlib.closing(self)
+
+    def pause(self):
+        return contextlib.closing(self)
+
+    def wait(self):
+        return contextlib.closing(self)
+
     def run(self, rasync=True):
+        """@deprecated"""
         return contextlib.closing(self)
 
     def push(self, data):
@@ -53,6 +66,10 @@ class Batch:
     @property
     def cluster_centers_(self):
         return self.centroids
+
+    @property
+    def status(self):
+        return self._algo.status
 
 
 def chunker(iterable, n):

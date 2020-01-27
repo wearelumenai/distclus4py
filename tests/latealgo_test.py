@@ -32,13 +32,13 @@ class TestLateInit(unittest.TestCase):
 
     def test_run_sync(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467, dim=12)
-        self.assertRaises(ValueError, late.run, False)
+        self.assertRaises(ValueError, late.batch)
         late.push(self.data)
-        late.run(False)
+        late.batch()
 
     def test_run_async(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
-        late.run(True)
+        late.play()
         self.assertIsNone(late._algo)
         late.push(self.data)
         late.close()
@@ -46,7 +46,7 @@ class TestLateInit(unittest.TestCase):
     def test_centroids(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
         self.assertRaises(ValueError, lambda: late.centroids)
-        late.run(True)
+        late.play()
         late.push(self.data)
         time.sleep(.3)
         self.assertGreaterEqual(len(late.centroids), 2)
@@ -55,12 +55,12 @@ class TestLateInit(unittest.TestCase):
     def test_predict(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
         late.push(self.data)
-        late.run(False)
+        late.batch()
         self.check_static(late)
 
     def test_predict_online(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
-        late.run(True)
+        late.play()
         self.assertRaises(ValueError, late.predict, self.data)
         late.push(self.data)
         time.sleep(.3)
@@ -75,15 +75,16 @@ class TestLateInit(unittest.TestCase):
 
     def test_push_parallel(self):
         late = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
-        late.run(True)
+        late.play()
         threads = []
         for d in self.data:
             t = Thread(target=late.push, args=(np.array([d]),))
-            t.start()
             threads.append(t)
-        time.sleep(.1)
+        for thread in threads:
+            thread.start()
         for t in threads:
             t.join()
+        late.wait()
         late.close()
         self.check_static(late)
 

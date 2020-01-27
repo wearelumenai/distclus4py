@@ -24,9 +24,24 @@ class LateAlgo:
         else:
             self._try_initialize(data)
 
+    def _run(self, play=True):
+        if self._algo:
+            return getattr(self._algo, 'play' if play else 'batch')()
+        elif play:
+            self._latestart = True
+        else:
+            self._raise_unitialized()
+
+    def play(self):
+        return self._run()
+
+    def batch(self):
+        return self._run(False)
+
     def run(self, rasync=False):
         """
-        Run the wrapped algorithm if initialized 
+        @deprecated
+        Run the wrapped algorithm if initialized
         otherwise delay the run after initialization if rasync=True
         or raise an error if rasync=False
         :param rasync: if True run in asynchronous mode
@@ -47,11 +62,18 @@ class LateAlgo:
         """
         if self._algo:
             return self._algo.centroids
+
         self._raise_unitialized()
 
     @property
     def cluster_centers_(self):
         return self.centroids
+
+    @property
+    def status(self):
+        if self._algo:
+            return self._algo.status
+        self._raise_unitialized()
 
     def predict(self, data):
         """
@@ -62,6 +84,7 @@ class LateAlgo:
         """
         if self._algo:
             return self._algo.predict(data)
+
         self._raise_unitialized()
 
     def predict_online(self, data):
@@ -73,28 +96,53 @@ class LateAlgo:
         """
         if self._algo:
             return self._algo.predict_online(data)
+
         self._raise_unitialized()
 
     def close(self):
         """
+        Close the wrapped algorithm and release resources
+        """
+        if self._algo:
+            return self._algo.close()
+        self._raise_unitialized()
+
+    def stop(self):
+        """
         Stop the wrapped algorithm and release resources
         """
-        self._algo.close()
+        if self._algo:
+            return self._algo.stop()
+        self._raise_unitialized()
+
+    def wait(self):
+        if self._algo:
+            return self._algo.wait()
+        self._raise_unitialized()
+
+    def pause(self):
+        if self._algo:
+            return self._algo.pause()
+        self._raise_unitialized()
 
     def _try_initialize(self, data):
         self._mu.acquire()
+
         if self._algo:
             self._algo.push(data)
         else:
             self._initialize(data)
+
         self._mu.release()
 
     def _initialize(self, data):
         self._buffer = [*self._buffer, *data]
         algo = self._builder(np.array(self._buffer))
+
         if algo:
             if self._latestart:
-                algo.run(True)
+                algo.play()
+
             self._algo = algo
             self._buffer.clear()
 
@@ -102,7 +150,7 @@ class LateAlgo:
         raise ValueError('algorithm has not been initialized')
 
     def __enter__(self):
-        self.run(rasync=True)
+        self.play()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):

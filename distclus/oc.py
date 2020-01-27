@@ -3,7 +3,7 @@ import weakref
 
 from distclus.bind import handle_error
 from . import bind
-from .ffi import lib
+from .ffi import lib, ffi
 
 
 class OnlineClust:

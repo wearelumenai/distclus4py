@@ -28,6 +28,6 @@ gotest:
 	go test -coverprofile=coverage.out -timeout=60000ms -short -v ./...
 
 pytest: pybuild
-	pipenv run py.test --cov=distclus tests
+	python setup.py test
 
-.PHONY: build pybuild test gotest pytest
+.PHONY: build gobuild pybuild test gotest pytest

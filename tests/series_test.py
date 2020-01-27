@@ -20,10 +20,11 @@ class TestSeries(unittest.TestCase):
     def test_online(self):
         algo = MCMC(space='series', init_k=2, b=500, amp=.1, seed=353875342)
         algo.push(self.data[:5])
-        with algo.run():
-            algo.push(self.data[5:])
-            time.sleep(.3)
-            self.check_online(algo)
+        algo.play()
+        algo.push(self.data[5:])
+        time.sleep(.3)
+        self.check_online(algo)
+        algo.close()
 
     def check_static(self, algo):
         labels = algo.predict(self.data)

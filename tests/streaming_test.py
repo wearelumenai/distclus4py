@@ -14,10 +14,11 @@ class TestStreaming(unittest.TestCase):
     def test_streaming(self):
         algo = Streaming(sigma=.3, seed=1367098323)
         algo.push(self.data[:1])
-        with algo.run(rasync=True):
-            algo.push(self.data[1:])
-            time.sleep(.3)
-            self.check_online(algo)
+        algo.play()
+        algo.push(self.data[1:])
+        time.sleep(.3)
+        self.check_online(algo)
+        algo.close()
         self.assertGreater(algo.max_distance, 10.)
 
     def check_online(self, algo):

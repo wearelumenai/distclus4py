@@ -19,7 +19,7 @@ class TestKMeans(unittest.TestCase):
         )
         algo.push(self.data[:5])
 
-        algo.run(rasync=True)
+        algo.play()
         algo.push(self.data[5:])
         time.sleep(.3)
         self.check_online(algo)

@@ -18,7 +18,7 @@ class TestMCMC(unittest.TestCase):
             init_k=2, b=1, amp=0.1, mcmc_iter=5, seed=653126513379
         )
         try:
-            algo.centroids()
+            algo.centroids
         except RuntimeError as x:
             self.assertEqual(x.args[0], b'clustering not started')
             return
@@ -30,8 +30,7 @@ class TestMCMC(unittest.TestCase):
         )
         algo.push(self.data[:5])
 
-        algo.run(rasync=True)
-
+        algo.play()
         algo.push(self.data[5:])
         time.sleep(.3)
         self.check_online(algo)
@@ -43,10 +42,11 @@ class TestMCMC(unittest.TestCase):
         )
         algo.push(self.data[:5])
 
-        with algo.run(rasync=True):
-            algo.push(self.data[5:])
-            time.sleep(.3)
-            self.check_online(algo)
+        algo.play()
+        algo.push(self.data[5:])
+        time.sleep(.3)
+        self.check_online(algo)
+        algo.close()
 
     def test_fit_predict(self):
         algo = MCMC(init_k=2, b=500, amp=0.1)
