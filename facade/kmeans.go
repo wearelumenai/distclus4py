@@ -5,6 +5,7 @@ import "C"
 import (
 	"distclus/core"
 	"distclus/kmeans"
+	"time"
 
 	"golang.org/x/exp/rand"
 )
@@ -47,7 +48,7 @@ func kmeansConf(
 			Iter:        (int)(iter),
 			IterFreq:    (float64)(iterFreq),
 			DataPerIter: (int)(dataPerIter),
-			Timeout:     (int)(timeout),
+			Timeout:     (time.Duration)(timeout),
 		},
 	}
 }

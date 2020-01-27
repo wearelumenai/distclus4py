@@ -5,6 +5,7 @@ import "C"
 import (
 	"distclus/core"
 	"distclus/mcmc"
+	"time"
 
 	"golang.org/x/exp/rand"
 )
@@ -82,7 +83,7 @@ func mcmcConf(par C.int,
 			Iter:        (int)(mcmcIter),
 			IterFreq:    (float64)(iterFreq),
 			DataPerIter: (int)(dataPerIter),
-			Timeout:     (int)(timeout),
+			Timeout:     (time.Duration)(timeout),
 		},
 	}
 }

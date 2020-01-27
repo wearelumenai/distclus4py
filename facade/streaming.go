@@ -5,7 +5,7 @@ import "C"
 import (
 	"distclus/core"
 	"distclus/streaming"
-	"fmt"
+	"time"
 
 	"golang.org/x/exp/rand"
 )
@@ -57,10 +57,7 @@ func streamConf(
 			Iter:        (int)(iter),
 			IterFreq:    (float64)(iterFreq),
 			DataPerIter: (int)(dataPerIter),
-			Timeout:     (int)(timeout),
-			StatusNotifier: func(status core.ClustStatus, err error) {
-				fmt.Println(status, err)
-			},
+			Timeout:     (time.Duration)(timeout),
 		},
 	}
 }
