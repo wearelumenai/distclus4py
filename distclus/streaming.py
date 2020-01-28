@@ -12,14 +12,14 @@ class Streaming(OnlineClust):
             seed=None,
             iter=0, iter_freq=0, data_per_iter=0, timeout=0,
             data=None,
-            inner_space=0, window=10
+            inner_space='vectors', window=10
     ):
         super(Streaming, self).__init__(
             lib.Streaming, space, data, bind.none2zero(seed),
             buffer_size, mu,
             sigma, outRatio, outAfter,
             iter, iter_freq, data_per_iter, timeout,
-            inner_space, window
+            bind.space(inner_space), window
         )
 
     @property

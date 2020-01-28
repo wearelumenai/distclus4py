@@ -28,7 +28,7 @@ extern struct Algo KMeans(
     space space, double* data, size_t l1, size_t l2, size_t l3,
     int par, initializer init, int initdescr, long seed,
     int k, int iter, int framesize,
-    float iterFreq, int dataPerIter, float timeout, int numCPU,
+    float iterFreq, int dataPerIter, int timeout, int numCPU,
     space innerSpace, int window
 );
 
@@ -37,7 +37,7 @@ extern struct Algo MCMC(
     int par, initializer init, int initdescr, long seed,
     size_t dim, int initK, int maxK, int iter, int framesize, double b,
     double amp, double norm, double nu,
-    float iterFreq, int dataPerIter, float timeout, int numCPU,
+    float iterFreq, int dataPerIter, int timeout, int numCPU,
     space innerSpace, int window
 );
 
@@ -46,7 +46,7 @@ extern struct Algo Streaming(
     long seed, int bufsize,
     double mu, double sigma,
     double outRatio , int outAfter,
-    int iter, float iterFreq, int dataPerIter, float timeout,
+    int iter, float iterFreq, int dataPerIter, int timeout,
     space innerSpace, int window
 );
 

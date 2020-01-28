@@ -13,8 +13,8 @@ class OnlineClust:
         self.builder = builder
         space = bind.space(space)
         data = as_float64(data)
-        arr, l1, l2, l3 = bind.to_c_array(data)
-        self.args = [space, arr, l1, l2, l3] + list(args)
+        data_array = bind.to_c_array(data)
+        self.args = [space, *data_array, *args]
         self._set_descr()
 
     def _set_descr(self):
