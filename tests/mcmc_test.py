@@ -4,6 +4,8 @@ import unittest
 from distclus import MCMC
 from tests.util import sample, rmse, nan
 
+import numpy as np
+
 
 class TestMCMC(unittest.TestCase):
     def setUp(self):
@@ -83,6 +85,23 @@ class TestMCMC(unittest.TestCase):
         self.assertRaises(ValueError, algo.predict_online, data=data)
         self.assertRaises(ValueError, algo.predict_online, data=data)
         self.assertRaises(ValueError, algo.push, data=data)
+
+    def test_combine(self):
+        algo = MCMC()
+        combined = algo.combine(
+            np.array([1, 2, 3]),
+            np.array([4, 5, 6]),
+            weight1=2
+        )
+        self.assertTrue(np.array_equal(combined, [2, 3, 4]))
+
+    def test_dist(self):
+        algo = MCMC()
+        dist = algo.dist(
+            np.array([1, 2, 3]),
+            np.array([4, 5, 6])
+        )
+        self.assertEqual(dist, 5.196152422706632)
 
     def check_static(self, algo):
         labels = algo.predict(self.data)

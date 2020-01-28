@@ -110,6 +110,11 @@ func realElemtsToArray(elemts []core.Elemt) (arr *C.double, l1, l2, l3 C.size_t)
 		var n2, n3 int
 		var slice []float64
 		switch e := elemts[0].(type) {
+		case float64:
+			slice, arr = makeArray(n1)
+			for i, value := range elemts {
+				slice[i] = value.(float64)
+			}
 		case []float64:
 			n2 = len(e)
 			slice, arr = makeArray(n1 * n2)
@@ -168,13 +173,45 @@ func ArrayToRealElemts(arr *C.double, l1, l2, l3 C.size_t) []core.Elemt {
 			n = n1 * n2 * n3
 			var slice = makeSlice(arr, n)
 			copyTo3D(data, slice, n2, n3)
-		} else {
+		} else if n2 > 0 {
 			n = n1 * n2
 			var slice = makeSlice(arr, n)
 			copyTo2D(data, slice, n2)
+		} else {
+			var slice = makeSlice(arr, n1)
+			for i, value := range slice {
+				data[i] = value
+			}
 		}
 	}
 	return data
+}
+
+// ArrayToRealElemt convert a C double array with the given 3 dimensions size
+// to element Go slice. If l3 = 0 element type is []float64 otherwise [][]float64.
+func ArrayToRealElemt(arr *C.double, l1, l2, l3 C.size_t) (elemt core.Elemt) {
+	var n1, n2, n3 = (int)(l1), (int)(l2), (int)(l3)
+	var n int
+	if n1 > 0 {
+		if n3 > 0 {
+			n = n1 * n2 * n3
+			var slice = makeSlice(arr, n)
+			elemt = make([][][]float64, n1)
+			copyTo3D(elemt.([]core.Elemt), slice, n2, n3)
+		} else if n2 > 0 {
+			n = n1 * n2
+			var slice = makeSlice(arr, n)
+			elemt = make([][]float64, n1)
+			copyTo2D(elemt.([]core.Elemt), slice, n2)
+		} else {
+			elemt = make([]float64, n1)
+			var slice = makeSlice(arr, n1)
+			for i, value := range slice {
+				elemt.([]float64)[i] = value
+			}
+		}
+	}
+	return
 }
 
 func copyTo2D(data []core.Elemt, slice []float64, n2 int) {

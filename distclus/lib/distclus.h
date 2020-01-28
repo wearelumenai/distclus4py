@@ -121,6 +121,29 @@ struct MCMC_return {
 
 extern struct MCMC_return MCMC(space p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, initializer p6, int p7, long int p8, size_t p9, int p10, int p11, int p12, int p13, double p14, double p15, double p16, double p17, float p18, int p19, int p20, int p21, space p22, int p23);
 
+/* Return type for Combine */
+struct Combine_return {
+	double* r0; /* combined */
+	size_t r1; /* c1 */
+	size_t r2; /* c2 */
+	size_t r3; /* c3 */
+	char* r4; /* errMsg */
+};
+
+// Combine combines two elements with respective weight
+
+extern struct Combine_return Combine(int p0, double* p1, size_t p2, size_t p3, size_t p4, int p5, double* p6, size_t p7, size_t p8, size_t p9, int p10);
+
+/* Return type for Dist */
+struct Dist_return {
+	double r0; /* dist */
+	char* r1; /* errMsg */
+};
+
+// Dist get space distance between two elemnts
+
+extern struct Dist_return Dist(int p0, double* p1, size_t p2, size_t p3, size_t p4, double* p5, size_t p6, size_t p7, size_t p8);
+
 // Push pushes an array of element to the algorithm corresponding to the given descriptor
 
 extern char* Push(int p0, double* p1, size_t p2, size_t p3, size_t p4);

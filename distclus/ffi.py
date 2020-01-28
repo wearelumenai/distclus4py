@@ -50,6 +50,31 @@ extern struct Algo Streaming(
     space innerSpace, int window
 );
 
+struct CombineResult {
+    double* combined;
+    size_t l1;
+    size_t l2;
+    size_t l3;
+    const char* err;
+};
+
+extern struct CombineResult Combine(
+    int descr,
+    double* data1, size_t l11, size_t l21, size_t l31, int weight1,
+    double* data2, size_t l12, size_t l22, size_t l32, int weight2
+);
+
+struct DistResult {
+    double dist;
+    const char* err;
+};
+
+extern struct DistResult Dist(
+    int descr,
+    double* data1, size_t l11, size_t l21, size_t l31,
+    double* data2, size_t l12, size_t l22, size_t l32
+);
+
 extern const char* Push(
     int descr, double* data, size_t l1, size_t l2, size_t l3
 );

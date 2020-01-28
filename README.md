@@ -137,6 +137,11 @@ with algo.run():
         # ...
 ```
 
+# Tool methods
+
+- combine(elt1, elt2, weigth1=1, weight2=1) elt: return space combination of elt1, elt2 with respective weights
+- dist(elt1, elt2) float: return space distance between elt1 and elt2
+
 # Algorithms
 
 The library offers 3 clustering algorithms :

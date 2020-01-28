@@ -2,7 +2,6 @@ package main
 
 import (
 	"distclus/core"
-	"fmt"
 	"math"
 	"strings"
 	"testing"
@@ -79,7 +78,6 @@ func TestInitFromDescr(t *testing.T) {
 			var zero = int(values[j] * precision)
 			var one = int(elemts1[i].([]float64)[j] * precision)
 			if zero != one {
-				fmt.Println(zero, one)
 				t.Error("error in initialization from descriptor")
 			}
 		}

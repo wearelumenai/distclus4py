@@ -122,6 +122,37 @@ class OnlineClust:
         labels = bind.Array(addr=result.labels, l1=result.n1)
         return bind.to_managed_array(labels)
 
+    def combine(self, elemt1, elemt2, weight1=1, weight2=1):
+        elemt1 = as_float64(elemt1)
+        elemt2 = as_float64(elemt2)
+        arr1, l11, l21, l31 = bind.to_c_array(elemt1)
+        arr2, l12, l22, l32 = bind.to_c_array(elemt2)
+        combine_result = lib.Combine(
+            self.descr,
+            arr1, l11, l21, l31, weight1,
+            arr2, l12, l22, l32, weight2
+        )
+        handle_error(combine_result.err)
+        combined = bind.Array(
+            addr=combine_result.combined,
+            l1=combine_result.l1, l2=combine_result.l2, l3=combine_result.l3
+        )
+        result = bind.to_managed_array(combined)
+        return result[0]
+
+    def dist(self, elemt1, elemt2):
+        elemt1 = as_float64(elemt1)
+        elemt2 = as_float64(elemt2)
+        arr1, l11, l21, l31 = bind.to_c_array(elemt1)
+        arr2, l12, l22, l32 = bind.to_c_array(elemt2)
+        dist_result = lib.Dist(
+            self.descr,
+            arr1, l11, l21, l31,
+            arr2, l12, l22, l32
+        )
+        handle_error(dist_result.err)
+        return dist_result.dist
+
     @property
     def alive(self):
         return lib.Alive(self.descr)

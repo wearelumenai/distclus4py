@@ -7,10 +7,42 @@ package main
 //#include "bind.h"
 import "C"
 import (
+	"distclus/core"
 	"fmt"
 	"runtime"
 	"strings"
 )
+
+// Combine combines two elements with respective weight
+//export Combine
+func Combine(
+	descr C.int,
+	data1 *C.double, l11 C.size_t, l21 C.size_t, l31 C.size_t, weight1 C.int,
+	data2 *C.double, l12 C.size_t, l22 C.size_t, l32 C.size_t, weight2 C.int,
+) (combined *C.double, c1 C.size_t, c2 C.size_t, c3 C.size_t, errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var elemt1 = ArrayToRealElemt(data1, l11, l21, l31)
+	var elemt2 = ArrayToRealElemt(data2, l12, l22, l32)
+	var _, space = GetAlgorithm((AlgorithmDescr)(descr))
+	var combine = space.Combine(elemt1, int(weight1), elemt2, int(weight2))
+	combined, c1, c2, c3 = realElemtsToArray([]core.Elemt{combine})
+	return
+}
+
+// Dist get space distance between two elemnts
+//export Dist
+func Dist(
+	descr C.int,
+	data1 *C.double, l11 C.size_t, l21 C.size_t, l31 C.size_t,
+	data2 *C.double, l12 C.size_t, l22 C.size_t, l32 C.size_t,
+) (dist C.double, errMsg *C.char) {
+	defer handlePanic(descr, &errMsg)
+	var elemt1 = ArrayToRealElemt(data1, l11, l21, l31)
+	var elemt2 = ArrayToRealElemt(data2, l12, l22, l32)
+	var _, space = GetAlgorithm((AlgorithmDescr)(descr))
+	dist = (C.double)(space.Dist(elemt1, elemt2))
+	return
+}
 
 // Push pushes an array of element to the algorithm corresponding to the given descriptor
 //export Push
