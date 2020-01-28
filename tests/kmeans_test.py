@@ -2,7 +2,7 @@ import time
 import unittest
 
 from distclus import KMeans
-from tests.util import sample, rmse
+from tests.util import sample, rmse, nan
 
 
 class TestKMeans(unittest.TestCase):
@@ -36,6 +36,18 @@ class TestKMeans(unittest.TestCase):
         algo.fit(self.data)
 
         self.assertEqual(5, algo.iterations)
+
+    def test_nan(self):
+        data = nan()
+        self.assertRaises(ValueError, KMeans, data=data)
+
+        algo = KMeans()
+        self.assertRaises(ValueError, algo.fit, data=data)
+        self.assertRaises(ValueError, algo.predict, data=data)
+        self.assertRaises(ValueError, algo.predict_online, data=data)
+        self.assertRaises(ValueError, algo.predict_online, data=data)
+        self.assertRaises(ValueError, algo.push, data=data)
+
 
     def check_static(self, algo):
         labels = algo.predict(self.data)

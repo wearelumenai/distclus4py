@@ -5,6 +5,8 @@ from distclus.bind import handle_error
 from . import bind
 from .ffi import lib, ffi
 
+from numpy import isnan
+
 
 class OnlineClust:
     """Base class for algorithm implementation using a native library"""
@@ -231,8 +233,13 @@ class OnlineClust:
 
 
 def as_float64(data):
-    if data is not None and data.dtype != 'float64':
-        data = data.astype('float64')
+    if data is not None:
+        if isnan(data).any():
+            raise ValueError("data contains NaN value(s)")
+
+        elif data.dtype != 'float64':
+            data = data.astype('float64')
+
     return data
 
 

@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 
 from distclus.streaming import Streaming
-from tests.util import sample, rmse
+from tests.util import sample, rmse, nan
 
 
 class TestStreaming(unittest.TestCase):
@@ -20,6 +20,17 @@ class TestStreaming(unittest.TestCase):
         self.check_online(algo)
         algo.close()
         self.assertGreater(algo.max_distance, 10.)
+
+    def test_nan(self):
+        data = nan()
+        self.assertRaises(ValueError, Streaming, data=data)
+
+        algo = Streaming()
+        self.assertRaises(ValueError, algo.fit, data=data)
+        self.assertRaises(ValueError, algo.predict, data=data)
+        self.assertRaises(ValueError, algo.predict_online, data=data)
+        self.assertRaises(ValueError, algo.predict_online, data=data)
+        self.assertRaises(ValueError, algo.push, data=data)
 
     def check_online(self, algo):
         centroids, labels = algo.predict_online(self.data)

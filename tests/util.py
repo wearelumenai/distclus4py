@@ -16,3 +16,7 @@ def rmse(data, centroids, labels):
     for i, label in enumerate(labels):
         mse += np.linalg.norm(centroids[label] - data[i]) / len(data)
     return np.math.sqrt(mse)
+
+
+def nan():
+    return np.array([1, np.nan, 2])

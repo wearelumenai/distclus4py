@@ -2,7 +2,7 @@ import time
 import unittest
 
 from distclus import MCMC
-from tests.util import sample, rmse
+from tests.util import sample, rmse, nan
 
 
 class TestMCMC(unittest.TestCase):
@@ -72,6 +72,17 @@ class TestMCMC(unittest.TestCase):
 
         centroids = algo.centroids
         self.assertGreater(len(centroids), 1)
+
+    def test_nan(self):
+        data = nan()
+        self.assertRaises(ValueError, MCMC, data=data)
+
+        algo = MCMC()
+        self.assertRaises(ValueError, algo.fit, data=data)
+        self.assertRaises(ValueError, algo.predict, data=data)
+        self.assertRaises(ValueError, algo.predict_online, data=data)
+        self.assertRaises(ValueError, algo.predict_online, data=data)
+        self.assertRaises(ValueError, algo.push, data=data)
 
     def check_static(self, algo):
         labels = algo.predict(self.data)
