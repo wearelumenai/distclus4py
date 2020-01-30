@@ -32,23 +32,6 @@ class TestStreaming(unittest.TestCase):
         self.assertRaises(ValueError, algo.predict_online, data=data)
         self.assertRaises(ValueError, algo.push, data=data)
 
-    def test_combine(self):
-        algo = Streaming()
-        combined = algo.combine(
-            np.array([1, 2, 3]),
-            np.array([4, 5, 6]),
-            weight1=2
-        )
-        self.assertTrue(np.array_equal(combined, [2, 3, 4]))
-
-    def test_dist(self):
-        algo = Streaming()
-        dist = algo.dist(
-            np.array([1, 2, 3]),
-            np.array([4, 5, 6])
-        )
-        self.assertEqual(dist, 5.196152422706632)
-
     def check_online(self, algo):
         centroids, labels = algo.predict_online(self.data)
         self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
