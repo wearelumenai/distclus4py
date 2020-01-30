@@ -7,7 +7,6 @@ package main
 //#include "bind.h"
 import "C"
 import (
-	"distclus/core"
 	"fmt"
 	"runtime"
 	"strings"
@@ -25,7 +24,7 @@ func Combine(
 	var elemt2 = ArrayToRealElemt(data2, l12, l22, l32)
 	var _, space = GetAlgorithm((AlgorithmDescr)(descr))
 	var combine = space.Combine(elemt1, int(weight1), elemt2, int(weight2))
-	combined, c1, c2, c3 = realElemtsToArray([]core.Elemt{combine})
+	combined, c1, c2, c3 = realElemtToArray(combine)
 	return
 }
 

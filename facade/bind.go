@@ -131,6 +131,44 @@ func realElemtsToArray(elemts []core.Elemt) (arr *C.double, l1, l2, l3 C.size_t)
 	return
 }
 
+// realElemtToArray converts core.Elemt Go Slice to a C double array.
+// Element type must be []float64 or [][]float64.
+// It returns a pointer to the C array in row major layout
+// and the size of its 3 dimensions, if element type os []float64 then l3 = 0.
+func realElemtToArray(elemt core.Elemt) (arr *C.double, l1, l2, l3 C.size_t) {
+	var slice []float64
+	var n1, n2, n3 int
+	switch elemt.(type) {
+	case []float64:
+		var data = elemt.([]float64)
+		n1 = len(data)
+		slice, arr = makeArray(n1)
+		for i, value := range data {
+			slice[i] = value
+		}
+	case [][]float64:
+		var data = elemt.([][]float64)
+		n1, n2 = len(data), len(data[0])
+		slice, arr = makeArray(n1 * n2)
+		for i, d := range data {
+			copy(slice[i*n2:(i+1)*n2], d)
+		}
+	case [][][]float64:
+		var data = elemt.([][][]float64)
+		n1, n2, n3 = len(data), len(data[0]), len(data[0][0])
+		slice, arr = makeArray(n1 * n2 * n3)
+		for i, d := range data {
+			for j, v := range d {
+				copy(slice[i*n2*n3+j*n3:i*n2*n3+(j+1)*n3], v)
+			}
+		}
+	default:
+		panic(errUnauthorizedType)
+	}
+	l1, l2, l3 = C.size_t(n1), C.size_t(n2), C.size_t(n3)
+	return
+}
+
 // errUnauthorizedType describes an error when using
 // an unauthorized type in slice to array conversion
 var errUnauthorizedType = errors.New("unauthorized element type")
@@ -196,19 +234,33 @@ func ArrayToRealElemt(arr *C.double, l1, l2, l3 C.size_t) (elemt core.Elemt) {
 		if n3 > 0 {
 			n = n1 * n2 * n3
 			var slice = makeSlice(arr, n)
-			elemt = make([][][]float64, n1)
-			copyTo3D(elemt.([]core.Elemt), slice, n2, n3)
+			var data = make([][][]float64, n1)
+			for i := range data {
+				var sl = make([][]float64, n2)
+				for j := range sl {
+					sl[j] = make([]float64, n3)
+					copy(sl[j], slice[i*n2*n3+j*n3:i*n2*n3+(j+1)*n3])
+				}
+				data[i] = sl
+			}
+			elemt = data
 		} else if n2 > 0 {
 			n = n1 * n2
 			var slice = makeSlice(arr, n)
-			elemt = make([][]float64, n1)
-			copyTo2D(elemt.([]core.Elemt), slice, n2)
+			var data = make([][]float64, n1)
+			for i := range data {
+				var sl = make([]float64, n2)
+				copy(sl, slice[i*n2:(i+1)*n2])
+				data[i] = sl
+			}
+			elemt = data
 		} else {
-			elemt = make([]float64, n1)
+			var data = make([]float64, n1)
 			var slice = makeSlice(arr, n1)
 			for i, value := range slice {
-				elemt.([]float64)[i] = value
+				data[i] = value
 			}
+			elemt = data
 		}
 	}
 	return

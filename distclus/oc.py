@@ -137,8 +137,7 @@ class OnlineClust:
             addr=combine_result.combined,
             l1=combine_result.l1, l2=combine_result.l2, l3=combine_result.l3
         )
-        result = bind.to_managed_array(combined)
-        return result[0]
+        return bind.to_managed_array(combined)
 
     def dist(self, elemt1, elemt2):
         elemt1 = as_float64(elemt1)
