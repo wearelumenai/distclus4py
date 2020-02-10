@@ -85,11 +85,11 @@ class OnlineClust:
         handle_error(err)
         return self.centroids
 
-    def wait(self):
+    def wait(self, iter=0, duration=0):
         """
         Wait the online algorithm
         """
-        err = lib.Wait(self.descr)
+        err = lib.Wait(self.descr, iter, duration)
         handle_error(err)
         return self.centroids
 
