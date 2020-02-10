@@ -29,7 +29,7 @@ func TestStreaming(t *testing.T) {
 	}
 
 	Push(descr, arr, 1, l2, l3)
-	Play(descr)
+	Play(descr, 0, 0)
 	Push(descr, arr, l1, l2, l3)
 	time.Sleep(time.Second)
 	var maxDistance, _ = RuntimeFigure(descr, 2)

@@ -79,9 +79,9 @@ extern const char* Push(
     int descr, double* data, size_t l1, size_t l2, size_t l3
 );
 
-extern const char* Play(int descr);
+extern const char* Play(int descr, int iter, int duration);
 
-extern const char* Wait(int descr);
+extern const char* Wait(int descr, int iter, int duration);
 
 extern const char* Pause(int descr);
 
@@ -91,7 +91,7 @@ extern const int Alive(int descr);
 
 extern const char* Status(int descr);
 
-extern const char* Batch(int descr);
+extern const char* Batch(int descr, int iter, int duration);
 
 extern const char* Init(int descr);
 

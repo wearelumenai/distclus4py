@@ -53,7 +53,7 @@ func TestInitFromDescr(t *testing.T) {
 		0, 0, 0, 0,
 	)
 	_ = Push(descr0, arr, l1, l2, l3)
-	_ = Batch(descr0)
+	_ = Batch(descr0, 0, 0)
 	var centroids0, c01, c02, c03, _ = Centroids(descr0)
 	var descr1, _ = MCMC(
 		0, arr, l1, l2, l3,
@@ -64,7 +64,7 @@ func TestInitFromDescr(t *testing.T) {
 		0, 0, 0, 0,
 	)
 	Free(descr0)
-	_ = Batch(descr1)
+	_ = Batch(descr1, 0, 0)
 	var centroids1, c11, c12, c13, _ = Centroids(descr1)
 
 	var elemts0 = ArrayToRealElemts(centroids0, c01, c02, c03)
@@ -109,7 +109,7 @@ func assertAlgo(t *testing.T, d int, elemts []core.Elemt) {
 	if msgPush != nil {
 		t.Error("unexpected error")
 	}
-	var msgRun = Play(descr)
+	var msgRun = Play(descr, 0, 0)
 	if msgRun != nil {
 		t.Error("unexpected error")
 	}

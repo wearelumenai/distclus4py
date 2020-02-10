@@ -22,6 +22,19 @@ class Streaming(OnlineClust):
             bind.space(inner_space), window
         )
 
+    def fit(self, data, iter=0, duration=0):
+        """
+        Sequentially push train data, run in synchronous mode
+        and close the algorithm.
+        :param data: train data
+        :return: centroids
+        """
+        self._set_descr()
+        self.push(data)
+        if iter == 0:
+            iter = len(data)
+        return self.batch(iter, duration)
+
     @property
     def max_distance(self):
         """

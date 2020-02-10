@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"runtime"
 	"strings"
+	"time"
 )
 
 // Combine combines two elements with respective weight
@@ -61,10 +62,10 @@ func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (e
 
 // Play runs the algorithm corresponding to the given descriptor
 //export Play
-func Play(descr C.int) (errMsg *C.char) {
+func Play(descr C.int, iter C.int, duration C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Play()
+	var err = algo.Play(int(iter), time.Duration(duration))
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}
@@ -138,10 +139,10 @@ func Stop(descr C.int) (errMsg *C.char) {
 
 // Wait waits the algorithm corresponding to the given descriptor
 //export Wait
-func Wait(descr C.int) (errMsg *C.char) {
+func Wait(descr C.int, iter C.int, duration C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Wait()
+	var err = algo.Wait(int(iter), time.Duration(duration))
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}
@@ -174,10 +175,10 @@ func Init(descr C.int) (errMsg *C.char) {
 
 // Batch batches the algorithm corresponding to the given descriptor
 //export Batch
-func Batch(descr C.int) (errMsg *C.char) {
+func Batch(descr C.int, iter C.int, duration C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Batch()
+	var err = algo.Batch(int(iter), time.Duration(duration))
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}

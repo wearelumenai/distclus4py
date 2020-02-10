@@ -150,7 +150,7 @@ extern char* Push(int p0, double* p1, size_t p2, size_t p3, size_t p4);
 
 // Play runs the algorithm corresponding to the given descriptor
 
-extern char* Play(int p0);
+extern char* Play(int p0, int p1, int p2);
 
 /* Return type for Predict */
 struct Predict_return {
@@ -199,7 +199,7 @@ extern char* Stop(int p0);
 
 // Wait waits the algorithm corresponding to the given descriptor
 
-extern char* Wait(int p0);
+extern char* Wait(int p0, int p1, int p2);
 
 // Pause pauses the algorithm corresponding to the given descriptor
 
@@ -211,7 +211,7 @@ extern char* Init(int p0);
 
 // Batch batches the algorithm corresponding to the given descriptor
 
-extern char* Batch(int p0);
+extern char* Batch(int p0, int p1, int p2);
 
 // Close batches the algorithm corresponding to the given descriptor
 

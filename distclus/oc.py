@@ -28,7 +28,7 @@ class OnlineClust:
         self.descr = algo.descr
         self.__finalize = weakref.finalize(self, _make_free(self.descr))
 
-    def fit(self, data):
+    def fit(self, data, iter=0, duration=0):
         """
         Sequentially push train data, run in synchronous mode
         and close the algorithm.
@@ -37,7 +37,7 @@ class OnlineClust:
         """
         self._set_descr()
         self.push(data)
-        return self.batch()
+        return self.batch(iter, duration)
 
     def push(self, data):
         """
@@ -58,22 +58,22 @@ class OnlineClust:
         """
         return self.play() if rasync else self.batch()
 
-    def play(self):
+    def play(self, iter=0, duration=0):
         """
         Play the online algorithm
         """
-        err = lib.Play(self.descr)
+        err = lib.Play(self.descr, iter, duration)
         handle_error(err)
         return self
 
     def __call__(self):
         return self.play()
 
-    def batch(self):
+    def batch(self, iter=0, duration=0):
         """
         Batch the online algorithm
         """
-        err = lib.Batch(self.descr)
+        err = lib.Batch(self.descr, iter, duration)
         handle_error(err)
         return self.centroids
 
