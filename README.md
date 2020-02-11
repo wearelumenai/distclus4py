@@ -43,7 +43,7 @@ Static learning means that when the algorithm is run, all train data are already
 (this is the common way to do machine learning).
 
 The algorithms in this library implements the following interface, compliant with [scikit-learn](https://scikit-learn.org) :
- - ```fit(data)```: Compute the clustering using *data* as training samples.
+ - ```fit(data, iter=0, duration=0)```: Compute the clustering using *data* as training samples. *iter* and *duration* are optional and respectively the maximal number of iterations to do and timeout in seconds.
  - ```predict(data)```: Predict the closest cluster each sample in *data* belongs to.
  - ```cluster_centers_``` : Once the model is fitted, the centers of the clusters.
 
@@ -56,8 +56,8 @@ train = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.]]
 test = np.array([[1., 4.], [13., 2.]])
 
 algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
-algo.fit(train)
-print(algo.centroids)
+centroids = algo.fit(train)
+print(centroids)
 labels = algo.predict(train)
 print(labels)
 
@@ -79,7 +79,8 @@ Online learning occurs when new data are used to update the model after the algo
 
 The algorithm provided by this library implements a specific interface, dedicated to online learning :
  - ```push(data)``` : Push data to feed the algorithm and update the model
- - ```run(rasync=True)``` : Start the algorithm in asynchronous (background) mode
+ - ```play(iter=0, duration=0)``` : Start the algorithm in asynchronous (background) mode. *iter* and *duration* are optional and respectively the maximal number of iterations to do and timeout in seconds
+ - ```wait(iter=0, duration=0)``` : in addition to play, wait permits to block until a convergeance is done (related to *iter* in algo constructor or method param) or a timeout occures. *iter* and *duration* are optional and respectively the maximal number of iterations to do and timeout in seconds. Returns centroids.
  - ```predict_online(data)``` : Get a tuple current centroids and labels of the closest one for the given data
  - ```close()``` : Stop the background algorithm and release resources
  - ```centroids``` : Get the current centroids
@@ -100,9 +101,9 @@ data = np.array([[[0., 3.], [15., 5.]], [[0., 5.], [0., 8.]], [[15., 1.], [15., 
 algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
 # algorithm initialization needs data
 algo.push(data[0])
-algo.run()
+algo.play()
 for i, chunk in enumerate(data):
-    time.sleep(.5) # wait for the algorithm to converge
+    algo.wait(duration=0.5) # wait for the algorithm to converge
     # simulate new data arrival
     centroids, labels = algo.predict_online(chunk)
     algo.push(chunk)
@@ -131,7 +132,7 @@ chunk 6 8
 The ```run``` method returns a context manager that can be used to properly close the algorithm :
 
 ```python
-with algo.run():
+with algo.play():
     for chunk in data:
         algo.push(chunk)
         # ...
@@ -196,7 +197,7 @@ Parameter name | values | default | description
 ```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
 ```buffer_size``` | *int* | *100* | the size of the buffer used to store samples before being consumed by the algorithm *
 ```mu``` | *float* | *.5* | the mean of the Gaussian
-```sigma``` | *float* | *.1* | the variance of the Gaussian 
+```sigma``` | *float* | *.1* | the variance of the Gaussian
 ```outRatio``` | *float* | *2* | threshold to detect an outlier
 ```outAfter``` | *int* | *7.* | number of observations before to detect outliers
 ```seed``` | *int* | *None* | the seed of the pseudo-random number generator. If None the seed is computed from epoch.
@@ -255,7 +256,7 @@ def LateMCMC(init_k, **kwargs):
 
 data = np.array([[0., 3.], [15., 5.], [0., 5.], [0., 8.], [15., 1.], [15., 6.], [1., 4.], [13., 2.]])
 algo = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
-algo.run()
+algo.play()
 algo.push(data) # the algorithm will initialize properly
 # ...
 algo.close()
@@ -279,7 +280,7 @@ from distclus import Batch, MCMC
 data = np.array([[[0., 3.], [15., 5.], [0., 5.], [0., 8.]], [[15., 1.], [15., 6.], [1., 4.], [13., 2.]]])
 
 algo = Batch(MCMC, init_k=2, b=500, amp=0.1, mcmc_iter=10)
-with algo.run():
+with algo.play():
     for chunk in data:
         algo.push(chunk)
         centroids, labels = algo.predict_online(chunk)
