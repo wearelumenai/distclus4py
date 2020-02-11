@@ -195,8 +195,10 @@ Parameter name | values | default | description
 -------------- | ------ | ------- | -----------
 ```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
 ```buffer_size``` | *int* | *100* | the size of the buffer used to store samples before being consumed by the algorithm *
-```b``` | *float* | *.95* | the value of the *b* parameter
-```labmd``` | *float* | *3.* | the value of the *lambda* parameter
+```mu``` | *float* | *.5* | the mean of the Gaussian
+```sigma``` | *float* | *.1* | the variance of the Gaussian 
+```outRatio``` | *float* | *2* | threshold to detect an outlier
+```outAfter``` | *int* | *7.* | number of observations before to detect outliers
 ```seed``` | *int* | *None* | the seed of the pseudo-random number generator. If None the seed is computed from epoch.
 ```data``` | *ndarray* | *None* | data to be pushed at algorithm construction time (optional)
 ```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
