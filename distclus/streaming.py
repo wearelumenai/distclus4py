@@ -29,11 +29,10 @@ class Streaming(OnlineClust):
         :param data: train data
         :return: centroids
         """
-        self._set_descr()
-        self.push(data)
         if iter == 0:
-            iter = len(data)
-        return self.batch(iter, duration)
+            iter = len(data) - (1 if self.status == 'Created' else 0)
+
+        return super().fit(data, iter, duration)
 
     @property
     def max_distance(self):

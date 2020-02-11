@@ -65,7 +65,7 @@ func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (e
 func Play(descr C.int, iter C.int, duration C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Play(int(iter), time.Duration(duration))
+	var err = algo.Play(int(iter), time.Duration(duration*1e9))
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}
@@ -142,7 +142,7 @@ func Stop(descr C.int) (errMsg *C.char) {
 func Wait(descr C.int, iter C.int, duration C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Wait(int(iter), time.Duration(duration))
+	var err = algo.Wait(int(iter), time.Duration(duration*1e9))
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}
@@ -178,7 +178,7 @@ func Init(descr C.int) (errMsg *C.char) {
 func Batch(descr C.int, iter C.int, duration C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Batch(int(iter), time.Duration(duration))
+	var err = algo.Batch(int(iter), time.Duration(duration*1e9))
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}
