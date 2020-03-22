@@ -10,7 +10,7 @@ class TestBind(unittest.TestCase):
     def test_initializer(self):
         self.assertEqual((lib.I_RANDOM, 0), bind.initializer("random"))
         self.assertEqual((lib.I_GIVEN, 0), bind.initializer("given"))
-        self.assertEqual((lib.I_KMEANSPP, 0), bind.initializer("kmeanspp"))
+        self.assertEqual((lib.I_KMEANS_PP, 0), bind.initializer("kmeans_pp"))
 
         class a:
             def __init__(self):

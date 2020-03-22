@@ -7,7 +7,7 @@ class MCMC(OnlineClust):
     """Proxy a MCMC algorithm implemented in native library"""
 
     def __init__(
-            self, space='vectors', par=True, init='kmeanspp',
+            self, space='vectors', par=True, init='kmeans_pp',
             init_k=8, max_k=16, mcmc_iter=100, frame_size=None, b=1.,
             amp=1., dim=None, nu=3., norm=2., seed=None,
             iter_freq=0, data_per_iter=0, timeout=0, num_cpu=0,

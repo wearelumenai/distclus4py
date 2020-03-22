@@ -23,7 +23,7 @@ func initializer(i C.initializer, initDescr C.int) (fi core.Initializer) {
 		fi = kmeans.RandInitializer
 	case C.I_GIVEN:
 		fi = kmeans.GivenInitializer
-	case C.I_KMEANSPP:
+	case C.I_KMEANS_PP:
 		fi = kmeans.PPInitializer
 	case C.I_OC:
 		fi = descrInitializer(initDescr)

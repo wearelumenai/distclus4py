@@ -154,7 +154,7 @@ The library offers 3 clustering algorithms :
 
  ```python
 class distclus.MCMC(
-    space='vectors', par=True, init='kmeanspp',
+    space='vectors', par=True, init='kmeans_pp',
     init_k=8, max_k=16, mcmc_iter=100, frame_size=None,
     b=1., amp=1., dim=None, nu=3., norm=2,
     seed=None, data=None, inner_space=None, window=None
@@ -165,7 +165,7 @@ Parameter name | values | default | description *
 -------------- | ------ | ------- | -------------
 ```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
 ```par``` | *boolean* | *True* | indicates if computation is done in parallel
-```init``` | *'kmeanspp', 'random', 'given'* | *'kmeanspp'* | the way initial centers are chosen
+```init``` | *'kmeans_pp', 'random', 'given'* | *'kmeans_pp'* | the way initial centers are chosen
 ```init_k``` | *int* | *8* | the number of initial centers
 ```max_k``` | *int* | *16* | the maximum number of center
 ```mcmc_iter``` | *int* | *100* | the number of mcmc iteration
@@ -210,7 +210,7 @@ Parameter name | values | default | description
 ```python
 
 class distclus.KMeans(
-    space='vectors', par=True, init='kmeanspp',
+    space='vectors', par=True, init='kmeans_pp',
     k=16, nb_iter=100, frame_size=None,
     seed=None, data=None, inner_space=None, window=None
 )
@@ -220,7 +220,7 @@ Parameter name | values | default | description
 -------------- | ------ | ------- | -----------
 ```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
 ```par``` | *boolean* | *True* | indicates if computation is done in parallel
-```init``` | *'kmeanspp', 'random', 'given'* | *'kmeanspp'* | the way initial centers are chosen
+```init``` | *'kmeans_pp', 'random', 'given'* | *'kmeans_pp'* | the way initial centers are chosen
 ```k``` | *int* | *8* | the number of clusters
 ```nb_iter``` | *int* | *100* | the number of iteration
 ```frame_size``` | *int* | *None* | the number of data used for computation: <br> - None means all data, <br> - N > 0 means the N last pushed values

@@ -84,8 +84,8 @@ def initializer(name):
         return lib.I_RANDOM, 0
     elif name == 'given':
         return lib.I_GIVEN, 0
-    elif name in ['kmeanspp', 'kmeans++']:
-        return lib.I_KMEANSPP, 0
+    elif name in ['kmeans_pp', 'kmeans++']:
+        return lib.I_KMEANS_PP, 0
 
 
 def space(name):
