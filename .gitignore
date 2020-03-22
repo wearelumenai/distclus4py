@@ -7,3 +7,6 @@ build/
 __pycache__/
 coverage.out
 venv
+dist
+.pytest_cache
+.vscode
