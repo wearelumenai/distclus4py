@@ -2,8 +2,9 @@ package main
 
 import (
 	"C"
-	"distclus/core"
 	"testing"
+
+	"github.com/wearelumenai/distclus/core"
 
 	"golang.org/x/exp/rand"
 )

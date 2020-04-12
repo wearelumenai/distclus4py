@@ -3,9 +3,10 @@ package main
 //#include "bind.h"
 import "C"
 import (
-	"distclus/core"
-	"distclus/mcmc"
 	"time"
+
+	"github.com/wearelumenai/distclus/core"
+	"github.com/wearelumenai/distclus/mcmc"
 
 	"golang.org/x/exp/rand"
 )

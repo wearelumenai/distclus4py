@@ -1,11 +1,12 @@
 package main
 
 import (
-	"distclus/core"
 	"math"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/wearelumenai/distclus/core"
 )
 
 func TestCreateError(t *testing.T) {

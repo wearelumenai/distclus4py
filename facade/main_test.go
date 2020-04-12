@@ -1,11 +1,12 @@
 package main
 
 import (
-	"distclus/core"
-	"distclus/euclid"
-	"distclus/kmeans"
-	"distclus/mcmc"
 	"testing"
+
+	"github.com/wearelumenai/distclus/core"
+	"github.com/wearelumenai/distclus/euclid"
+	"github.com/wearelumenai/distclus/kmeans"
+	"github.com/wearelumenai/distclus/mcmc"
 )
 
 func TestRegisterAlgorithm(t *testing.T) {

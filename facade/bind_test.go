@@ -1,11 +1,13 @@
 package main
 
 import (
-	"distclus/core"
-	"distclus/kmeans"
 	"reflect"
 	"testing"
 	"unsafe"
+
+	"github.com/wearelumenai/distclus/kmeans"
+
+	"github.com/wearelumenai/distclus/core"
 )
 
 func TestIntsToArray(t *testing.T) {

@@ -3,15 +3,16 @@ package main
 //#include "bind.h"
 import "C"
 import (
-	"distclus/core"
-	"distclus/cosinus"
-	"distclus/dtw"
-	"distclus/euclid"
-	"distclus/figures"
-	"distclus/kmeans"
 	"fmt"
 	"reflect"
 	"unsafe"
+
+	"github.com/wearelumenai/distclus/core"
+	"github.com/wearelumenai/distclus/cosinus"
+	"github.com/wearelumenai/distclus/dtw"
+	"github.com/wearelumenai/distclus/euclid"
+	"github.com/wearelumenai/distclus/figures"
+	"github.com/wearelumenai/distclus/kmeans"
 
 	"github.com/pkg/errors"
 )

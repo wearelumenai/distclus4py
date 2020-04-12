@@ -4,9 +4,10 @@ package main
 //#include <string.h>
 import "C"
 import (
-	"distclus/core"
 	"sync"
 	"unsafe"
+
+	"github.com/wearelumenai/distclus/core"
 )
 
 // These functions maintain a global table for allocated algorithms.

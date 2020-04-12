@@ -14,8 +14,6 @@ It is based on a Go library (https://github.com/wearelumenai/distclus) compiled 
 
 # Installation
 
-The repo should be clone inside your GO environnment. One standard location for it is to put it inside `~/go/src`
-
 > We highly recommand you start by using a [virtual environment](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments) in order to keep safe your main environment
 
 1. Get source code
