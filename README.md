@@ -152,7 +152,7 @@ The library offers 3 clustering algorithms :
 
  ```python
 class distclus.MCMC(
-    space='vectors', par=True, init='kmeans_pp',
+    space='euclid', par=True, init='kmeans_pp',
     init_k=8, max_k=16, mcmc_iter=100, frame_size=None,
     b=1., amp=1., dim=None, nu=3., norm=2,
     seed=None, data=None, inner_space=None, window=None
@@ -161,7 +161,7 @@ class distclus.MCMC(
 
 Parameter name | values | default | description *
 -------------- | ------ | ------- | -------------
-```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
+```space``` | *'euclid', 'cosinus','series'* | *'euclid'* | how distance and barycenters are computed
 ```par``` | *boolean* | *True* | indicates if computation is done in parallel
 ```init``` | *'kmeans_pp', 'random', 'given'* | *'kmeans_pp'* | the way initial centers are chosen
 ```init_k``` | *int* | *8* | the number of initial centers
@@ -174,7 +174,7 @@ Parameter name | values | default | description *
 ```norm``` | *float* | *2.* | the power of the p-norm used to compute the loss generalized mean
 ```seed``` | *int* | *None* | the seed of the pseudo-random number generator. If None the seed is computed from epoch.
 ```data``` | *ndarray* | *None* | data to be pushed at algorithm construction time (optional)
-```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
+```inner_space``` | *'euclid', 'cosinus'* | *None* | inner space when *```space='series'```*
 ```window``` | *int* | *None* | size of window for *```space='series'```*
 
 <sup>* for more information on parameter values please refer to the article https://hal.inria.fr/hal-01264233</sup>
@@ -184,7 +184,7 @@ Parameter name | values | default | description *
 
 ```python
 class distclus.Streaming(
-    space='vectors', buffer_size=0,
+    space='euclid', buffer_size=0,
     b=.95, lambd=3.,
     seed=None, data=None, inner_space=0, window=10
 )
@@ -192,7 +192,7 @@ class distclus.Streaming(
 
 Parameter name | values | default | description
 -------------- | ------ | ------- | -----------
-```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
+```space``` | *'euclid', 'cosinus','series'* | *'euclid'* | how distance and barycenters are computed
 ```buffer_size``` | *int* | *100* | the size of the buffer used to store samples before being consumed by the algorithm *
 ```mu``` | *float* | *.5* | the mean of the Gaussian
 ```sigma``` | *float* | *.1* | the variance of the Gaussian
@@ -200,7 +200,7 @@ Parameter name | values | default | description
 ```outAfter``` | *int* | *7.* | number of observations before to detect outliers
 ```seed``` | *int* | *None* | the seed of the pseudo-random number generator. If None the seed is computed from epoch.
 ```data``` | *ndarray* | *None* | data to be pushed at algorithm construction time (optional)
-```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
+```inner_space``` | *'euclid', 'cosinus'* | *None* | inner space when *```space='series'```*
 ```window``` | *int* | *None* | size of window for *```space='series'```*
 
 ## KMeans
@@ -208,7 +208,7 @@ Parameter name | values | default | description
 ```python
 
 class distclus.KMeans(
-    space='vectors', par=True, init='kmeans_pp',
+    space='euclid', par=True, init='kmeans_pp',
     k=16, nb_iter=100, frame_size=None,
     seed=None, data=None, inner_space=None, window=None
 )
@@ -216,7 +216,7 @@ class distclus.KMeans(
 
 Parameter name | values | default | description
 -------------- | ------ | ------- | -----------
-```space``` | *'vectors', 'cosinus','series'* | *'vectors'* | how distance and barycenters are computed
+```space``` | *'euclid', 'cosinus','series'* | *'euclid'* | how distance and barycenters are computed
 ```par``` | *boolean* | *True* | indicates if computation is done in parallel
 ```init``` | *'kmeans_pp', 'random', 'given'* | *'kmeans_pp'* | the way initial centers are chosen
 ```k``` | *int* | *8* | the number of clusters
@@ -224,7 +224,7 @@ Parameter name | values | default | description
 ```frame_size``` | *int* | *None* | the number of data used for computation: <br> - None means all data, <br> - N > 0 means the N last pushed values
 ```seed``` | *int* | *None* | the seed of the pseudo-random number generator. If None the seed is computed from epoch.
 ```data``` | *ndarray* | *None* | data to be pushed at algorithm construction time (optional)
-```inner_space``` | *'vectors', 'cosinus'* | *None* | inner space when *```space='series'```*
+```inner_space``` | *'euclid', 'cosinus'* | *None* | inner space when *```space='series'```*
 ```window``` | *int* | *None* | size of window for *```space='series'```*
 
 # Advanced usage

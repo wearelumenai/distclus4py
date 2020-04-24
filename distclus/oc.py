@@ -11,7 +11,7 @@ from numpy import isnan
 class OnlineClust:
     """Base class for algorithm implementation using a native library"""
 
-    def __init__(self, builder, space='vectors', data=None, *args):
+    def __init__(self, builder, space='euclid', data=None, *args):
         self.builder = builder
         space = bind.space(space)
         data = as_float64(data)

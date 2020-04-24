@@ -19,7 +19,7 @@ class TestBind(unittest.TestCase):
         self.assertEqual((lib.I_OC, 1), bind.initializer(a()))
 
     def test_space(self):
-        self.assertEqual(lib.S_VECTORS, bind.space("vectors"))
+        self.assertEqual(lib.S_EUCLID, bind.space("euclid"))
         self.assertEqual(lib.S_SERIES, bind.space("series"))
 
     def test_oc(self):

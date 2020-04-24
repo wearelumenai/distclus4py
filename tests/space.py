@@ -21,7 +21,7 @@ class TestSpace(unittest.TestCase):
 
     def test(self):
         for algo in [Streaming, MCMC, KMeans]:
-            for i, space in enumerate(['vectors', 'series']):
+            for i, space in enumerate(['euclid', 'series']):
                 dim = i + 1
                 _algo, arr1, arr2 = get_algo_data(algo, space, dim)
                 self.check_dist(_algo, arr1, arr2)

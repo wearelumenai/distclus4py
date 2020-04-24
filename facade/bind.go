@@ -316,7 +316,7 @@ func getSpace(spaceName C.space, window C.int, innerSpace C.space) core.Space {
 			Window:     (int)(window),
 		}
 		return dtw.NewSpace(conf)
-	case C.S_VECTORS:
+	case C.S_EUCLID:
 		return euclid.NewSpace()
 	case C.S_COSINUS:
 		return cosinus.NewSpace()

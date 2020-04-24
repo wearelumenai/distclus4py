@@ -7,10 +7,10 @@ class KMeans(OnlineClust):
     """Proxy a KMEANS algorithm implemented in native library"""
 
     def __init__(
-            self, space='vectors', par=True, init='kmeans_pp', init_descr=None,
+            self, space='euclid', par=True, init='kmeans_pp', init_descr=None,
             k=16, nb_iter=100, frame_size=None, seed=None,
             iter_freq=0, data_per_iter=0, timeout=0, num_cpu=0, iter=None,
-            data=None, inner_space='vectors', window=None
+            data=None, inner_space='euclid', window=None
     ):
         super(KMeans, self).__init__(
             lib.KMeans, space, data, bind.par(par),

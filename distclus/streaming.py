@@ -7,12 +7,12 @@ class Streaming(OnlineClust):
     """Proxy a Streaming algorithm implemented in native library"""
 
     def __init__(
-            self, space='vectors',
+            self, space='euclid',
             buffer_size=100, mu=.5, sigma=0.1, outRatio=2., outAfter=5,
             seed=None,
             iter=0, iter_freq=0, data_per_iter=0, timeout=0,
             data=None,
-            inner_space='vectors', window=10
+            inner_space='euclid', window=10
     ):
         super(Streaming, self).__init__(
             lib.Streaming, space, data, bind.none2zero(seed),
