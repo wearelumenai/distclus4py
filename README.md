@@ -8,7 +8,7 @@ This library implements online clustering algorithms, especially based on the co
 It is based on a Go library (https://github.com/wearelumenai/distclus) compiled in native format and binded with CFFI.
 
 # Requirements
-* A Go proper environment must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
+* A Go proper environment (we tested with version 1.14) must be installed and configured before proceeding to the library installation. Refer to https://golang.org/doc/install.
 * Although the Makefile should do it, it is better to install previously and separately the [distclus](https://github.com/wearelumenai/distclus) library for now.
 * Python3 (we recommand you to install a virtualenv in order to not corrupt your environment)
 
