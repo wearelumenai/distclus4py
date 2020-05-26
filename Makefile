@@ -10,7 +10,7 @@ configci:
 
 .PHONY: distclus/lib/distclus.so
 distclus/lib/distclus.so: ${GOSRC}
-	go get -v -u ./facade
+	go get -v ./facade
 	go build -buildmode=c-shared -x -o distclus/lib/distclus.so github.com/wearelumenai/distclus4py/facade
 	cp facade/bind.h distclus/lib/
 
