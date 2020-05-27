@@ -11,6 +11,8 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/wearelumenai/distclus/core"
 )
 
 // Combine combines two elements with respective weight
@@ -62,10 +64,10 @@ func Push(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (e
 
 // Play runs the algorithm corresponding to the given descriptor
 //export Play
-func Play(descr C.int, iter C.int, duration C.int) (errMsg *C.char) {
+func Play(descr C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Play(int(iter), time.Duration(duration*1e9))
+	var err = algo.Play()
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}
@@ -75,35 +77,28 @@ func Play(descr C.int, iter C.int, duration C.int) (errMsg *C.char) {
 // Predict returns the centroids and labels for the input data
 // from the algorithm corresponding to the given descriptor
 //export Predict
-func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (labels *C.long, n1 C.size_t, centers *C.double, c1 C.size_t, c2 C.size_t, c3 C.size_t, errMsg *C.char) {
-	defer handlePanic(descr, &errMsg)
+func Predict(descr C.int, data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) (labels *C.long, n1 C.size_t, centers *C.double, c1 C.size_t, c2 C.size_t, c3 C.size_t) {
 	var elemts = ArrayToRealElemts(data, l1, l2, l3)
 	var algo, space = GetAlgorithm((AlgorithmDescr)(descr))
-	var centroids, err = algo.Centroids()
+	var centroids = algo.Centroids()
 
-	if err != nil {
-		errMsg = setError((AlgorithmDescr)(descr), err.Error())
-	} else {
+	if len(centroids) > 0 {
 		var predictions, _ = centroids.ParMapLabel(elemts, space, runtime.NumCPU())
 		labels, n1 = intsToArray(predictions)
 		centers, c1, c2, c3 = realElemtsToArray(centroids)
 	}
+
 	return
 }
 
 // Centroids returns the centroids
 // from the algorithm corresponding to the given descriptor
 //export Centroids
-func Centroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t, errMsg *C.char) {
-	defer handlePanic(descr, &errMsg)
+func Centroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size_t) {
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var centroids, err = algo.Centroids()
+	var centroids = algo.Centroids()
 
-	if err != nil {
-		errMsg = setError((AlgorithmDescr)(descr), err.Error())
-	} else {
-		data, l1, l2, l3 = realElemtsToArray(centroids)
-	}
+	data, l1, l2, l3 = realElemtsToArray(centroids)
 
 	return
 }
@@ -111,16 +106,11 @@ func Centroids(descr C.int) (data *C.double, l1 C.size_t, l2 C.size_t, l3 C.size
 // RuntimeFigure returns runtime figures
 // from the algorithm corresponding to the given descriptor
 //export RuntimeFigure
-func RuntimeFigure(descr C.int, fig C.figure) (value C.double, errMsg *C.char) {
-	defer handlePanic(descr, &errMsg)
+func RuntimeFigure(descr C.int, fig C.figure) (value C.double) {
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var rfigures, err = algo.RuntimeFigures()
+	var rfigures = algo.RuntimeFigures()
 
-	if err != nil {
-		errMsg = setError((AlgorithmDescr)(descr), err.Error())
-	} else {
-		value = (C.double)(rfigures[figure(fig)])
-	}
+	value = (C.double)(rfigures[figure(fig)])
 
 	return
 }
@@ -142,7 +132,8 @@ func Stop(descr C.int) (errMsg *C.char) {
 func Wait(descr C.int, iter C.int, duration C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Wait(int(iter), time.Duration(duration*1e9))
+	var iterFinishing = core.IterFinishing{Iter: (int)(iter)}
+	var err = algo.Wait(iterFinishing, time.Duration(duration*1e9))
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}
@@ -175,22 +166,10 @@ func Init(descr C.int) (errMsg *C.char) {
 
 // Batch batches the algorithm corresponding to the given descriptor
 //export Batch
-func Batch(descr C.int, iter C.int, duration C.int) (errMsg *C.char) {
+func Batch(descr C.int) (errMsg *C.char) {
 	defer handlePanic(descr, &errMsg)
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Batch(int(iter), time.Duration(duration*1e9))
-	if err != nil {
-		errMsg = setError((AlgorithmDescr)(descr), err.Error())
-	}
-	return
-}
-
-// Close batches the algorithm corresponding to the given descriptor
-//export Close
-func Close(descr C.int) (errMsg *C.char) {
-	defer handlePanic(descr, &errMsg)
-	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	var err = algo.Close()
+	var err = algo.Batch()
 	if err != nil {
 		errMsg = setError((AlgorithmDescr)(descr), err.Error())
 	}
@@ -199,16 +178,21 @@ func Close(descr C.int) (errMsg *C.char) {
 
 // Status return the status of the algorithm corresponding to the given descriptor
 //export Status
-func Status(descr C.int) *C.char {
+func Status(descr C.int) (stat *C.char, err *C.char) {
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	return C.CString(algo.Status().String())
+	var status = algo.Status()
+	stat = C.CString(status.Value.String())
+	if status.Error != nil {
+		err = C.CString(status.Error.Error())
+	}
+	return
 }
 
 // Alive true iif the algorithm corresponding to the given descriptor is running
 //export Alive
 func Alive(descr C.int) C.int {
 	var algo, _ = GetAlgorithm((AlgorithmDescr)(descr))
-	if algo.Alive() {
+	if algo.Status().Alive() {
 		return C.int(1)
 	}
 	return C.int(0)

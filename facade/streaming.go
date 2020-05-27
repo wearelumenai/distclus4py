@@ -54,7 +54,7 @@ func streamConf(
 		OutRatio:   float64(outRatio),
 		OutAfter:   int(outAfter),
 		RGen:       rgen,
-		Conf: core.Conf{
+		CtrlConf: core.CtrlConf{
 			Iter:        (int)(iter),
 			IterFreq:    (float64)(iterFreq),
 			DataPerIter: (int)(dataPerIter),

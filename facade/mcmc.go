@@ -80,7 +80,7 @@ func mcmcConf(par C.int,
 		Norm: (float64)(norm), InitK: (int)(initK), MaxK: (int)(maxK),
 		RGen:   rgen,
 		NumCPU: (int)(numCPU),
-		Conf: core.Conf{
+		CtrlConf: core.CtrlConf{
 			Iter:        (int)(mcmcIter),
 			IterFreq:    (float64)(iterFreq),
 			DataPerIter: (int)(dataPerIter),

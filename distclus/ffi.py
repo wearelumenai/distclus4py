@@ -11,8 +11,9 @@ typedef enum {I_RANDOM, I_GIVEN, I_KMEANS_PP, I_OC} initializer;
 typedef enum {S_EUCLID, S_COSINUS, S_SERIES} space;
 typedef enum {O_KMEANS, O_MCMC, O_KNN, O_STREAMING} oc;
 typedef enum {
-    F_ITERATIONS, F_ACCEPTATIONS, F_MAX_DISTANCE, F_PUSHED_DATA,
-    F_LAST_ITERATIONS, F_DURATION, F_LAST_DURATION
+    F_ITERATIONS, F_PUSHED_DATA, F_DURATION, F_LAST_DATA_TIME, F_ACCEPTATIONS,
+    F_LAMBDA, F_RHO, F_RGIBBS, F_TIME,
+    F_MAX_DISTANCE
 } figure;
 
 extern void FreeRealArray(double* p0);
@@ -79,7 +80,7 @@ extern const char* Push(
     int descr, double* data, size_t l1, size_t l2, size_t l3
 );
 
-extern const char* Play(int descr, int iter, int duration);
+extern const char* Play(int descr);
 
 extern const char* Wait(int descr, int iter, int duration);
 
@@ -89,9 +90,14 @@ extern const char* Stop(int descr);
 
 extern const int Alive(int descr);
 
-extern const char* Status(int descr);
+struct StatusResult {
+    char *status;
+    char *error;
+};
 
-extern const char* Batch(int descr, int iter, int duration);
+extern struct StatusResult Status(int descr);
+
+extern const char* Batch(int descr);
 
 extern const char* Init(int descr);
 
@@ -100,7 +106,6 @@ struct CentroidsResult {
     size_t l1;
     size_t l2;
     size_t l3;
-    const char* err;
 };
 
 extern struct CentroidsResult Centroids(int descr);
@@ -112,21 +117,13 @@ struct PredictResult {
     size_t l1;
     size_t l2;
     size_t l3;
-    const char* err;
 };
 
 extern struct PredictResult Predict(
     int descr, double* data, size_t l1, size_t l2, size_t l3
 );
 
-struct FigureResult {
-    double value;
-    const char *err;
-};
-
-extern struct FigureResult RuntimeFigure(int descr, figure fig);
-
-extern const char* Close(int descr);
+extern const double RuntimeFigure(int descr, figure fig);
 
 extern void Free(int descr);
 """)

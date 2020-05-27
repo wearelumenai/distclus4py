@@ -15,17 +15,6 @@ class TestMCMC(unittest.TestCase):
         algo = MCMC(init_k=2)
         self.assertTrue(algo.descr >= 1)
 
-    def test_centroids_error(self):
-        algo = MCMC(
-            init_k=2, b=1, amp=0.1, mcmc_iter=5, seed=653126513379
-        )
-        try:
-            algo.centroids
-        except RuntimeError as x:
-            self.assertEqual(x.args[0], b'clustering not started')
-            return
-        self.fail()
-
     def test_push_run_centroids_predict(self):
         algo = MCMC(
             init_k=2, b=500, amp=1, seed=654126513379
@@ -36,7 +25,7 @@ class TestMCMC(unittest.TestCase):
         algo.push(self.data[5:])
         time.sleep(.3)
         self.check_online(algo)
-        algo.close()
+        algo.stop()
 
     def test_context(self):
         algo = MCMC(
@@ -48,7 +37,7 @@ class TestMCMC(unittest.TestCase):
         algo.push(self.data[5:])
         time.sleep(.3)
         self.check_online(algo)
-        algo.close()
+        algo.stop()
 
     def test_fit_predict(self):
         algo = MCMC(init_k=2, b=500, amp=0.1)
@@ -82,15 +71,13 @@ class TestMCMC(unittest.TestCase):
         algo = MCMC()
         self.assertRaises(ValueError, algo.fit, data=data)
         self.assertRaises(ValueError, algo.predict, data=data)
-        self.assertRaises(ValueError, algo.predict_online, data=data)
-        self.assertRaises(ValueError, algo.predict_online, data=data)
         self.assertRaises(ValueError, algo.push, data=data)
 
     def check_static(self, algo):
-        labels = algo.predict(self.data)
+        _, labels = algo.predict(self.data)
         centroids = algo.centroids
         self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
 
     def check_online(self, algo):
-        centroids, labels = algo.predict_online(self.data)
+        centroids, labels = algo.predict(self.data)
         self.assertLessEqual(rmse(self.data, centroids, labels), 1.)

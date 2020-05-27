@@ -39,9 +39,9 @@ class MCMC(OnlineClust):
         return self._figure(lib.F_RHO)
 
     @property
-    def time(self):
-        return self._figure(lib.F_TIME)
-
-    @property
     def rGibbs(self):
         return self._figure(lib.F_RGIBBS)
+
+    @property
+    def time(self):
+        return self._figure(lib.F_TIME)

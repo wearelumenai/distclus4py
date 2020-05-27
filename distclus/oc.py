@@ -28,7 +28,7 @@ class OnlineClust:
         self.descr = algo.descr
         self.__finalize = weakref.finalize(self, _make_free(self.descr))
 
-    def fit(self, data, iter=0, duration=0):
+    def fit(self, data):
         """
         Sequentially push train data, run in synchronous mode
         and close the algorithm.
@@ -37,7 +37,7 @@ class OnlineClust:
         """
         self._set_descr()
         self.push(data)
-        return self.batch(iter, duration)
+        return self.batch()
 
     def push(self, data):
         """
@@ -58,22 +58,22 @@ class OnlineClust:
         """
         return self.play() if rasync else self.batch()
 
-    def play(self, iter=0, duration=0):
+    def play(self):
         """
         Play the online algorithm
         """
-        err = lib.Play(self.descr, iter, duration)
+        err = lib.Play(self.descr)
         handle_error(err)
         return self
 
     def __call__(self):
         return self.play()
 
-    def batch(self, iter=0, duration=0):
+    def batch(self):
         """
         Batch the online algorithm
         """
-        err = lib.Batch(self.descr, iter, duration)
+        err = lib.Batch(self.descr)
         handle_error(err)
         return self.centroids
 
@@ -108,19 +108,6 @@ class OnlineClust:
         err = lib.Init(self.descr)
         handle_error(err)
         return self.centroids
-
-    def predict(self, data):
-        """
-        Get labels for input data
-        :param data: input data
-        :return: output labels
-        """
-        data = as_float64(data)
-        arr, l1, l2, l3 = bind.to_c_array(data)
-        result = lib.Predict(self.descr, arr, l1, l2, l3)
-        handle_error(result.err)
-        labels = bind.Array(addr=result.labels, l1=result.n1)
-        return bind.to_managed_array(labels)
 
     def combine(self, elemt1, elemt2, weight1=1, weight2=1):
         elemt1 = as_float64(elemt1)
@@ -158,13 +145,14 @@ class OnlineClust:
 
     @property
     def status(self):
-        return ffi.string(lib.Status(self.descr))
+        status = lib.Status(self.descr)
+        status, err = ffi.string(status), ffi.string(err)
+        return status, err
 
     @property
     def centroids(self):
         """Get centroids"""
         result = lib.Centroids(self.descr)
-        handle_error(result.err)
         centroids = bind.Array(
             addr=result.centroids,
             l1=result.l1, l2=result.l2, l3=result.l3
@@ -176,7 +164,7 @@ class OnlineClust:
         """Get cluster centers (equivalent to centroids attribute)"""
         return self.centroids
 
-    def predict_online(self, data):
+    def predict(self, data):
         """
         Get centroids and labels for input data
         :param data: input data
@@ -185,7 +173,6 @@ class OnlineClust:
         data = as_float64(data)
         arr, l1, l2, l3 = bind.to_c_array(data)
         result = lib.Predict(self.descr, arr, l1, l2, l3)
-        handle_error(result.err)
         labels = bind.Array(
             addr=result.labels,
             l1=result.n1
@@ -195,14 +182,6 @@ class OnlineClust:
             l1=result.l1, l2=result.l2, l3=result.l3
         )
         return bind.to_managed_array(centroids), bind.to_managed_array(labels)
-
-    def close(self):
-        """
-        Close the algorithm and release resources
-        """
-        err = lib.Close(self.descr)
-        handle_error(err)
-        return self.centroids
 
     def __enter__(self):
         return self
@@ -214,10 +193,7 @@ class OnlineClust:
         self.stop()
 
     def _figure(self, name):
-        figure = lib.RuntimeFigure(self.descr, name)
-        if figure.err:
-            raise RuntimeError(figure.err)
-        return figure.value
+        return lib.RuntimeFigure(self.descr, name)
 
     @property
     def iterations(self):
@@ -234,25 +210,11 @@ class OnlineClust:
         return self._figure(lib.F_PUSHED_DATA)
 
     @property
-    def last_iterations(self):
-        """
-        Get the number of last execution iterations
-        """
-        return self._figurer(lib.F_LAST_ITERATIONS)
-
-    @property
     def duration(self):
         """
         Get the duration so far
         """
-        return self._figure(F_DURATION)
-
-    @property
-    def last_duration(self):
-        """
-        Get the last execution duration
-        """
-        return self._figure(lib.F_LAST_DURATION)
+        return self._figure(lib.F_DURATION)
 
     @property
     def last_data_time(self):

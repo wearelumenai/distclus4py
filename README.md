@@ -56,10 +56,10 @@ test = np.array([[1., 4.], [13., 2.]])
 algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
 centroids = algo.fit(train)
 print(centroids)
-labels = algo.predict(train)
+_, labels = algo.predict(train)
 print(labels)
 
-predictions = algo.predict(test)
+_, predictions = algo.predict(test)
 print(predictions)
 ```
 output :
@@ -79,8 +79,8 @@ The algorithm provided by this library implements a specific interface, dedicate
  - ```push(data)``` : Push data to feed the algorithm and update the model
  - ```play(iter=0, duration=0)``` : Start the algorithm in asynchronous (background) mode. *iter* and *duration* are optional and respectively the maximal number of iterations to do and timeout in seconds
  - ```wait(iter=0, duration=0)``` : in addition to play, wait permits to block until a convergeance is done (related to *iter* in algo constructor or method param) or a timeout occures. *iter* and *duration* are optional and respectively the maximal number of iterations to do and timeout in seconds. Returns centroids.
- - ```predict_online(data)``` : Get a tuple current centroids and labels of the closest one for the given data
- - ```close()``` : Stop the background algorithm and release resources
+ - ```predict(data)``` : Get a tuple current centroids and labels of the closest one for the given data
+ - ```stop()``` : Stop the background algorithm and release resources
  - ```centroids``` : Get the current centroids
 
  Before starting the algorithm (with the ```run``` method),
@@ -103,13 +103,13 @@ algo.play()
 for i, chunk in enumerate(data):
     algo.wait(duration=0.5) # wait for the algorithm to converge
     # simulate new data arrival
-    centroids, labels = algo.predict_online(chunk)
+    centroids, labels = algo.predict(chunk)
     algo.push(chunk)
     print("chunk", i)
     print(centroids)
     print(labels)
 
-algo.close()
+algo.stop()
 ```
 output :
 ```
@@ -257,7 +257,7 @@ algo = LateMCMC(init_k=2, mcmc_iter=20, seed=166348259467)
 algo.play()
 algo.push(data) # the algorithm will initialize properly
 # ...
-algo.close()
+algo.stop()
 ```
 
 ```LateAlgo``` has also a context manager :
@@ -281,7 +281,7 @@ algo = Batch(MCMC, init_k=2, b=500, amp=0.1, mcmc_iter=10)
 with algo.play():
     for chunk in data:
         algo.push(chunk)
-        centroids, labels = algo.predict_online(chunk)
+        centroids, labels = algo.predict(chunk)
         # ...
 ```
 
@@ -292,3 +292,9 @@ with historical data if necessary.
 ```python
 algo = Batch(MCMC, frame_size=100, init_k=2, b=500, amp=0.1, mcmc_iter=10)
 ```
+
+## Perspectives
+
+- algorithm plugin system
+- status notifier callback
+- algorithm finishing

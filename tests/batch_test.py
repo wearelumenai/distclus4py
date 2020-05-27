@@ -30,5 +30,5 @@ class TestBatch(unittest.TestCase):
             self.check_online(algo, batch_data)
 
     def check_online(self, algo, batch_data):
-        centroids, labels = algo.predict_online(batch_data)
+        centroids, labels = algo.predict(batch_data)
         self.assertLessEqual(rmse(batch_data, centroids, labels), 1.)

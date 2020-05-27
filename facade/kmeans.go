@@ -45,7 +45,7 @@ func kmeansConf(
 		Par: par != 0, K: (int)(k), FrameSize: (int)(framesize),
 		RGen:   rand.New(rand.NewSource((uint64)(seed))),
 		NumCPU: (int)(numCPU),
-		Conf: core.Conf{
+		CtrlConf: core.CtrlConf{
 			Iter:        (int)(iter),
 			IterFreq:    (float64)(iterFreq),
 			DataPerIter: (int)(dataPerIter),

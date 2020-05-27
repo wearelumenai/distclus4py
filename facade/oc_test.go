@@ -54,8 +54,8 @@ func TestInitFromDescr(t *testing.T) {
 		0, 0, 0, 0,
 	)
 	_ = Push(descr0, arr, l1, l2, l3)
-	_ = Batch(descr0, 0, 0)
-	var centroids0, c01, c02, c03, _ = Centroids(descr0)
+	_ = Batch(descr0)
+	var centroids0, c01, c02, c03 = Centroids(descr0)
 	var descr1, _ = MCMC(
 		0, arr, l1, l2, l3,
 		0, 3, descr0, 6305689164243,
@@ -65,8 +65,8 @@ func TestInitFromDescr(t *testing.T) {
 		0, 0, 0, 0,
 	)
 	Free(descr0)
-	_ = Batch(descr1, 0, 0)
-	var centroids1, c11, c12, c13, _ = Centroids(descr1)
+	_ = Batch(descr1)
+	var centroids1, c11, c12, c13 = Centroids(descr1)
 
 	var elemts0 = ArrayToRealElemts(centroids0, c01, c02, c03)
 	var elemts1 = ArrayToRealElemts(centroids1, c11, c12, c13)
@@ -101,25 +101,19 @@ func TestRunSeries(t *testing.T) {
 
 func assertAlgo(t *testing.T, d int, elemts []core.Elemt) {
 	var descr = cInt(d)
-	var _, _, _, _, msgErr = Centroids(descr)
-	if m := goString(msgErr); m != "clustering not started" {
-		t.Error("expected error", m)
-	}
+	var _, _, _, _ = Centroids(descr)
 	var arr, l1, l2, l3 = realElemtsToArray(elemts)
 	var msgPush = Push(descr, arr, l1, l2, l3)
 	if msgPush != nil {
 		t.Error("unexpected error")
 	}
-	var msgRun = Play(descr, 0, 0)
+	var msgRun = Play(descr)
 	if msgRun != nil {
 		t.Error("unexpected error")
 	}
 	time.Sleep(500 * time.Millisecond)
 	Stop(descr)
-	var centroids, c1, c2, c3, msgCentroids = Centroids(descr)
-	if msgCentroids != nil {
-		t.Error("unexpected error")
-	}
+	var centroids, c1, c2, c3 = Centroids(descr)
 	if c1 != 2 {
 		t.Error("Expected 2 got", c1)
 	}
@@ -127,18 +121,12 @@ func assertAlgo(t *testing.T, d int, elemts []core.Elemt) {
 		t.Error("Expected", l2, "got", c2)
 	}
 	assertCentroids(ArrayToRealElemts(centroids, c1, c2, c3), t)
-	var labels, l, _, _, _, _, msgPredict = Predict(descr, arr, l1, l2, l3)
-	if msgPredict != nil {
-		t.Error("unexpected error")
-	}
+	var labels, l, _, _, _, _ = Predict(descr, arr, l1, l2, l3)
 	if l != l1 {
 		t.Error("Expected", l1, "got", l)
 	}
 	assertLabels(arrayToInts(labels, l), t)
-	var iters, msgFig = RuntimeFigure(descr, 0)
-	if msgFig != nil {
-		t.Error("unexpected error")
-	}
+	var iters = RuntimeFigure(descr, 0)
 	if iters < 50 {
 		t.Error("Expected more iterations got", iters)
 	}

@@ -24,13 +24,13 @@ class TestSeries(unittest.TestCase):
         algo.push(self.data[5:])
         time.sleep(.3)
         self.check_online(algo)
-        algo.close()
+        algo.stop()
 
     def check_static(self, algo):
-        labels = algo.predict(self.data)
+        _, labels = algo.predict(self.data)
         centroids = algo.centroids
         self.assertLessEqual(rmse(self.data, centroids, labels), 2.)
 
     def check_online(self, algo):
-        centroids, labels = algo.predict_online(self.data)
+        centroids, labels = algo.predict(self.data)
         self.assertLessEqual(rmse(self.data, centroids, labels), 2.)

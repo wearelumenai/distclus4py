@@ -29,10 +29,10 @@ func TestStreaming(t *testing.T) {
 	}
 
 	Push(descr, arr, 1, l2, l3)
-	Play(descr, 0, 0)
+	Play(descr)
 	Push(descr, arr, l1, l2, l3)
 	time.Sleep(time.Second)
-	var maxDistance, _ = RuntimeFigure(descr, 2)
+	var maxDistance = RuntimeFigure(descr, 2)
 	if maxDistance < .1 {
 		t.Error("max distance should be grater than .1")
 	}

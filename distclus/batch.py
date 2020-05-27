@@ -53,12 +53,6 @@ class Batch:
     def predict(self, data):
         return self._algo.predict(data)
 
-    def predict_online(self, data):
-        return self._algo.predict_online(data)
-
-    def close(self):
-        pass
-
     @property
     def centroids(self):
         return self._algo.centroids

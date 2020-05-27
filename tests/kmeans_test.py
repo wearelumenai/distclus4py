@@ -25,7 +25,7 @@ class TestKMeans(unittest.TestCase):
         algo.push(self.data[5:])
         time.sleep(.3)
         self.check_online(algo)
-        algo.close()
+        algo.stop()
 
     def test_fit_predict(self):
         algo = KMeans(k=2)
@@ -46,15 +46,13 @@ class TestKMeans(unittest.TestCase):
         algo = KMeans()
         self.assertRaises(ValueError, algo.fit, data=data)
         self.assertRaises(ValueError, algo.predict, data=data)
-        self.assertRaises(ValueError, algo.predict_online, data=data)
-        self.assertRaises(ValueError, algo.predict_online, data=data)
         self.assertRaises(ValueError, algo.push, data=data)
 
     def check_static(self, algo):
-        labels = algo.predict(self.data)
+        _, labels = algo.predict(self.data)
         centroids = algo.centroids
         self.assertLessEqual(rmse(self.data, centroids, labels), 1.)
 
     def check_online(self, algo):
-        centroids, labels = algo.predict_online(self.data)
+        centroids, labels = algo.predict(self.data)
         self.assertLessEqual(rmse(self.data, centroids, labels), 1.)

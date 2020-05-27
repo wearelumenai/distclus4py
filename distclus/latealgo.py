@@ -49,8 +49,10 @@ class LateAlgo:
         """
         if self._algo:
             self._algo.run(rasync)
+
         elif rasync:
             self._latestart = True
+
         else:
             self._raise_unitialized()
 
@@ -77,34 +79,14 @@ class LateAlgo:
 
     def predict(self, data):
         """
-        Predict the labels from wrapped algorithm if initialized
+        Predict the centroids and labels from wrapped algorithm if initialized
         otherwise raise an error
         :param data: input data
-        :return: labels
+        :return: centroids and labels
         """
         if self._algo:
             return self._algo.predict(data)
 
-        self._raise_unitialized()
-
-    def predict_online(self, data):
-        """
-        Get centroids and predict the labels from wrapped algorithm
-        if initialized otherwise raise an error
-        :param data: input data
-        :return: centroids and output labels
-        """
-        if self._algo:
-            return self._algo.predict_online(data)
-
-        self._raise_unitialized()
-
-    def close(self):
-        """
-        Close the wrapped algorithm and release resources
-        """
-        if self._algo:
-            return self._algo.close()
         self._raise_unitialized()
 
     def stop(self):
@@ -154,4 +136,4 @@ class LateAlgo:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()
+        self.stop()

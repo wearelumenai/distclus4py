@@ -150,7 +150,7 @@ extern char* Push(int p0, double* p1, size_t p2, size_t p3, size_t p4);
 
 // Play runs the algorithm corresponding to the given descriptor
 
-extern char* Play(int p0, int p1, int p2);
+extern char* Play(int p0);
 
 /* Return type for Predict */
 struct Predict_return {
@@ -160,7 +160,6 @@ struct Predict_return {
 	size_t r3; /* c1 */
 	size_t r4; /* c2 */
 	size_t r5; /* c3 */
-	char* r6; /* errMsg */
 };
 
 // Predict returns the centroids and labels for the input data
@@ -174,7 +173,6 @@ struct Centroids_return {
 	size_t r1; /* l1 */
 	size_t r2; /* l2 */
 	size_t r3; /* l3 */
-	char* r4; /* errMsg */
 };
 
 // Centroids returns the centroids
@@ -182,16 +180,10 @@ struct Centroids_return {
 
 extern struct Centroids_return Centroids(int p0);
 
-/* Return type for RuntimeFigure */
-struct RuntimeFigure_return {
-	double r0; /* value */
-	char* r1; /* errMsg */
-};
-
 // RuntimeFigure returns runtime figures
 // from the algorithm corresponding to the given descriptor
 
-extern struct RuntimeFigure_return RuntimeFigure(int p0, figure p1);
+extern double RuntimeFigure(int p0, figure p1);
 
 // Stop terminates the algorithm corresponding to the given descriptor
 
@@ -211,15 +203,17 @@ extern char* Init(int p0);
 
 // Batch batches the algorithm corresponding to the given descriptor
 
-extern char* Batch(int p0, int p1, int p2);
+extern char* Batch(int p0);
 
-// Close batches the algorithm corresponding to the given descriptor
-
-extern char* Close(int p0);
+/* Return type for Status */
+struct Status_return {
+	char* r0; /* stat */
+	char* r1; /* err */
+};
 
 // Status return the status of the algorithm corresponding to the given descriptor
 
-extern char* Status(int p0);
+extern struct Status_return Status(int p0);
 
 // Alive true iif the algorithm corresponding to the given descriptor is running
 

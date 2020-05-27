@@ -11,8 +11,9 @@ import (
 	"github.com/wearelumenai/distclus/cosinus"
 	"github.com/wearelumenai/distclus/dtw"
 	"github.com/wearelumenai/distclus/euclid"
-	"github.com/wearelumenai/distclus/figures"
 	"github.com/wearelumenai/distclus/kmeans"
+	"github.com/wearelumenai/distclus/mcmc"
+	"github.com/wearelumenai/distclus/streaming"
 
 	"github.com/pkg/errors"
 )
@@ -34,10 +35,7 @@ func initializer(i C.initializer, initDescr C.int) (fi core.Initializer) {
 
 func descrInitializer(initDescr C.int) core.Initializer {
 	var algo, _ = GetAlgorithm((int)(initDescr))
-	var centroids, err = algo.Centroids()
-	if err != nil {
-		panic(err)
-	}
+	var centroids = algo.Centroids()
 	return centroids.Initializer
 }
 
@@ -45,29 +43,25 @@ func descrInitializer(initDescr C.int) core.Initializer {
 func figure(figure C.figure) (name string) {
 	switch figure {
 	case C.F_ITERATIONS:
-		name = figures.Iterations
-	case C.F_ACCEPTATIONS:
-		name = figures.Acceptations
-	case C.F_LAMBDA:
-		name = figures.Lambda
-	case C.F_RHO:
-		name = figures.Rho
-	case C.F_RGIBBS:
-		name = figures.RGibbs
-	case C.F_TIME:
-		name = figures.Time
-	case C.F_MAX_DISTANCE:
-		name = figures.MaxDistance
+		name = core.Iterations
 	case C.F_PUSHED_DATA:
-		name = figures.PushedData
-	case C.F_LAST_ITERATIONS:
-		name = figures.LastIterations
+		name = core.PushedData
 	case C.F_DURATION:
-		name = figures.Duration
-	case C.F_LAST_DURATION:
-		name = figures.LastDuration
+		name = core.Duration
 	case C.F_LAST_DATA_TIME:
-		name = figures.LastDataTime
+		name = core.LastDataTime
+	case C.F_ACCEPTATIONS:
+		name = mcmc.Acceptations
+	case C.F_LAMBDA:
+		name = mcmc.Lambda
+	case C.F_RHO:
+		name = mcmc.Rho
+	case C.F_RGIBBS:
+		name = mcmc.RGibbs
+	case C.F_TIME:
+		name = mcmc.Time
+	case C.F_MAX_DISTANCE:
+		name = streaming.MaxDistance
 	}
 	return
 }
