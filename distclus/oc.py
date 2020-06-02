@@ -5,7 +5,7 @@ from distclus.bind import handle_error
 from . import bind
 from .ffi import lib, ffi
 
-from numpy import isnan
+import numpy as np
 
 
 class OnlineClust:
@@ -226,11 +226,18 @@ class OnlineClust:
 
 def as_float64(data):
     if data is not None:
-        if isnan(data).any():
-            raise ValueError("data contains NaN value(s)")
 
-        elif data.dtype != 'float64':
+        if type(data) is not np.ndarray:
+            data = np.array(data, dtype='float64')
+
+        elif data.dtype != 'float64': # ensure float64 data type
             data = data.astype('float64')
+
+        if not data.data.c_contiguous:
+            data = np.ascontiguousarray(data)
+
+        if np.isnan(data).any():
+            raise ValueError('data contains NaN value(s)')
 
     return data
 
