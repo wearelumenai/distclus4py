@@ -101,7 +101,7 @@ algo = MCMC(init_k=2, b=10., amp=.05, dim=2)
 algo.push(data[0])
 algo.play()
 for i, chunk in enumerate(data):
-    algo.wait(duration=0.5) # wait for the algorithm to converge
+    algo.wait(duration=1, iter=1) # wait for the algorithm to converge
     # simulate new data arrival
     centroids, labels = algo.predict(chunk)
     algo.push(chunk)
